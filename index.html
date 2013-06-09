@@ -1,0 +1,694 @@
+<!DOCTYPE HTML>
+<html manifest="" lang="fr-FR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="application-name" content="MyVera"/>
+    <meta name="msapplication-TileColor" content="#517428e"/>
+    <meta name="msapplication-TileImage" content="../resources/images/tuiles/tile4.png"/>
+    <title>MyVera</title>
+    <style type="text/css">
+         /**
+         * Example of an initial loading indicator.
+         * It is recommended to keep this as minimal as possible to provide instant feedback
+         * while other resources are still being loaded for the first time
+         */
+        html, body {
+            height: 100%;
+            background-color: #2b2d2c;
+        }
+
+        #appLoadingIndicator {
+            position: absolute;
+            top: 50%;
+            margin-top: -15px;
+            text-align: center;
+            width: 100%;
+            height: 30px;
+            -webkit-animation-name: appLoadingIndicator;
+            -webkit-animation-duration: 0.5s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-direction: linear;
+        }
+
+        #appLoadingIndicator > * {
+            background-color: #d9ffa0;
+            display: inline-block;
+            height: 30px;
+            -webkit-border-radius: 15px;
+            margin: 0 5px;
+            width: 30px;
+            opacity: 0.8;
+        }
+
+        @-webkit-keyframes appLoadingIndicator{
+            0% {
+                opacity: 0.8
+            }
+            50% {
+                opacity: 0
+            }
+            100% {
+                opacity: 0.8
+            }
+        }
+		
+.devicecadre div.devtitle {
+        width:157px;
+        text-align:left;
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	margin:1px;
+	padding:2px 4px 2px 4px;
+	background-color:#ccc;
+	font-weight:bold;
+	height:22px;
+	min-width:150px;
+	border-top-right-radius: 0.4em !important;
+	border-top-left-radius: 0.4em !important;
+	-webkit-border-top-right-radius: 0.4em !important;
+	-webkit-border-top-left-radius: 0.4em !important;
+}
+
+.devicecadre div.devmain {
+	max-width:150px;
+}
+
+img.deviceImage {
+	width:50px;
+	height: 50px;
+	background-size: 50px 50px;
+}
+div.contenu {
+	margin-left:55px;
+	height:52px;
+	font-size:12px;
+	/*background-color:#9966FF;*/
+}
+.devicecadre div.floatleft {
+	float:left;
+	width: 100px;
+	height:56px;
+	/*background-color:blue;*/
+}
+div.devicelevel1 {
+	float:left;
+	width: 46px;
+	height:51px;
+	/*background-color:red;*/
+}
+div.lpourcent {
+	width:46px;
+	height:24px;
+	padding:1px;
+	text-align:center;
+	font-size:12px;
+	/*background-color:blue;*/
+}
+div.watt {
+	width:46px;
+	margin-top:-5px;
+	/*height:24px;*/
+	text-align:center;
+	font-size:10px;
+	/*background-color:blue;*/
+}
+
+span.wattfooter {
+	float:left;
+	width:50px;
+	margin-top:-2px;
+	text-align:center;
+	font-size:10px;
+	font-weight:bold;
+	/*background-color:yellow;*/
+}
+div.devicelevel2 {
+	margin-left:46px;
+	/*background-color:green;*/
+}
+img.d25 {
+	width:23px;
+	height: 26px;
+	/*background-color:red;*/
+}
+img.d50 {
+	width:23px;
+	height: 26px;
+	/*background-color:red;*/
+}
+img.d75 {
+	width:23px;
+	height: 50px;
+	/*background-color:red;*/
+}
+img.d100 {
+	width:19px;
+	height: 50px;
+	/*background-color:red;*/
+}
+
+div.var {
+	text-align:left;
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	font-size:10px;
+	padding-left:5px;
+	padding-top: 5px;
+
+}
+
+div.varcenter {
+	text-align:left;
+	text-align:center;
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	font-size:10px;
+	padding-left:5px;
+	padding-top: 5px;
+
+}
+
+div.vargros {
+text-align:center;
+overflow: hidden;
+white-space : nowrap;
+text-overflow: ellipsis;
+font-size:12px;
+font-weight: bold;
+padding-left:5px;
+padding-top: 5px;
+
+}
+
+div.longvar {
+	text-align:left;
+	float:left;
+	overflow: hidden;
+	/*white-space : nowrap;*/
+	/*text-overflow: ellipsis;*/
+	font-size:10px;
+	padding-left:5px;
+	padding-top: 5px;
+	width: 60px;
+	max-height:53px;
+	line-height:12px;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+}
+
+div.texticon {
+/*font-size:10px;
+line-height: 9px;*/
+margin-top: -6px;
+text-align:center;
+/*position: absolute;
+top: 51px;
+font-size:10px;
+text-align:center;
+overflow: hidden;
+white-space : nowrap;
+width: 50px;
+line-height: 9px;*/
+/*background-color:green;*/
+}
+
+.scene {
+	position: absolute !important;
+	width: 130px;
+	height: 55px;
+	background-color: rgba(60, 60, 50, 0.5);
+	z-index: 6;
+	border-top: 1px solid #c0c0c0;
+	border-radius: 0.4em;
+	border-radius: 0.4em;
+	-webkit-border-radius: 0.4em;
+	-webkit-border-radius: 0.4em;
+	box-shadow: 0px 2px 2px 0px rgba(210, 210, 210, 0.4);
+	-webkit-box-shadow: 0px 2px 2px 0px rgba(210, 210, 210, 0.4);
+}
+
+.scene div.devicon {
+	float:left;
+	/*padding-left: 1px;*/
+	padding-top: 2px;
+	width: 50px;
+	/*background-color:#FF3366;*/
+}
+
+div.txtscene {
+	line-height:50px;
+	margin-left: 52px;
+	margin-right: 5px;
+	text-align:center;
+}
+
+span.scenemiddle {
+	width:73px;
+	margin-top: 0px;
+	vertical-align:middle;
+	display:inline-block;
+	line-height:1.2; /* on rétablit le line-height */
+	text-align:center;
+	font-size:12px;
+	color:#fff;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+div.listconfigimg {
+	float:left;
+	width:60px;
+	margin-top: -10px;
+	margin-bottom: -5px;
+	background-repeat: no-repeat;
+	background-size: 18px;
+	background-position: 0px 10px;
+}
+
+div.listconfig {
+	margin-top: -10px;
+	margin-bottom: -5px;
+	line-height:33px;
+	margin-left: 65px;
+	text-align:left;
+}
+
+span.listconfig {
+	vertical-align:middle;
+	display:inline-block;
+	line-height:1.2; /* on rétablit le line-height */
+}
+	
+/*Servait à mettre une couleur sur les picèes en fonction de la section, non utilisé */
+	.head1 {
+		color: #5C8A00;
+	}
+	.head0 {
+		color: #1F5C3D;
+	}
+/*-----*/
+
+.deviceview {
+	/*font-family:'Helvetica Neue', HelveticaNeue, Helvetica-Neue, Helvetica, 'BBAlpha Sans', sans-serif;
+	font-size:15px;*/
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+}
+
+.slidelist {
+    border-right: 2px solid #999;
+	box-shadow: 1px 1px 12px #555 inset;
+	-webkit-box-shadow: 1px 1px 12px #555 inset;
+	background: #ffffff;
+}
+
+.listwebview {
+	height:45px;
+	border-bottom: 1px solid #ccc;
+	background: #ffffff;
+}
+div.listwebviewimg {
+	margin-top:2px;
+	float:left;
+	width:58px;
+	height:40px;
+	margin-left: 8px;
+}
+
+.listroom {
+    height:45px;
+    font-size:14px;
+    font-weight:bold;
+    border-bottom: 1px solid #ccc;
+}
+
+div.listroomimg {
+	margin-top:2px;
+	float:left;
+	width:40px;
+	height:40px;
+	margin-left: 8px;
+}
+div.listroomtext {
+	line-height:40px;
+}
+div.listroomnoicon {
+	margin-left: 10px;
+	line-height:40px;
+}
+span.listroomtext {
+	margin-left: 5px;
+	width: 170px;
+	vertical-align:middle;
+	display:inline-block;
+	line-height:35px; /* on rétablit le line-height */
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	/*background-color:red !important;*/
+}
+span.listroomtext2 {
+	width: 213px;
+	vertical-align:middle;
+	display:inline-block;
+	line-height:35px; /* on rétablit le line-height */
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	/*background-color:blue !important;*/
+}
+
+span.hideitem {
+	vertical-align:middle;
+	display:inline-block;
+	line-height:1.2; /* on rétablit le line-height */
+	color: #ccc;
+}
+
+.listroomselect {
+	background: rgba(213, 255, 147, 0.5);
+}
+
+/*Rangement des styles pour les templates*/
+.devicecadre {
+	margin: 3px;
+	-webkit-border-radius: 0.4em !important;
+	border-radius: 0.4em !important;
+	border-width: 1px !important;
+	box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.5), 0px 2px 2px 0px rgba(255, 255, 255, 0.5) inset;
+	-webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.5), 0px 2px 2px 0px rgba(255, 255, 255, 0.5) inset;
+	
+	/*padding: 0px 0px 0px 0px !important;*/
+	padding-top:0px;
+	border-top: 1px solid #dedede;
+	background-color:#ffffff;
+}
+
+.listdevice {
+    /*height:100px;*/
+    /*font-size:14px;*/
+    border-bottom: 1px solid #ccc;
+}
+
+div.listdevicename {
+	/*margin: 60px;
+	width: 100%;*/
+	/*vertical-align:middle;
+	display:inline-block;
+	line-height:35px; on rétablit le line-height */
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	font-size:14px;
+	height:19px;
+	/*background-color: red !important;*/
+}
+
+.devicecadre div.devicon {
+	float:left;
+	padding-left: 1px;
+	padding-top: 2px;
+	width: 51px;
+	height: 50px;
+	/*background-color:#FF3366;*/
+}
+
+.listdevice div.devicon {
+	margin-top:2px;
+	float:left;
+	width:50px;
+	height:50px;
+	margin-left: 2px;
+	margin-right: 4px;
+	/*background-color: yellow !important;*/
+}
+
+
+.devicecadre div.footer {
+	margin-left:1px;
+	margin-right:1px;
+	margin-top:5px;
+	/*background-color:#669933;*/
+	max-width:150px;
+	width:150px;
+	text-align:left;
+	font-size:9px;
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	clear:both;
+	/*background-color: green;*/
+}
+
+.listdevice div.footer {
+	/*background-color: green !important;*/
+	margin-left:1px;
+	margin-right:2px;
+	/*margin-top:1px;*/
+	/*background-color:#669933;*/
+	/*max-width:150px;
+	width:150px;*/
+	text-align:left;
+	font-size:9px;
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	clear:both;
+}
+
+.devicecadre img.armed {
+	width:32px;
+	height: 32px;
+	margin-left: 20px;
+	margin-top: 10px;
+	/*background-color:red;*/
+}
+.listdevice img.armed {
+	width:30px;
+	/*height: 30px;*/
+	/*margin-top: 1px;*/
+	/*background-color:red !important;*/
+}
+
+.devicecadre div.clock1 {
+	text-align:left;
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	font-size:10px;
+	padding-left:5px;
+	padding-top: 5px;
+	float:left;
+	/*background-color:red;*/
+	width: 60px;
+}
+
+.listdevice div.clock1 {
+	text-align:left;
+	overflow: hidden;
+	white-space : nowrap;
+	text-overflow: ellipsis;
+	font-size:10px;
+	padding-left:5px;
+	padding-top: 5px;
+	float:left;
+	/*background-color:blue;*/
+	width: 60px;
+}
+
+.devicecadre div.clock2 {
+	margin-left:57px;
+	height:30px;
+	/*background-color:green;*/
+}
+.listdevice div.clock2 {
+	/*margin-left:57px;*/
+	height:30px;
+	display: inline-block;
+	/*background-color:blue !important;*/
+}
+
+.devicecadre img.armed2 {
+	width:32px;
+	height: 32px;
+	margin-top: 5px;
+	/*background-color:red;*/
+}
+
+.listdevice img.armed2 {
+	width:30px;
+	/*height: 30px;*/
+	/*margin-top: 1px;*/
+	/*background-color:red !important;*/
+}
+
+.devicecadre div.clock3 {
+	position:relative;
+	top:0px;
+	left: 2px;
+}
+
+.listdevice div.clock3 {
+	/*margin-left:57px;*/
+	height:28px;
+	margin-left: 5px;
+	display: inline-block;
+	/*background-color:yellow !important;*/
+}
+
+.devicecadre img.clocknext {
+	
+}
+
+.listdevice img.clocknext {
+	/*width:42px;*/
+	height: 28px;
+	/*margin-top: 1px;*/
+	/*background-color:red !important;*/
+}
+
+.segmentedpressed{
+color: #4c7709 !important;
+background:#c9f486 !important; 
+}
+
+img.i0 {
+	width:28px;
+}
+img.i1 {
+	width:28px;
+}
+img.i2 {
+	width:28px;
+}
+img.i3 {
+	width:28px;
+}
+.indic, .djaune, .dalert {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 18px;
+}
+
+.indic2, .djaune2, .dalert2 {
+	position: relative;
+	top: -55px;
+	left: 0px;
+	height: 18px;
+}
+
+.djaune, .djaune2 {
+	height: 19px;
+	background-size: 18px 18px;
+	background-image: url(data:image/png;base64,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);
+}
+
+.dalert, .dalert2 {
+	height: 19px;
+	background-size: 18px 18px;
+	background-image: url(data:image/png;base64,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);
+}
+
+
+/*
+.tab1 {
+	-webkit-mask-image: url('./resources/images/picto/tab1.png');
+}
+.tab2 {
+	-webkit-mask-image: url('./resources/images/picto/tab2.png');
+}
+.tab3 {
+	-webkit-mask-image: url('./resources/images/picto/tab3.png');
+}
+.tab4 {
+	-webkit-mask-image: url('./resources/images/picto/tab4.png');
+}
+.tab5 {
+	-webkit-mask-image: url('./resources/images/picto/tab5.png');
+}
+.tab6 {
+	-webkit-mask-image: url('./resources/images/picto/tab6.png');
+}
+.tab7 {
+	-webkit-mask-image: url('./resources/images/picto/tab7.png');
+}
+.tab8 {
+	-webkit-mask-image: url('./resources/images/picto/tab8.png');
+}
+*/
+
+.tabfont {
+	font-family: "Pictos";
+}
+
+.iconphonefont .x-picker-item, .icontabletfont .x-innerhtml {
+	font-family: "Pictos";
+	font-size:30px;
+	font-weight:normal;
+}
+
+.transparentmodal {
+
+}
+
+/*slider Field Extend */
+/*.x-slider-field-extended .x-component-outer {
+  padding: 0.5em;
+}
+*/
+.x-slider-field-extended .x-slider-helper {
+  width: 25%;
+}
+
+.x-slider-field-extended .x-slider-helper .x-slider-helper-input {
+  width: 100%;
+  margin: 0;
+  padding: 0.1em 0.3em;
+  height: 2.2em;
+  border: 1px solid #CCC;
+}
+
+.x-slider-field-extended .x-slider {
+    width: 75% !important;
+}
+
+/*
+.x-slider-field-extended .x-component-outer {
+  padding: 0.5em;
+  width: 200px;
+}
+
+
+
+.x-slider-field-extended .x-slider-helper {
+  width: 50px;
+  margin-right:-50px;
+}
+
+.x-slider-field-extended .x-slider-helper .x-slider-helper-input {
+  width: 100%;
+  margin: 0;
+  padding: 0.1em 0.3em;
+  height: 2.2em;
+  border: 1px solid #CCC;
+}
+*/
+
+    </style>
+    <!-- The line below must be kept intact for Sencha Command to build your application -->
+    <script id="microloader" type="text/javascript" src="touch/microloader/development.js"></script>
+</head>
+<body>
+    <div id="appLoadingIndicator">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</body>
+</html>

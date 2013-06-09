@@ -1,0 +1,1 @@
+Répertoire contenant les images des vues.
