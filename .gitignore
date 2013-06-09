@@ -1,0 +1,17 @@
+#################
+## MyVera
+#################
+
+tmp/
+devices*.json
+rooms.json
+floors*.json
+conf.json
+tabs*.json
+version.json
+resources/config/img/*.jpg
+protect/.htaccess
+resources/sass/.sass-cache
+build/
+archive/
+Thumbs.db
