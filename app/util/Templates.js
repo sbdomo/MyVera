@@ -38,17 +38,12 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 	    '<tpl elseif="category==108">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
+	    '<tpl elseif="category==109">'+
+	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 	    '<tpl elseif="category==1001&&subcategory!=0">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	    '<tpl else>0_0</tpl>{retina}.png" />'+
 	    
-	    '<tpl if="state==-2"><img class="djaune" src="./resources/images/indic/vide.png" />'+
-	    '<tpl elseif="state==-3"><img class="djaune" src="./resources/images/indic/vide.png" />'+
-	    '<tpl elseif="state==2"><img class="dalert" src="./resources/images/indic/vide.png" />'+
-	    '<tpl elseif="(category==4||category==103)&&armed==0"><img class="indic" src="./resources/images/indic/darm{retina}.png" />'+
-	    '<tpl elseif="category==120"><tpl if="armed==1&&var3==\'off\'"><img class="indic" src="./resources/images/indic/doff{retina}.png" />'+
-	    	'<tpl elseif="armed==0&&var3==\'off\'"><img class="indic" src="./resources/images/indic/darmoff{retina}.png" /><tpl elseif="armed==0&&var3==\'on\'"><img class="indic" src="./resources/images/indic/darm{retina}.png" /></tpl>'+
-	    '</tpl>'+
 	    
 	    '<tpl if="category==16&&var1!=null"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >{var1} %</div>'+
 	    '<tpl elseif="category==17&&var1!=null"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >{var1} {var3}</div>'+
@@ -65,6 +60,18 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    '<tpl elseif="category==108">'+
 	    	'<tpl if="camuser!=null||campassword!=null"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
 	    	'<tpl if="camuser!=null">{camuser}<br/></tpl><tpl if="campassword!=null">{campassword}</tpl></div></tpl>'+
+	    	
+	    	
+	    	
+	    '<tpl elseif="category==109">'+
+		'<div class="dbadge" style="font-size:{fontsize}; position: absolute; left:4px; top:-2px;" >{level}</div>'+
+		'<tpl if="armed==1"><img style="position:absolute; left:0px; top:8px; height: 16px;" src="./resources/images/plugin/dnosound{retina}.png" /></tpl>'+
+	    	'<div class="texticon" style=\'font-size:{fontsize}; <tpl if="color!=null"> color:#{color};</tpl>\' >'+
+	    	'<tpl if="status==1">{var2}</tpl></div>'+
+	    	
+	    	
+	    	
+	    	
 	    '<tpl elseif="category==104"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
 	    	'{var1}</div>'+
 	    '<tpl elseif="category==105"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
@@ -72,6 +79,16 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 		'<tpl else>{var6}<br/>&nbsp;</tpl></div>'+
 		'<div style=\'font-weight:bold; text-shadow: 0 0 5px white; font-size:{fontsize}; position: absolute; color:#009ade; width:50px; text-align:center; top: 25%;"\' > {var1}{camuser} </div>'+
 	    '</tpl>'+
+	    
+	    '<tpl if="state==-2"><img class="djaune" src="./resources/images/indic/vide.png" />'+
+	    '<tpl elseif="state==-3"><img class="djaune" src="./resources/images/indic/vide.png" />'+
+	    '<tpl elseif="state==2"><img class="dalert" src="./resources/images/indic/vide.png" />'+
+	    '<tpl elseif="(category==4||category==103)&&armed==0"><img class="indic" src="./resources/images/indic/darm{retina}.png" />'+
+	    '<tpl elseif="category==120"><tpl if="armed==1&&var3==\'off\'"><img class="indic" src="./resources/images/indic/doff{retina}.png" />'+
+	    	'<tpl elseif="armed==0&&var3==\'off\'"><img class="indic" src="./resources/images/indic/darmoff{retina}.png" /><tpl elseif="armed==0&&var3==\'on\'"><img class="indic" src="./resources/images/indic/darm{retina}.png" /></tpl>'+
+	    '</tpl>'+
+	    
+	    
 	'</div></tpl>',
 	
 tpllist: "",
@@ -93,6 +110,8 @@ tpllisticon:'<div class="devicon">'+
 				'<tpl elseif="category==107">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 				'<tpl elseif="category==108">'+
+					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
+				'<tpl elseif="category==109">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 				'<tpl elseif="category==1001">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
@@ -119,12 +138,12 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 			'<tpl elseif="category==103"><div class="floatleft"><div class="longvar"><tpl if="var1==null">&nbsp;<tpl else>{var1}</tpl></div>'+
 					'<tpl if="armed!= null"><div class="clock2"><img class="armed2" src="./resources/images/indic/arm{armed}{retina}.png" /></div></tpl></div>'+
 			'<tpl elseif="category==104">'+
-					'<div class="floatleft">'+
+				'<div class="floatleft">'+
 					'<img class="i0" src="./resources/images/plugin/pw0_<tpl if="status==0">1<tpl else>0</tpl>{retina}.png" />'+
 					'&nbsp;&nbsp;&nbsp;<img class="i1" src="./resources/images/plugin/pw1_<tpl if="status==1">1<tpl else>0</tpl>{retina}.png" />'+
 					'&nbsp;&nbsp;&nbsp;<img class="i2" src="./resources/images/plugin/pw2_<tpl if="status==2">1<tpl else>0</tpl>{retina}.png" />'+
 					'&nbsp;&nbsp;&nbsp;<img class="i3" src="./resources/images/plugin/pw3_<tpl if="status==3">1<tpl else>0</tpl>{retina}.png" />'+
-					'</div>'+
+				'</div>'+
 			'<tpl elseif="category==105">'+
 				'<div class="vargros">{var1}{camuser}</div><div class="varcenter">'+
 				'<tpl if="status==3">{var6} {campassword}<br/><tpl if="var4==\'Normal\'">{var2}<tpl else>{var3}</tpl>{camuser}'+
@@ -132,6 +151,20 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 			'<tpl elseif="category==107"><div class="var"><tpl if="var1==null">&nbsp;<tpl else>{var1}</tpl></div>'+
 			'<tpl elseif="category==108"><div class="var"><tpl if="camuser==null">&nbsp;<tpl else>{camuser}</tpl>'+
 				'<tpl if="campassword!=null"></br>{campassword}</tpl></div>'+
+			
+				
+				
+				
+			'<tpl elseif="category==109">'+
+				'<img class="i5" src="./resources/images/plugin/plus{retina}.png" />'+
+				'&nbsp;<img class="i4" src="./resources/images/plugin/lnosound<tpl if="armed==1">1<tpl else>0</tpl>{retina}.png" />'+
+				'<div style="font-size:10px; display:inline-block; height:12px; padding-bottom:10px; margin-bottom:10px;">&nbsp;{level}%</div>'+
+				'<div class="varlong">{var1}</div>'+
+				
+				
+				
+				
+				
 			'<tpl elseif="category==120"><div class="floatleft">'+
 					'<div class="clock1"><tpl if="var1==null">&nbsp;<tpl else>{var1}</tpl><br /><tpl if="var2==null||subcategory!=1">&nbsp;<tpl else>{var2}</tpl></div>'+
 					'<tpl if="armed!= null"><div class="clock2"><img class="armed2" src="./resources/images/indic/arm{armed}{retina}.png" /></div></tpl>'+

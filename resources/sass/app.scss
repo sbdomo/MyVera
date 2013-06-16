@@ -81,6 +81,14 @@ $toolbar-gradient: 'glossy';
 @include icon('Y', 'Y');
 @include icon('Z', 'Z');
 
+@include icon('play', '4');
+@include icon('pause', '5');
+@include icon('stop', '6');
+@include icon('next', '7');
+@include icon('prev', '8');
+@include icon('muted', '$');
+@include icon('audio', '%');
+
 @include sencha-button-ui('decline', #bc3314, 'matte');
 
 .bg {

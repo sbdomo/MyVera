@@ -409,8 +409,11 @@ Ext.define('myvera.controller.contdevices', {
 						for (var idrecord in response.devices) {
 							var device = devices.getById(response.devices[idrecord].id);
 							if (device) {
-								//Le status des Smart Virtual Thermostat - cat 105 n'est pas dans status
-								if(device.set('cat')!=105) device.set('status', response.devices[idrecord].status);
+								//Le status des Smart Virtual Thermostat - category 105 n'a pas de status
+								if(device.get('category')!=105&&device.get('category')!=109) 
+								{
+									device.set('status', response.devices[idrecord].status);
+								}
 								device.set('level', response.devices[idrecord].level);
 								device.set('watts', response.devices[idrecord].watts);
 								device.set('comment', response.devices[idrecord].comment);
@@ -428,37 +431,37 @@ Ext.define('myvera.controller.contdevices', {
 								case 6: //camera
 									device.set('var1', response.devices[idrecord].ip);
 									device.set('var2', response.devices[idrecord].url);
-									break;
+								break;
 								case 16: //humidity sensor
 									device.set('var1', response.devices[idrecord].humidity);
-									break;
+								break;
 								case 17: //temperature sensor
 									device.set('var1', response.devices[idrecord].temperature);
 									device.set('var3', locale.getSt().unit.temp);//Unité utilisée ex: °C
-									break;
+								break;
 								case 18: //light sensor
 									device.set('var1', response.devices[idrecord].light);
-									break;
+								break;
 								case 21: //Power Meter : watts (déjà ajouté) + kwh
 									device.set('var1', response.devices[idrecord].kwh);
-									break;
+								break;
 								case 101: //vswitch
 									device.set('var1', response.devices[idrecord].text1);
 									device.set('var2', response.devices[idrecord].text2);
-									break;
+								break;
 								case 102: //vcontainer
 									device.set('var1', response.devices[idrecord].variable1);
 									device.set('var2', response.devices[idrecord].variable2);
 									device.set('var3', response.devices[idrecord].variable3);
 									device.set('var4', response.devices[idrecord].variable4);
 									device.set('var5', response.devices[idrecord].variable5);
-									break;
+								break;
 								case 103: //gcal
 									if(response.devices[idrecord].nextevent) device.set('var1', response.devices[idrecord].nextevent);
-									break;
+								break;
 								case 104:
 									device.set('var1', locale.getSt().device.pilotwire[response.devices[idrecord].status]);
-									break;
+								break;
 								case 105: //Smart Virtual Thermostat
 									//Status 5 : non connu, 0 : mode off, 1 : mode CoolOn (Inactif), 2: Mode HeatOn (Forcé), 3: Auto
 									switch (response.devices[idrecord].mode) {
@@ -497,12 +500,12 @@ Ext.define('myvera.controller.contdevices', {
 									
 //********Debug
 console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('status') + ", EnergyMode " + device.get('var4') + ", hvacstate "  + device.get('var5'));
-									break;
+								break;
 								case 107: //colored vcontainer
 									if(!isNaN(parseInt(response.devices[idrecord].variable1))) device.set('status', parseInt(response.devices[idrecord].variable1));
 										else device.set('status', "");
 									device.set('var1', response.devices[idrecord].variable2);
-									break;
+								break;
 								case 108: //Custom Device utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
 										//var4: commande, GraphlinkItem pour l'url du popup, wwidth et height
 										//Affectation : status en fonction de var1
@@ -517,7 +520,41 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 									if(device.get('var5')!=""&&device.get('var5')!= null) {
 										device.set('campassword', response.devices[idrecord][device.get('var5')] + device.get('var6') );
 									} else device.set('campassword', "");									
-									break;
+								break;
+							case 109: //Sonos plugin status : transportstate, level : volume, armed: mute, var1 : currentstatus
+								//var2 : version courte de currentstatus, var3 : currentalbumart
+									var status = 3;
+									switch (response.devices[idrecord].transportstate) {
+									case "PAUSED_PLAYBACK":
+										status = 0;
+										break;
+									case "PLAYING":
+										status = 1;
+										break;
+									case "STOPPED":
+										status = 2;
+										break;
+									default:
+										status = 3
+										break;
+									}
+									if(status!=3) {
+										device.set('status', status);
+									} else {
+										device.set('state', -2);
+									}
+									device.set('level', response.devices[idrecord].volume);
+									device.set('armed', response.devices[idrecord].mute);
+									device.set('var1', response.devices[idrecord].currentstatus);
+									var shorttitle = response.devices[idrecord].currentstatus;
+									if(shorttitle.length>10) shorttitle= shorttitle.substring(0,10)+"...";
+									device.set('var2', shorttitle);
+									device.set('var3', response.devices[idrecord].currentalbumart);
+									//device.set('var5', response.devices[idrecord].ip);
+									//si le menu de configuration du module est ouvert/existe, il est mis à jour
+									var popup=Ext.getCmp('sonos' + response.devices[idrecord].id);
+									if(popup) this.updatesonospopup(popup, device);
+								break;
 								case 120: //vclock
 									device.set('var1', response.devices[idrecord].alarmtime);
 									if (response.devices[idrecord].alarmtime != null) {
@@ -531,7 +568,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 									device.set('var4', response.devices[idrecord].text1);
 									device.set('var5', response.devices[idrecord].alarmtype);
 									device.set('var6', response.devices[idrecord].weekdays);
-									break;
+								break;
 								default:
 									break;
 								}
@@ -678,7 +715,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 
 	//Sert à mettre un timer sur la synchro pour qu'elle s'arrête pendant la veille et reprenne ensuite
 	newsync: function(loadtime, dataversion, delay) {//, timestamp
-		if(!delay) delay=100;
+		if(!delay) delay=200;
 		var newsynctask = Ext.create('Ext.util.DelayedTask', function() {
 				//var date = new Date();
 				//console.log("New Sync Timer" + Ext.Date.format(date, 'h:i:s'));
@@ -707,10 +744,9 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 		
 		var icontap = false;
 		var cat=record.get('category');
-		if (!Ext.Array.contains([2, 3, 4, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
+		if (!Ext.Array.contains([2, 3, 4, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
 			return;
 		}
-		
 		//Si c'est une webview, sort de la commande
 		if(cat==1001&&record.get('subcategory')==0) return;
 		
@@ -762,6 +798,8 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				newstatus = '2';
 			} else if (tap.hasCls('i3')) {
 				newstatus = '3';
+			} else if (tap.hasCls('i4')||tap.hasCls('i5')) {
+				newstatus = '';
 			} else {
 				return;
 			}
@@ -1058,6 +1096,17 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				}
 			}
 			
+			//Sonos plugin
+			if(cat == 109&&record.get('sceneon') == null) {
+				dservice = "urn:micasaverde-com:serviceId:MediaNavigation1";
+				if(record.get('status')==1) {
+					daction = 'Pause';
+				} else {
+					daction = 'Play';
+				}
+				newstatus = '';
+			}
+			
 			//Scene
 			if (cat == 1000) {
 				dservice = "urn:micasaverde-com:serviceId:HomeAutomationGateway1";
@@ -1114,6 +1163,17 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				dservice = "urn:antor-fr:serviceId:PilotWire1";
 				daction = 'SetTarget';
 				dtargetvalue = 'newTargetValue';
+			} else if  (cat == 109) {
+				if (tap.hasCls('i4')) {
+					dservice = 'urn:upnp-org:serviceId:RenderingControl';
+					daction = 'SetMute';
+					dtargetvalue = 'notargetvalue';
+					//record.set('state', -2);
+					//return;
+				} else if (tap.hasCls('i5')) {
+					this.onDeviceHoldTap(view, index, target, record, event);
+					return;
+				}
 			}
 		}
 
@@ -1128,7 +1188,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			url: vera_url,
 			headers: syncheader,
 			method: 'GET',
-			timeout: 10000,
+			timeout: 20000,
 			scope: this,
 			params: {
 				id: 'lu_action',
@@ -1159,18 +1219,194 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 	},
 	
 	onDeviceHoldTap: function(view, index, target, record, event) {
-		//var dservice = 'urn:upnp-org:serviceId:SwitchPower1';
-		//var daction = 'SetTarget';
-		var dservice = 'urn:upnp-org:serviceId:Dimming1';
-		var daction = 'SetLoadLevelTarget';
-		var dtargetvalue = 'newLoadlevelTarget';
-		//var dtargetvalue = 'newTargetValue';
-		var syncheader = "";
-		syncheader = {'Authorization': 'Basic ' + this.loggedUserId};
 		
-		//var newstatus = "0";
-		var ipvera = this.ipvera;
-		var popup=new Ext.Panel({
+		var me = this;
+		//record.set('state', 2);
+		//return;
+		if(record.get('category')==109) { //Sonos
+			
+			var popup=new Ext.Panel({
+			modal:true,
+			hideOnMaskTap: true,
+			width:300,
+			//maxHeight:300,
+			centered: true,
+			id: "sonos" + record.get('id'),
+			showart: 'none',
+			items:[
+			{
+				xtype:'container',
+				padding: 5,
+				layout:{
+					type:'hbox'
+				},
+				items: [
+				{
+					xtype:'slider',
+					itemId:'volumeslider',
+					width: 225,
+					//value:record.get('level'),
+					listeners: {
+						change: function(Slider, thumb, newValue, oldValue, eOpts) {
+							console.log("slider change");
+							me.ondeviceaction(record.get('id'), 'urn:upnp-org:serviceId:RenderingControl', 'SetVolume', 'DesiredVolume', newValue);
+						}
+					}
+				},
+				{
+					xtype: "button",
+					itemId: 'mute',
+					handler: function(btn) {
+						console.log("mute change");
+						me.ondeviceaction(record.get('id'), "urn:upnp-org:serviceId:RenderingControl", 'SetMute', "targetvalue", "");
+						btn.disable();
+					}
+				}
+				]
+			},
+			//play : 4, A: enceinte: A, jauge : J et K, info : ) audio : > et <
+			//pause: 5, stop : 6, next: 7 before : 8
+			{
+				xtype:'container',
+				padding: 5,
+				layout:{
+					type:'hbox'
+				},
+				items: [
+				{
+					xtype: 'segmentedbutton',
+					itemId: 'playpause',
+					pressedCls: 'mypressedbt',
+					ui: 'confirm',
+					toogleplay:false,
+					allowMultiple: false,
+					//layout:{pack:'center'},
+					//disabled: true,
+					items: [
+					{
+						//text: "Pause",
+						itemId: "Pause",
+						iconCls: 'pause'//,
+						//html: html0,
+						//pressed: press0
+					},
+					{
+						//text: "Play",
+						itemId: "Play",
+						//ui: 'confirm',
+						iconCls: 'play'//,
+						//pressed: press1,
+						//html: html1
+					},
+					{
+						//text: "Stop",
+						itemId: "Stop",
+						iconCls: 'stop'//,
+						//pressed: press2,
+						//html: html2
+					}
+					],
+					listeners: {
+						toggle: function(container, button, pressed){
+							if(pressed) {
+								if(container.toogleplay) {
+									console.log("Play change");
+									console.log(button.getItemId());
+									container.disable();
+									//Pas de targetvalue dans cette commande
+									me.ondeviceaction(record.get('id'), "urn:micasaverde-com:serviceId:MediaNavigation1", button.getItemId(), "targetvalue", "");
+									//me.onPilotWireTap(record.get('id'), button.getText());
+								} else {
+									//console.log("Pressed - not toogle");
+									container.toogleplay = true;
+								}
+							}
+							//Ext.getCmp('popup_tap').hide();
+						}
+					}
+				},
+				{ xtype: 'spacer' },
+				{
+					xtype: 'segmentedbutton',
+					itemId: 'nextbefore',
+					//allowMultiple: false,
+					//layout:{pack:'center'},
+					allowToggle: false,
+					items: [
+					{
+						//text: "Pause",
+						//action: "Prev",
+						iconCls: 'prev',
+						//html: html0,
+						handler: function(btn) {
+							me.ondeviceaction(record.get('id'), "urn:micasaverde-com:serviceId:MediaNavigation1", 'SkipUp', "targetvalue", "", "nostate");
+						}
+					},
+					{
+						//text: "Play",
+						action: "Next",
+						iconCls: 'next',
+						//html: html1,
+						handler: function(btn) {
+							me.ondeviceaction(record.get('id'), "urn:micasaverde-com:serviceId:MediaNavigation1", 'SkipDown', "targetvalue", "", "nostate");
+						}
+					}
+					]
+				}
+				]
+			},
+			{
+				padding: 5,
+				maxHeight: 180,
+				//html: record.get('var1'),
+				itemId: 'audiotxt'
+			},
+			{
+				xtype:'img',
+				itemId: 'sonosimg'//,
+				//src: record.get('var3'),
+				//flex: 1
+				//width: 300//,
+				//height: 300
+			}
+			],
+			listeners: {
+				hide: function(panel) {
+					delete myvera.view.dataplan.lastTapHold;
+					this.destroy();
+				}
+			}
+			});
+			
+			//Test pour voir s'il faut afficher la jaquette (mode tablette et ip qui commence comme celle de l'enceinte Sonos
+			var matches = record.get('var3').match(/^https?\:\/\/([^\/:?#]+)/i);
+			//var ip = matches && matches[1]; 
+			var ip = "none";
+			
+			if(matches && matches[1]) {
+				var endpoint = matches[1].lastIndexOf(".");
+				if(endpoint>0) ip = matches[1].substring(0,endpoint);
+			}
+			
+			var hostname= window.location.hostname.substring(0, ip.length);
+			//if(ip&&ip.length>hostname.length) window.location.hostname.substring(0, ip.length)
+			
+			console.log(hostname, ip);
+			
+			if(this.getApplication().getCurrentProfile().getName()=='rTablet'&&hostname==ip) {
+				popup.down('#sonosimg').setHeight(300);
+			} else {
+				popup.showart = "none";
+				//record.set('var6', "nojaq");
+			}
+			this.updatesonospopup(popup, record);
+			
+		} else {
+			var dservice = 'urn:upnp-org:serviceId:Dimming1';
+			var daction = 'SetLoadLevelTarget';
+			var dtargetvalue = 'newLoadlevelTarget';
+			
+			var popup=new Ext.Panel({
 			modal:true,
 			hideOnMaskTap: true,
 			width:300,
@@ -1181,40 +1417,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				value:record.data.level,
 				listeners: {
 					change: function(Slider, thumb, newValue, oldValue, eOpts) {
-						//dservice=sdim;
-						//daction=actdim;
-						//dtargetvalue=tardim;
-						//newstatus = newValue;
-						console.log("switch : " + record.get('name'));
-						record.set('state', -2);
-						var vera_url = './protect/syncvera.php';
-						
-						Ext.Ajax.request({
-								url: vera_url,
-								headers: syncheader,
-								method: 'GET',
-								timeout: 10000,
-								scope: this,
-								params: {
-									id: 'lu_action',
-									ipvera: ipvera,
-									DeviceNum: record.get('id'),
-									serviceId: dservice,
-									action: daction,
-									newvalue: newValue,
-									targetvalue: dtargetvalue
-									
-								},
-								success: function(response) {
-									if (Ext.Array.contains([2, 3, 8], record.get('category'))) {
-										record.set('state', -2);
-									}
-								},
-								failure: function(response) {
-									console.log("switch error :" + record.get('name'));
-									Ext.Msg.alert(locale.getSt().misc.error,'Switch Error');
-								}
-						});
+						me.ondeviceaction(record.get('id'), dservice, daction, dtargetvalue, newValue);
 					}
 				}
 			}],
@@ -1223,10 +1426,55 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 					delete myvera.view.dataplan.lastTapHold;
 				}
 			}
-		});
+			});
+		}
 		Ext.Viewport.add(popup);
 		popup.show();
+	},
+	
+	updatesonospopup: function(popup, record) {
+		var status=record.get('status');
+		var playbuttons = popup.down('#playpause');
+		//Mise à jour de la jaquette
+		//_name: "Tablet"
+		//console.log(this.getApplication().getCurrentProfile().getName());
+		console.log("popup.showart:" +popup.showart);
+		console.log("playbuttons.toogleplay:" +playbuttons.toogleplay);
+		if(popup.showart!="none"&&record.get('var3')!=popup.showart) {
+			var img = popup.down('#sonosimg');
+			console.log('new image');
+			img.setSrc(record.get('var3'));
+			popup.showart = record.get('var3');
+		}
 		
+		if(status!=3) {
+			if(!playbuttons.isPressed(playbuttons.getAt(status))) {
+				//console.log("Mise à jour bouton status");
+				playbuttons.toogleplay = false;
+				playbuttons.setPressedButtons(status);
+			}
+			if(record.get('state')!=-2) playbuttons.setDisabled(false);
+			if(status==2) playbuttons.getAt(0).disable();
+			else playbuttons.getAt(0).enable();
+		} else {
+			playbuttons.setDisabled(true);
+		}
+		
+		popup.down('#volumeslider').setValue(record.get('level'));
+		
+		if(record.get('armed')==0) {
+			popup.down('#mute').setUi('confirm');
+			popup.down('#mute').setIconCls('audio');
+		} else {
+			popup.down('#mute').setUi('decline');
+			popup.down('#mute').setIconCls('muted');
+		}
+		popup.down('#mute').setDisabled(false);
+		
+		popup.down('#audiotxt').setHtml(record.get('var1'));
+		
+		//console.log(window.location.hostname);
+		//console.log(record.get('var3'));
 	},
 	
 	onRetinaTap: function() {
@@ -2182,13 +2430,16 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 		}
 	},
 	
-	ondeviceaction: function(iddevice, dservice, daction, dtargetvalue, newstatus) {
+	ondeviceaction: function(iddevice, dservice, daction, dtargetvalue, newstatus, statechange) {
 		var devices = Ext.getStore('devicesStore');
 		var device = devices.getById(iddevice);
 		if(device) {
 		//switch status
 		console.log("switch : " + device.get('name'));
-		device.set('state', -2);
+		if(statechange!="nostate") device.set('state', -2);
+		
+		//var cat=device.get('category');
+		
 		var vera_url = './protect/syncvera.php';
 		var syncheader = "";
 		syncheader = {'Authorization': 'Basic ' + this.loggedUserId};
@@ -2209,9 +2460,9 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 				targetvalue: dtargetvalue
 			},
 			success: function(response) {
-				//var category = device.get('category');
-				//device.set('state', -2);
-				
+				if (Ext.Array.contains([2, 3, 8], device.get('category'))) {
+					if(statechange!="nostate") record.set('state', -2);
+				}
 			},
 			failure: function(response) {
 				console.log("switch error :" + device.get('name'));

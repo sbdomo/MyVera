@@ -37,6 +37,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 			{text: 'Smart Virtual Thermostat (plugin)',  value: '105'},
 			{text: 'Day Or Night (plugin)',  value: '106'},
 			{text: 'Colored Variable Container (plugin)',  value: '107'},
+			{text: 'Sonos (plugin)',  value: '109'},
 			{text: 'Interface',  value: '1'},
 			{text: 'Dimmable light',  value: '2'},
 			{text: 'Switch',  value: '3'},

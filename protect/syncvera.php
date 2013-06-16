@@ -56,6 +56,7 @@ if($id=='sdata') {
 	//debug
 	//echo $url;
 	$json=file_get_contents($url);
+	//$json = $url;
 } elseif($id=='vclock') {
 	
 	if(isset($_GET['DeviceNum'])) $DeviceNum=$_GET['DeviceNum'];
