@@ -10,6 +10,8 @@ Ext.define('myvera.view.datamove', {
 		scrollable: null,
 		listeners:{
 			painted:function(e,d){
+				console.log("painted");
+				this.draggablerecord= [];
 				myvera.app.getController('myvera.controller.contdevices').stopsynchro();
 				//console.log(this.id + " painted");
 			},
@@ -53,7 +55,6 @@ Ext.define('myvera.view.datamove', {
 				myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
 				
 			}
-			
 		}
 	}
 });

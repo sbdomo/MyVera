@@ -409,7 +409,7 @@ Ext.define('myvera.controller.contdevices', {
 						for (var idrecord in response.devices) {
 							var device = devices.getById(response.devices[idrecord].id);
 							if (device) {
-								//Le status des Smart Virtual Thermostat - category 105 n'a pas de status
+								//Le status des Smart Virtual Thermostat - category 105 et des sonos - 109 n'est pas dans status
 								if(device.get('category')!=105&&device.get('category')!=109) 
 								{
 									device.set('status', response.devices[idrecord].status);
@@ -1098,13 +1098,18 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			
 			//Sonos plugin
 			if(cat == 109&&record.get('sceneon') == null) {
-				dservice = "urn:micasaverde-com:serviceId:MediaNavigation1";
+				/*dservice = "urn:micasaverde-com:serviceId:MediaNavigation1";
 				if(record.get('status')==1) {
-					daction = 'Pause';
+					//if(shorttitle.length>10) shorttitle= shorttitle.substring(0,10)
+					if(record.get('var1').substring(0,15) == "Group driven by") daction = 'Stop';
+					else daction = 'Pause';
 				} else {
+					if(record.get('var1')=="") return;
 					daction = 'Play';
 				}
-				newstatus = '';
+				newstatus = '';*/
+				this.onDeviceHoldTap(view, index, target, record, event);
+				return;
 			}
 			
 			//Scene
@@ -1170,9 +1175,10 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 					dtargetvalue = 'notargetvalue';
 					//record.set('state', -2);
 					//return;
-				} else if (tap.hasCls('i5')) {
-					this.onDeviceHoldTap(view, index, target, record, event);
-					return;
+				//'<img class="i5" src="./resources/images/plugin/plus{retina}.png" />'+
+				//} else if (tap.hasCls('i5')) {
+				//	this.onDeviceHoldTap(view, index, target, record, event);
+				//	return;
 				}
 			}
 		}
@@ -1233,6 +1239,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			centered: true,
 			id: "sonos" + record.get('id'),
 			showart: 'none',
+			toogleplay:true,
 			items:[
 			{
 				xtype:'container',
@@ -1278,7 +1285,6 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 					itemId: 'playpause',
 					pressedCls: 'mypressedbt',
 					ui: 'confirm',
-					toogleplay:false,
 					allowMultiple: false,
 					//layout:{pack:'center'},
 					//disabled: true,
@@ -1309,7 +1315,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 					listeners: {
 						toggle: function(container, button, pressed){
 							if(pressed) {
-								if(container.toogleplay) {
+								if(popup.toogleplay) {
 									console.log("Play change");
 									console.log(button.getItemId());
 									container.disable();
@@ -1317,8 +1323,8 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 									me.ondeviceaction(record.get('id'), "urn:micasaverde-com:serviceId:MediaNavigation1", button.getItemId(), "targetvalue", "");
 									//me.onPilotWireTap(record.get('id'), button.getText());
 								} else {
-									//console.log("Pressed - not toogle");
-									container.toogleplay = true;
+									console.log("Play not change");
+									popup.toogleplay = true;
 								}
 							}
 							//Ext.getCmp('popup_tap').hide();
@@ -1393,12 +1399,14 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			
 			console.log(hostname, ip);
 			
-			if(this.getApplication().getCurrentProfile().getName()=='rTablet'&&hostname==ip) {
+			if(this.getApplication().getCurrentProfile().getName()=='Tablet'&&hostname==ip) {
 				popup.down('#sonosimg').setHeight(300);
+				popup.showart = "";
 			} else {
 				popup.showart = "none";
 				//record.set('var6', "nojaq");
 			}
+			popup.toogleplay = true;
 			this.updatesonospopup(popup, record);
 			
 		} else {
@@ -1439,7 +1447,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 		//_name: "Tablet"
 		//console.log(this.getApplication().getCurrentProfile().getName());
 		console.log("popup.showart:" +popup.showart);
-		console.log("playbuttons.toogleplay:" +playbuttons.toogleplay);
+		console.log("popup.toogleplay:" +popup.toogleplay);
 		if(popup.showart!="none"&&record.get('var3')!=popup.showart) {
 			var img = popup.down('#sonosimg');
 			console.log('new image');
@@ -1447,14 +1455,14 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			popup.showart = record.get('var3');
 		}
 		
-		if(status!=3) {
+		if(status!=3&&record.get('var1')!="") {
 			if(!playbuttons.isPressed(playbuttons.getAt(status))) {
 				//console.log("Mise à jour bouton status");
-				playbuttons.toogleplay = false;
+				popup.toogleplay = false;
 				playbuttons.setPressedButtons(status);
 			}
 			if(record.get('state')!=-2) playbuttons.setDisabled(false);
-			if(status==2) playbuttons.getAt(0).disable();
+			if(status==2||record.get('var1').substring(0,15) == "Group driven by") playbuttons.getAt(0).disable();
 			else playbuttons.getAt(0).enable();
 		} else {
 			playbuttons.setDisabled(true);

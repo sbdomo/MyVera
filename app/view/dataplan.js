@@ -11,7 +11,8 @@ Ext.define('myvera.view.dataplan', {
 		listeners:{
 			itemtaphold: function(view, index, target, record, event){
 				//2: Dimmable light, 8: Window Covering, 109: sonos
-			   if (Ext.Array.contains([2, 8, 109], record.data.category)) {
+			   //if (Ext.Array.contains([2, 8, 109], record.data.category)) {
+			   if (Ext.Array.contains([2, 8], record.data.category)) {
 				myvera.view.dataplan.lastTapHold = new Date();
 				//console.log('taphold:', record);
 				myvera.app.getController('myvera.controller.contdevices').onDeviceHoldTap(view, index, target, record, event);
@@ -28,7 +29,7 @@ Ext.define('myvera.view.dataplan', {
 				single: true,
 				fn: function() {
 				myvera.app.getController('myvera.controller.contdevices').stopsynchro();
-				console.log("dataplan: " + this.id);
+				console.log("dataplan painted: " + this.id);
 				}
 			}
 		}

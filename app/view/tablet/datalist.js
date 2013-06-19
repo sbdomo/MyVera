@@ -75,15 +75,13 @@ Ext.define('myvera.view.tablet.datalist', {
 				    }
 			    }
 			    ]
-		    }]//,
-		    //listeners: {
-		    	    //painted:function(e,d){
-				//myvera.app.getController('myvera.controller.contdevices').stopsynchro();
-				//console.log(this.id + " first painted");
-				
-			    //}
-		    //}
-		    
+		    }],
+			listeners: {
+				painted:function(e,d){
+					myvera.app.getController('myvera.controller.contdevices').stopsynchro();
+					console.log(this.id + " painted");
+				}
+			}    
 	    }
 	    ]
     },

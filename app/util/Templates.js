@@ -39,7 +39,7 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    '<tpl elseif="category==108">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 	    '<tpl elseif="category==109">'+
-	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
+	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 	    '<tpl elseif="category==1001&&subcategory!=0">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	    '<tpl else>0_0</tpl>{retina}.png" />'+
@@ -112,7 +112,7 @@ tpllisticon:'<div class="devicon">'+
 				'<tpl elseif="category==108">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 				'<tpl elseif="category==109">'+
-					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
+					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 				'<tpl elseif="category==1001">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	   			'<tpl else>0_0</tpl>{retina}.png" />'+
@@ -156,9 +156,8 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 				
 				
 			'<tpl elseif="category==109">'+
-				'<img class="i5" src="./resources/images/plugin/plus{retina}.png" />'+
-				'&nbsp;<img class="i4" src="./resources/images/plugin/lnosound<tpl if="armed==1">1<tpl else>0</tpl>{retina}.png" />'+
-				'<div style="font-size:10px; display:inline-block; height:12px; padding-bottom:10px; margin-bottom:10px;">&nbsp;{level}%</div>'+
+				'<img class="i4" src="./resources/images/plugin/lnosound<tpl if="armed==1">1<tpl else>0</tpl>{retina}.png" />'+
+				'<div style="font-size:10px; display:inline-block; height:12px; padding-bottom:10px; margin-bottom:10px;">&nbsp;&nbsp;&nbsp;{level}%</div>'+
 				'<div class="varlong">{var1}</div>'+
 				
 				
