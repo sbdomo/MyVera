@@ -156,9 +156,11 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 				
 				
 			'<tpl elseif="category==109">'+
-				'<img class="i4" src="./resources/images/plugin/lnosound<tpl if="armed==1">1<tpl else>0</tpl>{retina}.png" />'+
-				'<div style="font-size:10px; display:inline-block; height:12px; padding-bottom:10px; margin-bottom:10px;">&nbsp;&nbsp;&nbsp;{level}%</div>'+
-				'<div class="varlong">{var1}</div>'+
+				'<div class="floatleft">'+
+					'<img class="i4" src="./resources/images/plugin/lnosound<tpl if="armed==1">1<tpl else>0</tpl>{retina}.png" />'+
+					'<div style="font-size:10px; vertical-align:middle; display:inline-block; height:12px; padding-bottom:10px; margin-bottom:10px; margin-top:-12px;">&nbsp;&nbsp;&nbsp;{level}%</div>'+
+					'<div class="varlong">{var1}</div>'+
+				'</div>'+
 				
 				
 				
