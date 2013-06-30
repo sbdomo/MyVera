@@ -471,7 +471,9 @@ Ext.define('myvera.controller.contconfig', {
 			 	'<div style="top:<tpl if="etage=='+floorid+'">{top}px; left:{left}px;'+
 				'<tpl elseif="etage1=='+floorid+'">{top1}px; left:{left1}px;'+
 				'<tpl elseif="etage2=='+floorid+'">{top2}px; left:{left2}px;</tpl>'+
-				myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplpanwebviewmove() + myvera.util.Templates.getTplpanfin() + '</tpl>'
+				myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplplanwebviewmove() +
+				'<tpl else> z-index: 6;" class="x-img x-floating">' + myvera.util.Templates.getTplplanicon() +
+				myvera.util.Templates.getTplplanfin() + '</tpl>'
 		});
 	    } else {
 		Ext.Msg.alert(locale.getSt().misc.msg, locale.getSt().msg.noinview);

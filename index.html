@@ -12,7 +12,149 @@
          * It is recommended to keep this as minimal as possible to provide instant feedback
          * while other resources are still being loaded for the first time
          */
-        html, body {
+
+	 @font-face {
+		 font-family: 'ico';
+		 src: url('myvera.woff') format('woff');
+	 }
+	 
+	 .icon {
+		 font-family: 'ico', serif;
+		 font-size: 40px;
+	 }
+	 
+	 .devicecadre div.icon {
+		 width: 50px;
+		 height: 50px;
+		 font-family: 'ico', serif;
+		 font-size: 40px;
+		 text-align: center;
+		 /*background-color: green;*/
+	 }
+	 
+	 .listdevice div.icon {
+		 width: 50px;
+		 height: 50px;
+		 font-family: 'ico', serif;
+		 font-size: 40px;
+		 text-align: center;
+	 }
+/*
+green: #99bf0c
+blue: #04a0a8
+red: #cb5b72
+orange: #f49c2d
+orangbis : #f6cd01
+*/
+/*blanc + gris*/
+.defaut{
+	 color:	#b0b3bc;
+	 opacity: 0.9;
+	 text-shadow: 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 0 0 3px white,
+	 
+	 0.1em 0.1em 0.15em #333;
+}
+
+/*orange*/
+.switchon {
+	color: white;
+	opacity: 0.8;
+	text-shadow: 0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	0 0 3px #f49c2d,
+	
+	0.1em 0.1em 0.15em #333;
+}
+
+
+/*red*/
+.alert {
+	color: white;
+	opacity: 0.8;
+	text-shadow:  0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	0 0 3px #cb5b72,
+	
+	0.1em 0.1em 0.15em #333;
+}
+
+/*green*/
+.sensor {
+	color: white;
+	opacity: 0.8;
+	text-shadow:  0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	0 0 3px #99bf0c,
+	
+	0.1em 0.1em 0.15em #333;
+}
+
+/*blue*/
+.open {
+	color: white;
+	opacity: 0.8;
+	text-shadow:  0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	0 0 3px #04a0a8,
+	
+	0.1em 0.1em 0.15em #333;
+}
+
+/*orangbis*/
+.action {
+	color: white;
+	opacity: 0.8;
+	text-shadow:  0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	0 0 3px #f6cd01,
+	
+	0.1em 0.1em 0.15em #333;
+}
+	 html, body {
             height: 100%;
             background-color: #2b2d2c;
         }

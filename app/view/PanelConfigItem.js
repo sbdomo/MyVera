@@ -355,6 +355,12 @@ Ext.define('myvera.view.PanelConfigItem', {
 		},
 		{
 			xtype: 'textfield',
+			label: 'Utiliser caractère',
+			name: 'letter',
+			itemId: 'letter'
+		},
+		{
+			xtype: 'textfield',
 			label: locale.getSt().field.iconwidth,
 			name: 'width',
 			itemId: 'width'
@@ -489,6 +495,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 				
 				var listdevices = Ext.getStore('ConfigDevicesStore');
 				var listdevice = listdevices.getById(data.id);
+				var letter=formdata.letter;
+				if(letter=="") letter=null;
 				//Le module est déjà dans la liste
 				if (form.config.data.state=="-4") {
 					var device = devices.getById(data.id);
@@ -506,6 +514,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					device.set("color", formdata.color);
 					device.set("fontsize", fontsize);
 					device.set("icon", formdata.icon);
+					device.set("letter", letter);
 					device.set("width", formdata.width);
 					device.set("verif", formdata.verif);
 					device.set("sceneon", formdata.sceneon);
@@ -553,6 +562,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					color: formdata.color,
 					fontsize: fontsize,
 					icon: formdata.icon,
+					letter: letter,
 					width: formdata.width,
 					verif: formdata.verif,
 					sceneon: formdata.sceneon,
@@ -585,6 +595,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 				listdevice.set("category", formdata.category);
 				listdevice.set("subcategory", formdata.subcategory);
 				listdevice.set("icon", formdata.icon);
+				listdevice.set("letter", letter);
 				listdevice.set("ind", formdata.ind);
 				listdevice.set("room", formdata.room);
 				listdevice.set("name", data.name);
@@ -629,6 +640,9 @@ Ext.define('myvera.view.PanelConfigItem', {
 				listdevice.set("color", formdata.color);
 				listdevice.set("fontsize", formdata.fontsize);
 				listdevice.set("icon", formdata.icon);
+				var letter=formdata.letter;
+				if(letter=="") letter=null;
+				listdevice.set("letter", letter);
 				listdevice.set("verif", formdata.verif);
 				listdevice.set("sceneon", formdata.sceneon);
 				listdevice.set("sceneoff", formdata.sceneoff);

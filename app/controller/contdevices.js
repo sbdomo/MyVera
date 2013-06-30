@@ -38,6 +38,7 @@ Ext.define('myvera.controller.contdevices', {
 			isReveil: 'PanelConfigGenerale [name=isReveil]',
 			isRetina: 'PanelConfigGenerale [name=isRetina]',
 			isTab: 'PanelConfigGenerale [name=isTab]',
+			isFont: 'PanelConfigGenerale [name=isFont]',
 			autoVue: 'PanelConfigGenerale [name=autoVue]',
 			autoBord: 'PanelConfigGenerale [name=autoBord]',
 			viewprofil: 'PanelConfigGenerale [name=viewprofil]',
@@ -84,6 +85,10 @@ Ext.define('myvera.controller.contdevices', {
 			
 			isTab: {
 				change: 'onIsTabChange'
+			},
+			
+			isFont: {
+				change: 'onIsFontChange'
 			},
 			
 			autoVue: {
@@ -151,6 +156,8 @@ Ext.define('myvera.controller.contdevices', {
 				this.getIsVueP().setValue(cachedLoggedInUser.get('isVueP'));
 				this.getIsReveil().setValue(cachedLoggedInUser.get('isReveil'));
 				this.getIsTab().setValue(cachedLoggedInUser.get('isTab'));
+				this.getIsFont().setValue(cachedLoggedInUser.get('isFont'));
+				myvera.app.setIsFont(cachedLoggedInUser.get('isFont'));
 				if(cachedLoggedInUser.get('isTab')=="0") this.tabshow=false;
 				
 				this.getAutoVue().setValue(cachedLoggedInUser.get('autoVue'));
@@ -1514,6 +1521,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				isVueP = this.getIsVueP().getValue(),
 				isReveil = this.getIsReveil().getValue(),
 				isTab = this.getIsTab().getValue(),
+				isFont = this.getIsFont().getValue(),
 				autoVue = this.getAutoVue().getValue(),
 				autoBord = this.getAutoBord().getValue(),
 				profil = this.getViewprofil().getValue();
@@ -1530,6 +1538,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 					isVueP: isVueP,
 					isReveil: isReveil,
 					isTab: isTab,
+					isFont: isFont,
 					autoVue: autoVue,
 					autoBord: autoBord,
 					isRetina: isRetina,
@@ -1704,6 +1713,32 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 					this.tabshow=false;
 					Ext.Msg.alert(locale.getSt().misc.msg,locale.getSt().msg.addbtntab);
 				}
+			},
+			failure: function() {
+				// this should not happen, nevertheless:
+				alert(locale.getSt().misc.error);
+			}
+		}, this);
+		}
+	},
+	
+	onIsFontChange: function() {
+		//myvera.app.setIsFont(this.getIsFont().getValue());
+		//console.log(myvera.util.Templates.getIsFont());
+		if(this.logged==true) {
+		Ext.ModelMgr.getModel('myvera.model.CurrentUser').load(1, {
+			success: function(user) {
+				var isFont = this.getIsFont().getValue();
+				user.set("isFont", isFont);
+				user.save();
+				Ext.Msg.confirm(locale.getSt().misc.msg, "Recharger maintenant?", function(confirmed) {
+						if (confirmed == 'yes') window.location.reload();
+				}, this);
+				
+				//if(isTab==0&&this.tabshow===true) {
+				//	this.tabshow=false;
+				//	Ext.Msg.alert(locale.getSt().misc.msg,locale.getSt().msg.addbtntab);
+				//}
 			},
 			failure: function() {
 				// this should not happen, nevertheless:
@@ -1940,7 +1975,9 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 									'<div style="top:<tpl if="etage=='+floor.get('id')+'">{top}px; left:{left}px;'+
 									'<tpl elseif="etage1=='+floor.get('id')+'">{top1}px; left:{left1}px;'+
 									'<tpl elseif="etage2=='+floor.get('id')+'">{top2}px; left:{left2}px;</tpl>'+
-									myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplpanwebview() + myvera.util.Templates.getTplpanfin() + '</tpl>'
+									myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplplanwebview() +
+									'<tpl else> z-index: 6;" class="x-img x-floating">' + myvera.util.Templates.getTplplanicon() +
+									myvera.util.Templates.getTplplanfin() + '</tpl>'
 							});
 						}
 					}

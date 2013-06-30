@@ -59,6 +59,11 @@ Ext.application({
     setIsretina: function(value) {
 	    this.isretina = value;
     },
+    
+    isFont: "",
+    setIsFont: function(value) {
+	    this.isFont = value;
+    },
 
     launch: function() {
 	if(locale.getSt().lang!="en") {

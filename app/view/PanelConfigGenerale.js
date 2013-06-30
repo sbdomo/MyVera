@@ -97,6 +97,13 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 			},
 			{
 				xtype: 'togglefield',
+				name: 'isFont',
+				value: 1,
+				label: "Police d'icônes"//,
+				//labelWidth: '40%'
+			},
+			{
+				xtype: 'togglefield',
 				name: 'isRetina',
 				value: 0,
 				label: locale.getSt().misc.retina//,

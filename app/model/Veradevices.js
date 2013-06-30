@@ -46,9 +46,16 @@ Ext.define('myvera.model.Veradevices', {
 			{name: 'wwidth', type: 'int', defaultValue:50},
 			{name: 'forced', type: 'boolean', defaultValue: false},
 			{name: 'retina', type: 'string', convert: function(value, record) {
-			var result="";
-			if(myvera.app.isretina=="@2x") result= "@2x"
-			return result; } }
+				var result="";
+				if(myvera.app.isretina=="@2x") result= "@2x";
+				return result; }
+			},
+			{name: 'isfont', type: 'boolean', convert: function(value, record) {
+				var result=false;
+				if(myvera.app.isFont==true) result= true;
+				return result; }
+			},
+			{name: 'letter', type: 'string'}
 		],
 		idProperty: 'id'
 	}

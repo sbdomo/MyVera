@@ -22,6 +22,7 @@ $temparray="";
 foreach ($array_json['devices'] as $device) {
 	$state=-3;
 	if($device['category']=="1000"||$device['category']=="1001") $state=0;
+	//if($device['letter']=="") $device['letter']=null;
 	$temparray=array (
 		'id' => $device["id"],
 		'name' => $device["name"],
@@ -42,6 +43,7 @@ foreach ($array_json['devices'] as $device) {
 		'color' => $device['color'],
 		'tripped' => '0',
 		'icon' => $device['icon'],
+		'letter' => $device['letter'],
 		'verif' => $device['verif'],
 		'sceneon' => $device['sceneon'],
 		'sceneoff' => $device['sceneoff'],
