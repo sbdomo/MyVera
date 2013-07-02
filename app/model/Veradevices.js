@@ -47,7 +47,7 @@ Ext.define('myvera.model.Veradevices', {
 			{name: 'forced', type: 'boolean', defaultValue: false},
 			{name: 'retina', type: 'string', convert: function(value, record) {
 			var result="";
-			if(myvera.app.isretina=="@2x") result= "@2x"
+			if(myvera.app.isretina=="@2x") result= "@2x";
 			return result; } }
 		],
 		idProperty: 'id'

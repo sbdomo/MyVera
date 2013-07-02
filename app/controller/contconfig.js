@@ -487,7 +487,8 @@ Ext.define('myvera.controller.contconfig', {
 		var form = this.getPanelConfigFloor();
 		var formdata = form.getValues();
 		var contdevices = this.getApplication().getController('contdevices');
-		var contconfig = this.getApplication().getController('contconfig');
+		var me = this;
+		//var contconfig = this.getApplication().getController('contconfig');
 		var syncheader = "";
 		syncheader={'Authorization': 'Basic ' + contdevices.loggedUserId};
 		var idfloor = "";
@@ -507,6 +508,7 @@ Ext.define('myvera.controller.contconfig', {
 				floor: floor
 			},
 			success: function(result){
+				var contconfig = me.getApplication().getController('contconfig');
 				var response = Ext.decode(result.responseText, true);
 				if (response) {
 					Ext.Viewport.setMasked(false);
@@ -543,7 +545,8 @@ Ext.define('myvera.controller.contconfig', {
 		var form = this.getPanelConfigFloor();
 		var formdata = form.getValues();
 		var contdevices = this.getApplication().getController('contdevices');
-		var contconfig = this.getApplication().getController('contconfig');
+		var me = this;
+		//var contconfig = this.getApplication().getController('contconfig');
 		var syncheader = "";
 		syncheader={'Authorization': 'Basic ' + contdevices.loggedUserId};
 		var idfloor = form.config.data.id;
@@ -557,6 +560,7 @@ Ext.define('myvera.controller.contconfig', {
 				profil: contdevices.profilchoice
 			},
 			success: function(result){
+				var contconfig = me.getApplication().getController('contconfig');
 				var response = Ext.decode(result.responseText, true);
 				if (response) {
 					if (response.success=="true") {
@@ -635,7 +639,8 @@ Ext.define('myvera.controller.contconfig', {
 		var form = this.getPanelConfigTab();
 		var formdata = form.getValues();
 		var contdevices = this.getApplication().getController('contdevices');
-		var contconfig = this.getApplication().getController('contconfig');
+		var me = this;
+		//var contconfig = this.getApplication().getController('contconfig');
 		var syncheader = "";
 		syncheader={'Authorization': 'Basic ' + contdevices.loggedUserId};
 		var idtab = "";
@@ -654,6 +659,7 @@ Ext.define('myvera.controller.contconfig', {
 				tab: tab
 			},
 			success: function(result){
+				var contconfig = me.getApplication().getController('contconfig');
 				var response = Ext.decode(result.responseText, true);
 				if (response) {
 					Ext.Viewport.setMasked(false);
@@ -689,7 +695,8 @@ Ext.define('myvera.controller.contconfig', {
 		var form = this.getPanelConfigTab();
 		var formdata = form.getValues();
 		var contdevices = this.getApplication().getController('contdevices');
-		var contconfig = this.getApplication().getController('contconfig');
+		var me=this;
+		//var contconfig = this.getApplication().getController('contconfig');
 		var syncheader = "";
 		syncheader={'Authorization': 'Basic ' + contdevices.loggedUserId};
 		var iditem = form.config.data.id;
@@ -703,6 +710,7 @@ Ext.define('myvera.controller.contconfig', {
 				profil: contdevices.profilchoice
 			},
 			success: function(result){
+				var contconfig = me.getApplication().getController('contconfig');
 				var response = Ext.decode(result.responseText, true);
 				if (response) {
 					if (response.success=="true") {
