@@ -54,7 +54,6 @@ if($id=='sdata') {
 	$url=$vera.'/data_request?id=lu_action&DeviceNum='.$DeviceNum.'&serviceId='.$serviceId.'&action='.$action.'&'.$targetvalue.'='.$newTargetValue.'&output_format=json';
 	}
 	//debug
-	//echo $url;
 	$json=file_get_contents($url);
 	//$json = $url;
 } elseif($id=='vclock') {

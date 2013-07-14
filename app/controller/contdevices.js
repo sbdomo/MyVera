@@ -1194,7 +1194,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			url: vera_url,
 			headers: syncheader,
 			method: 'GET',
-			timeout: 20000,
+			timeout: 40000,
 			scope: this,
 			params: {
 				id: 'lu_action',
