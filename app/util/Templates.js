@@ -37,7 +37,8 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    '<tpl elseif="category==107">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 	    '<tpl elseif="category==108">'+
-	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
+	    	'<tpl if="icon!=null">{icon}<tpl elseif="subcategory==1">110<tpl else>{category}</tpl>_{status}'+
+		'<tpl if="subcategory==1"><tpl if="armed!=null">{armed}<tpl else>1</tpl></tpl>'+
 	    '<tpl elseif="category==109">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 	    '<tpl elseif="category==1001&&subcategory!=0">'+
@@ -59,19 +60,12 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    '{var1}</div>'+
 	    '<tpl elseif="category==108">'+
 	    	'<tpl if="camuser!=null||campassword!=null"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
-	    	'<tpl if="camuser!=null">{camuser}<br/></tpl><tpl if="campassword!=null">{campassword}</tpl></div></tpl>'+
-	    	
-	    	
-	    	
+	    	'<tpl if="camuser!=null">{camuser}<br/></tpl><tpl if="campassword!=null">{campassword}</tpl></div></tpl>'+	    	
 	    '<tpl elseif="category==109">'+
 		'<div class="dbadge" style="font-size:{fontsize}; position: absolute; left:4px; top:-2px;" >{level}</div>'+
 		'<tpl if="armed==1"><img style="position:absolute; left:0px; top:8px; height: 16px;" src="./resources/images/plugin/dnosound{retina}.png" /></tpl>'+
 	    	'<div class="texticon" style=\'font-size:{fontsize}; <tpl if="color!=null"> color:#{color};</tpl>\' >'+
 	    	'<tpl if="status==1">{var2}</tpl></div>'+
-	    	
-	    	
-	    	
-	    	
 	    '<tpl elseif="category==104"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
 	    	'{var1}</div>'+
 	    '<tpl elseif="category==105"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
@@ -83,9 +77,9 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    '<tpl if="state==-2"><img class="djaune" src="./resources/images/indic/vide.png" />'+
 	    '<tpl elseif="state==-3"><img class="djaune" src="./resources/images/indic/vide.png" />'+
 	    '<tpl elseif="state==2"><img class="dalert" src="./resources/images/indic/vide.png" />'+
-	    '<tpl elseif="(category==4||category==103)&&armed==0"><img class="indic" src="./resources/images/indic/darm{retina}.png" />'+
+	    '<tpl elseif="(category==4||category==103)&&armed!=null"><img class="indic" src="./resources/images/indic/darm{armed}{retina}.png" />'+
 	    '<tpl elseif="category==120"><tpl if="armed==1&&var3==\'off\'"><img class="indic" src="./resources/images/indic/doff{retina}.png" />'+
-	    	'<tpl elseif="armed==0&&var3==\'off\'"><img class="indic" src="./resources/images/indic/darmoff{retina}.png" /><tpl elseif="armed==0&&var3==\'on\'"><img class="indic" src="./resources/images/indic/darm{retina}.png" /></tpl>'+
+	    	'<tpl elseif="armed==0&&var3==\'off\'"><img class="indic" src="./resources/images/indic/darmoff{retina}.png" /><tpl elseif="armed==0&&var3==\'on\'"><img class="indic" src="./resources/images/indic/darm0{retina}.png" /></tpl>'+
 	    '</tpl>'+
 	    
 	    
@@ -110,7 +104,7 @@ tpllisticon:'<div class="devicon">'+
 				'<tpl elseif="category==107">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 				'<tpl elseif="category==108">'+
-					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
+					'<tpl if="icon!=null">{icon}<tpl elseif="subcategory==1">110<tpl else>{category}</tpl>_{status}'+
 				'<tpl elseif="category==109">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 				'<tpl elseif="category==1001">'+
@@ -149,23 +143,19 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 				'<tpl if="status==3">{var6} {campassword}<br/><tpl if="var4==\'Normal\'">{var2}<tpl else>{var3}</tpl>{camuser}'+
 				'<tpl else>{var6}</tpl></div>'+
 			'<tpl elseif="category==107"><div class="var"><tpl if="var1==null">&nbsp;<tpl else>{var1}</tpl></div>'+
-			'<tpl elseif="category==108"><div class="var"><tpl if="camuser==null">&nbsp;<tpl else>{camuser}</tpl>'+
-				'<tpl if="campassword!=null"></br>{campassword}</tpl></div>'+
-			
-				
-				
-				
+			'<tpl elseif="category==108">'+
+				'<div class="floatleft">'+
+					'<div class="longvar"><tpl if="camuser==null">&nbsp;<tpl else>{camuser}</tpl>'+
+						'<tpl if="campassword!=null"></br>{campassword}</tpl></div>'+
+					'<tpl if="subcategory==1&&armed!= null">'+
+						'<div class="clock2"><img class="armed2" src="./resources/images/indic/arm{armed}{retina}.png" /></div></tpl>'+
+				'</div>'+
 			'<tpl elseif="category==109">'+
 				'<div class="floatleft">'+
 					'<img class="i4" src="./resources/images/plugin/lnosound<tpl if="armed==1">1<tpl else>0</tpl>{retina}.png" />'+
 					'<div style="font-size:10px; vertical-align:middle; display:inline-block; height:12px; padding-bottom:10px; margin-bottom:10px; margin-top:-12px;">&nbsp;&nbsp;&nbsp;{level}%</div>'+
 					'<div class="varlong">{var1}</div>'+
 				'</div>'+
-				
-				
-				
-				
-				
 			'<tpl elseif="category==120"><div class="floatleft">'+
 					'<div class="clock1"><tpl if="var1==null">&nbsp;<tpl else>{var1}</tpl><br /><tpl if="var2==null||subcategory!=1">&nbsp;<tpl else>{var2}</tpl></div>'+
 					'<tpl if="armed!= null"><div class="clock2"><img class="armed2" src="./resources/images/indic/arm{armed}{retina}.png" /></div></tpl>'+

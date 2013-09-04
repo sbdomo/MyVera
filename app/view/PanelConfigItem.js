@@ -19,13 +19,15 @@ Ext.define('myvera.view.PanelConfigItem', {
 			itemId: 'titlePanelConfigItem',
 			tpl: [ '<img style="float: left;" height="40px" src="resources/images/l<tpl if="icon!=null">{icon}'+
 			'<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}'+
+			'<tpl elseif="category==108&&subcategory==1">110<tpl elseif="category==108">108'+
 			'<tpl elseif="category==120&&subcategory==1">121<tpl elseif="category==120&&subcategory==2">122'+
-			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id}</p><p>&nbsp;</p>' ]
+			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id} {category} {subcategory}</p><p>&nbsp;</p>' ]
 		},
 		{
 			xtype: 'selectfield',
 			label: locale.getSt().field.category,
 			name: 'category',
+			itemId: 'category',
 			options: [
 			{text: 'Unknown plugin', value:'0'},
 			{text: 'Custom device',  value: '108'},
@@ -80,6 +82,13 @@ Ext.define('myvera.view.PanelConfigItem', {
 						{text: 'Leak Sensor',  value: '2'},
 						{text: 'Motion Sensor',  value: '3'},
 						{text: 'Smoke Sensor',  value: '4'}
+						];
+						subcat.setOptions(options);
+						subcat.show();
+					} else if(value=="108"){
+						var options = [
+						{text: 'Normal',  value: '0'},
+						{text: 'Security Sensor',  value: '1'}
 						];
 						subcat.setOptions(options);
 						subcat.show();
@@ -753,6 +762,13 @@ Ext.define('myvera.view.PanelConfigItem', {
 					var label = this.getParent().down('#titlePanelConfigItem');
 					var html = label.getTpl().apply(this.getParent().config.data);
 					label.setHtml(html);
+					
+					//change l'indication dans placeHolder pour les Custom Device
+					if(this.getParent().down('#category').getValue()==108) {
+						var exemple = 'status';
+						if(newvalue==1) exemple = 'tripped|armed';
+						this.getParent().down('#var1').setPlaceHolder(exemple);
+					}
 				});
 		    }
 	}

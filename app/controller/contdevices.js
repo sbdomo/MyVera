@@ -410,7 +410,7 @@ Ext.define('myvera.controller.contdevices', {
 							var device = devices.getById(response.devices[idrecord].id);
 							if (device) {
 								//Le status des Smart Virtual Thermostat - category 105 et des sonos - 109 n'est pas dans status
-								if(device.get('category')!=105&&device.get('category')!=109) 
+								if(device.get('category')!=7&&device.get('category')!=105&&device.get('category')!=109&&device.get('category')!=108)
 								{
 									device.set('status', response.devices[idrecord].status);
 								}
@@ -424,13 +424,16 @@ Ext.define('myvera.controller.contdevices', {
 								}
 								device.set('tripped', response.devices[idrecord].tripped);
 								var armed =response.devices[idrecord].armed;
-								device.set('armed', armed);
+								if(device.get('category')!=108) device.set('armed', armed);
 								
 								var category = device.get('category');
 								switch (category) {
 								case 6: //camera
 									device.set('var1', response.devices[idrecord].ip);
 									device.set('var2', response.devices[idrecord].url);
+								break;
+								case 7: //camera
+									device.set('status', response.devices[idrecord].locked);
 								break;
 								case 16: //humidity sensor
 									device.set('var1', response.devices[idrecord].humidity);
@@ -511,8 +514,16 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 										//Affectation : status en fonction de var1
 										//camuser : contient var2+var3
 										//campassword : contient var5+var6
+										//sous-catégorie 0 : normal var1=status
+										//sous-catégorie 1 : security sensor var1=status|armed
 									if(device.get('var1')!=""&&device.get('var1')!= null) {
-										device.set('status', response.devices[idrecord][device.get('var1')]);
+										if(device.get('subcategory')==1) {
+											var commande =device.get('var1').split('|');
+											device.set('status', response.devices[idrecord][commande[0]]);
+											device.set('armed', response.devices[idrecord][commande[1]]);
+										} else {
+											device.set('status', response.devices[idrecord][device.get('var1')]);
+										}
 									} else device.set('status', 0);
 									if(device.get('var2')!=""&&device.get('var2')!= null) {
 										device.set('camuser', response.devices[idrecord][device.get('var2')] + device.get('var3') );
@@ -773,9 +784,19 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				//Open 100%
 				newstatus = "1";
 			} else if (tap.hasCls('armed') || tap.hasCls('armed2')) {
-				dservice = 'urn:micasaverde-com:serviceId:SecuritySensor1';
-				daction = 'SetArmed';
-				dtargetvalue = 'newArmedValue';
+				if(record.get('category')==108) {
+					if(record.get('var4')!=""&&record.get('var4')!=null) {
+						//Exemple : urn:micasaverde-com:serviceId:SecuritySensor1|SetArmed|newArmedValue
+						var commande =record.get('var4').split('|')
+						dservice = commande[0];
+						daction = commande[1];
+						dtargetvalue = commande[2];
+					} else return;
+				} else {
+					dservice = 'urn:micasaverde-com:serviceId:SecuritySensor1';
+					daction = 'SetArmed';
+					dtargetvalue = 'newArmedValue';
+				}
 				if (record.get('armed') == 1) {
 					newstatus = "0";
 				} else {
@@ -1082,7 +1103,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			
 			//Custom Device
 			if(cat == 108&&record.get('sceneon') == null) {
-				if(record.get('var4')!=""&&record.get('var4')!=null) {
+				if(record.get('var4')!=""&&record.get('var4')!=null&&record.get('subcategory')==0) {
 					//Exemple : urn:upnp-org:serviceId:VSwitch1|SetTarget|newTargetValue
 					var commande =record.get('var4').split('|')
 					dservice = commande[0];
