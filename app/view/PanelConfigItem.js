@@ -21,7 +21,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 			'<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}'+
 			'<tpl elseif="category==108&&subcategory==1">110<tpl elseif="category==108">108'+
 			'<tpl elseif="category==120&&subcategory==1">121<tpl elseif="category==120&&subcategory==2">122'+
-			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id} {category} {subcategory}</p><p>&nbsp;</p>' ]
+			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id}</p><p>&nbsp;</p>' ]
 		},
 		{
 			xtype: 'selectfield',
