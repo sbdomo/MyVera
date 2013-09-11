@@ -18,10 +18,11 @@ tplplan: '<tpl if="category==1000&&subcategory!=1">'+
 tplpanwebview:	'<tpl elseif="category==1001&&subcategory==0">'+
 	' z-index:5;width:{wwidth}px;height:{height}px;" class="x-img x-floating">'+
 	'<iframe style="width:{wwidth}px;height:{height}px;" src="{graphlink}" frameborder="no" scrolling="no" marginwidth="0" marginheight="0" noresize >Your device does not support iframes.</iframe></div>',
-//Pour ne pas afficher l'iframe lors du drag and drop
+//Pour ne pas afficher l'iframe lors du drag and drop ou mettre un carré pour le slider (catégorie 111)
 tplpanwebviewmove: '<tpl elseif="category==1001&&subcategory==0">'+
-' z-index:5;width:{wwidth}px;height:{height}px; background-color:rgba(137,224,156,0.6);" class="x-img x-floating">{name}'+
-	'</div>',
+' z-index:5;width:{wwidth}px;height:{height}px; background-color:rgba(137,224,156,0.6);" class="x-img x-floating">{name}</div>'+
+	'<tpl elseif="category==111">'+
+' z-index:5;width:{wwidth}px;height:35px;padding:20px;" class="x-img x-floating"><div style=\'background-color:rgba(137,224,156,0.6);\'>{name}</div></div>',
 
 	
 tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
@@ -107,6 +108,8 @@ tpllisticon:'<div class="devicon">'+
 					'<tpl if="icon!=null">{icon}<tpl elseif="subcategory==1">110<tpl else>{category}</tpl>_{status}'+
 				'<tpl elseif="category==109">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
+				'<tpl elseif="category==111">'+
+					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_0</tpl>'+
 				'<tpl elseif="category==1001">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	   			'<tpl else>0_0</tpl>{retina}.png" />'+
@@ -156,6 +159,8 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 					'<div style="font-size:10px; vertical-align:middle; display:inline-block; height:12px; padding-bottom:10px; margin-bottom:10px; margin-top:-12px;">&nbsp;&nbsp;&nbsp;{level}%</div>'+
 					'<div class="varlong">{var1}</div>'+
 				'</div>'+
+			'<tpl elseif="category==111">'+
+				'<div class="vargros">{level}</div>'+
 			'<tpl elseif="category==120"><div class="floatleft">'+
 					'<div class="clock1"><tpl if="var1==null">&nbsp;<tpl else>{var1}</tpl><br /><tpl if="var2==null||subcategory!=1">&nbsp;<tpl else>{var2}</tpl></div>'+
 					'<tpl if="armed!= null"><div class="clock2"><img class="armed2" src="./resources/images/indic/arm{armed}{retina}.png" /></div></tpl>'+

@@ -31,6 +31,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 			options: [
 			{text: 'Unknown plugin', value:'0'},
 			{text: 'Custom device',  value: '108'},
+			{text: 'Custom slider',  value: '111'},
 			{text: 'Virtual ON/OFF Switches (plugin)',  value: '101'},
 			{text: 'Variable Container (plugin)',  value: '102'},
 			{text: 'Google Calendar Switch (plugin)',  value: '103'},
@@ -92,6 +93,12 @@ Ext.define('myvera.view.PanelConfigItem', {
 						];
 						subcat.setOptions(options);
 						subcat.show();
+					} else if(value=="111"){
+						var options = [
+						{text: 'Normal',  value: '0'}
+						];
+						subcat.setOptions(options);
+						subcat.show();
 					} else {
 						var options = [
 						{text: '0', value:'0'},
@@ -134,6 +141,17 @@ Ext.define('myvera.view.PanelConfigItem', {
 						this.getParent().down('#var4').show();
 						this.getParent().down('#var5').show();
 						this.getParent().down('#var6').show();
+					} else  if(value=="111") {
+						this.getParent().down('#GraphlinkItem').setLabel(locale.getSt().field.urlwidget);
+						this.getParent().down('#GraphlinkItem').show();
+						this.getParent().down('#wwidth').show();
+						this.getParent().down('#height').show();
+						this.getParent().down('#var1').show();
+						this.getParent().down('#var2').show();
+						this.getParent().down('#var3').show();
+						this.getParent().down('#var4').show();
+						this.getParent().down('#var5').show();
+						this.getParent().down('#var6').show();
 					}
 					
 					
@@ -148,16 +166,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 			xtype: 'selectfield',
 			label: locale.getSt().field.subcategory,
 			name: 'subcategory',
-			itemId: 'subcategory'//,
-			//options: [
-			//{text: '0', value:'0'},
-			//{text: '1', value:'1'},
-			//{text: '2', value:'2'},
-			//{text: '3', value:'3'},
-			//{text: '4', value:'4'},
-			//{text: '5', value:'5'},
-			//{text: '6', value:'6'},
-			//]
+			itemId: 'subcategory'
 		},
 		{
 			xtype: 'textfield',
@@ -529,7 +538,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					device.set("height", formdata.height);
 					device.set("wwidth", formdata.wwidth);
 					
-					if(formdata.category=="108") {
+					if(formdata.category=="108"||formdata.category=="111") {
 						device.set("var1", formdata.var1);
 						device.set("var2", formdata.var2);
 						device.set("var3", formdata.var3);
@@ -576,7 +585,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					});
 					var device = devices.getById(data.id);
 					
-					if(formdata.category=="108") {
+					if(formdata.category=="108"||formdata.category=="111") {
 						device.set("var1", formdata.var1);
 						device.set("var2", formdata.var2);
 						device.set("var3", formdata.var3);

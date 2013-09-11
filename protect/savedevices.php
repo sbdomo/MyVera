@@ -58,7 +58,7 @@ foreach ($array_json['devices'] as $device) {
 		if($device['subcategory']=="3") $temparray['status']=$device['status'];
 		if($device['subcategory']=="0"||$device['subcategory']=="1") $temparray['wwidth']=$device['wwidth'];
 	}
-	if($device['category']=="108") {
+	if($device['category']=="108"||$device['category']=="111") {
 		$temparray['var1']=$device['var1'];
 		$temparray['var2']=$device['var2'];
 		$temparray['var3']=$device['var3'];

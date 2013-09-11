@@ -410,11 +410,11 @@ Ext.define('myvera.controller.contdevices', {
 							var device = devices.getById(response.devices[idrecord].id);
 							if (device) {
 								//Le status des Smart Virtual Thermostat - category 105 et des sonos - 109 n'est pas dans status
-								if(device.get('category')!=7&&device.get('category')!=105&&device.get('category')!=109&&device.get('category')!=108)
+								if(device.get('category')!=7&&device.get('category')!=105&&device.get('category')!=109&&device.get('category')!=108&&device.get('category')!=111)
 								{
 									device.set('status', response.devices[idrecord].status);
 								}
-								device.set('level', response.devices[idrecord].level);
+								if(device.get('category')!=111) device.set('level', response.devices[idrecord].level);
 								device.set('watts', response.devices[idrecord].watts);
 								device.set('comment', response.devices[idrecord].comment);
 								if (response.devices[idrecord].state == null) {
@@ -510,7 +510,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 									device.set('var1', response.devices[idrecord].variable2);
 								break;
 								case 108: //Custom Device utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
-										//var4: commande, GraphlinkItem pour l'url du popup, wwidth et height
+										//var4: commande, graphlink pour l'url du popup, wwidth et height
 										//Affectation : status en fonction de var1
 										//camuser : contient var2+var3
 										//campassword : contient var5+var6
@@ -532,8 +532,8 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 										device.set('campassword', response.devices[idrecord][device.get('var5')] + device.get('var6') );
 									} else device.set('campassword', "");									
 								break;
-							case 109: //Sonos plugin status : transportstate, level : volume, armed: mute, var1 : currentstatus
-								//var2 : version courte de currentstatus, var3 : currentalbumart
+								case 109: //Sonos plugin status : transportstate, level : volume, armed: mute, var1 : currentstatus
+									//var2 : version courte de currentstatus, var3 : currentalbumart
 									var status = 3;
 									switch (response.devices[idrecord].transportstate) {
 									case "PAUSED_PLAYBACK":
@@ -565,6 +565,28 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 									//si le menu de configuration du module est ouvert/existe, il est mis à jour
 									var popup=Ext.getCmp('sonos' + response.devices[idrecord].id);
 									if(popup) this.updatesonospopup(popup, device);
+								break;
+								case 111: //Custom Slider
+									//utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
+										//var4: commande
+										//graphlink pour la largeur du slider, increment et max
+										//Affectation : status en fonction de var1
+										//camuser : contient var2+var3
+										//campassword : contient var5+var6
+										//sous-catégorie 0 : normal var1=level
+										//Faudrait : taille slider et max slider
+										//A voir height, wwidth
+									if(device.get('var1')!=""&&device.get('var1')!= null) {
+										if(device.get('subcategory')==0) device.set('level', response.devices[idrecord][device.get('var1')]);
+									} else device.set('level', 0);
+									
+									if(device.get('var2')!=""&&device.get('var2')!= null) {
+										device.set('camuser', response.devices[idrecord][device.get('var2')] + device.get('var3') );
+									} else device.set('camuser', "");
+									if(device.get('var5')!=""&&device.get('var5')!= null) {
+										device.set('campassword', response.devices[idrecord][device.get('var5')] + device.get('var6') );
+									} else device.set('campassword', "");	
+										
 								break;
 								case 120: //vclock
 									device.set('var1', response.devices[idrecord].alarmtime);
@@ -755,11 +777,14 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 		
 		var icontap = false;
 		var cat=record.get('category');
-		if (!Ext.Array.contains([2, 3, 4, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
+		if (!Ext.Array.contains([2, 3, 4, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
 			return;
 		}
 		//Si c'est une webview, sort de la commande
 		if(cat==1001&&record.get('subcategory')==0) return;
+		
+		//Si c'est un custom slider en dehors de listInRoom, sort de la commande
+		if(cat==111&&view.id!="listInRoom") return;
 		
 		if (Ext.Array.contains(["listInRoom", "dataliston", "datalistoff", "listclock"], view.id)) {
 			var tap = Ext.get(event.target);
@@ -787,7 +812,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				if(record.get('category')==108) {
 					if(record.get('var4')!=""&&record.get('var4')!=null) {
 						//Exemple : urn:micasaverde-com:serviceId:SecuritySensor1|SetArmed|newArmedValue
-						var commande =record.get('var4').split('|')
+						var commande =record.get('var4').split('|');
 						dservice = commande[0];
 						daction = commande[1];
 						dtargetvalue = commande[2];
@@ -822,6 +847,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			} else if (tap.hasCls('i4')||tap.hasCls('i5')) {
 				newstatus = '';
 			} else {
+				//si un tap sur autre chose, stop la commande
 				return;
 			}
 		} else {
@@ -1132,7 +1158,11 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				this.onDeviceHoldTap(view, index, target, record, event);
 				return;
 			}
-			
+			//Custom Slider
+			if(cat == 111&&record.get('sceneon') == null) {
+				this.onDeviceHoldTap(view, index, target, record, event);
+				return;
+			}
 			//Scene
 			if (cat == 1000) {
 				dservice = "urn:micasaverde-com:serviceId:HomeAutomationGateway1";
@@ -1428,8 +1458,34 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				//record.set('var6', "nojaq");
 			}
 			popup.toogleplay = true;
-			this.updatesonospopup(popup, record);
-			
+			this.updatesonospopup(popup, record);	
+		} else if(record.get('category')==111) { //Custom Slider
+			var commande =record.get('var4').split('|');
+			//var dservice = 'urn:upnp-org:serviceId:Dimming1';
+			//var daction = 'SetLoadLevelTarget';
+			//var dtargetvalue = 'newLoadlevelTarget';		
+			var popup=new Ext.Panel({
+			modal:true,
+			hideOnMaskTap: true,
+			width:300,
+			height:50,
+			centered: true,
+			items:[{
+				xtype:'slider',
+				value:record.data.level,
+				listeners: {
+					change: function(Slider, thumb, newValue, oldValue, eOpts) {
+						me.ondeviceaction(record.get('id'), commande[0], commande[1], commande[2], newValue);
+					}
+				}
+			}],
+			listeners: {
+				hide: function(panel) {
+					//delete myvera.view.dataplan.lastTapHold;
+					this.destroy();
+				}
+			}
+			});			
 		} else {
 			var dservice = 'urn:upnp-org:serviceId:Dimming1';
 			var daction = 'SetLoadLevelTarget';
@@ -1956,12 +2012,12 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 							items[floor.get('tab')].push({
 									xtype: 'dataplan',
 									id: ('vue' +floor.get('id')),
-									style: background,
-									itemTpl: '<tpl if="etage=='+floor.get('id')+'||etage1=='+floor.get('id')+'||etage2=='+floor.get('id')+'">'+
-									'<div style="top:<tpl if="etage=='+floor.get('id')+'">{top}px; left:{left}px;'+
-									'<tpl elseif="etage1=='+floor.get('id')+'">{top1}px; left:{left1}px;'+
-									'<tpl elseif="etage2=='+floor.get('id')+'">{top2}px; left:{left2}px;</tpl>'+
-									myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplpanwebview() + myvera.util.Templates.getTplpanfin() + '</tpl>'
+									style: background
+									//itemTpl: '<tpl if="etage=='+floor.get('id')+'||etage1=='+floor.get('id')+'||etage2=='+floor.get('id')+'">'+
+									//'<div style="top:<tpl if="etage=='+floor.get('id')+'">{top}px; left:{left}px;'+
+									//'<tpl elseif="etage1=='+floor.get('id')+'">{top1}px; left:{left1}px;'+
+									//'<tpl elseif="etage2=='+floor.get('id')+'">{top2}px; left:{left2}px;</tpl>'+
+									//myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplpanwebview() + myvera.util.Templates.getTplpanfin() + '</tpl>'
 							});
 						}
 					}

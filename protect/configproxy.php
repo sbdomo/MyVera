@@ -11,7 +11,7 @@ $listefichier = array(
 	'savefloors.php',
 	'saverooms.php',
 	'savetabs.php',
-	'sendhtml.php'
+	'sendhtml.php',
 	'syncvera.php'
 	);
 ?>

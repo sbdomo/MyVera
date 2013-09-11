@@ -1,11 +1,14 @@
 Ext.define('myvera.view.dataplan', {
 	extend: 'Ext.DataView',
 	xtype: 'dataplan',
-	requires:['myvera.util.Templates'],
+	requires:['myvera.view.dataitem'],
 	stores: ['devicesStore'],
 	config: {
+		//fullscreen: true,
 		emptyText: locale.getSt().misc.nodevice,
 		store: 'devicesStore',
+		useComponents: true,
+		defaultType: 'dataitem',
 		styleHtmlContent: true,
 		scrollable: null,
 		listeners:{
@@ -19,7 +22,7 @@ Ext.define('myvera.view.dataplan', {
 			   }
 			},
 			itemsingletap: function(view, index, target, record, event){
-			   if (!myvera.view.dataplan.lastTapHold || (myvera.view.dataplan.lastTapHold - new Date() > 1000)) {
+			   if (record.data.category!=111&&(!myvera.view.dataplan.lastTapHold || (myvera.view.dataplan.lastTapHold - new Date() > 1000))) {
 				console.log('tap');
 				myvera.app.getController('myvera.controller.contdevices').onDeviceTap(view, index, target, record, event);
 			   }
