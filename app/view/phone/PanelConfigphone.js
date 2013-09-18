@@ -1,7 +1,19 @@
 Ext.define('myvera.view.phone.PanelConfigphone', {
-    extend: 'myvera.view.PanelConfig',
+    extend: 'Ext.tab.Panel',
     xtype: 'PanelConfigphone',  
     config: {
+    	ui: 'light',
+    	tabBar: {
+    		layout:{
+    			pack:'center'
+    		},
+    		scrollable: {
+    			direction: 'horizontal',
+    			directionLock: true
+			}
+	},
+	activeTab: 1,
+		
 	items: [
 	{
 		xtype:'PanelConfigGenerale',

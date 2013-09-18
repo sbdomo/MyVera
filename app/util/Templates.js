@@ -20,15 +20,15 @@ tplpanwebview:	'<tpl elseif="category==1001&&subcategory==0">'+
 	'<iframe style="width:{wwidth}px;height:{height}px;" src="{graphlink}" frameborder="no" scrolling="no" marginwidth="0" marginheight="0" noresize >Your device does not support iframes.</iframe></div>',
 //Pour ne pas afficher l'iframe lors du drag and drop ou mettre un carré pour le slider (catégorie 111)
 tplpanwebviewmove: '<tpl elseif="category==1001&&subcategory==0">'+
-' z-index:5;width:{wwidth}px;height:{height}px; background-color:rgba(137,224,156,0.6);" class="x-img x-floating">{name}</div>'+
+		' z-index:5;width:{wwidth}px;height:{height}px; background-color:rgba(137,224,156,0.6);" class="x-img x-floating">{name}</div>'+
 	'<tpl elseif="category==111">'+
-' z-index:5;width:{wwidth}px;height:35px;padding:20px;" class="x-img x-floating"><div style=\'background-color:rgba(137,224,156,0.6);\'>{name}</div></div>',
+			' z-index:5;padding-left:28px;<tpl if="subcategory==0">padding-top:15px;</tpl>" class="x-img x-floating"><div style=\'background-color:rgba(137,224,156,0.6);<tpl if="subcategory==1">width:40px;height:{wwidth}px;<tpl else>width:{wwidth}px;height:35px;</tpl>\'>S</div></div>',
 
 	
 tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	'<img <tpl if="retina==\'@2x\'">width="{width}px"</tpl>src="./resources/images/d'+
 	    '<tpl if="category==2||category==3||category==4||category==7||category==8||category==101||category==103||category==106||category==120">'+
-	    '<tpl if="icon!=null">{icon}<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}<tpl else>{category}</tpl>_<tpl if="category==4||category==103||category==120">{tripped}<tpl else>{status}</tpl>'+
+	    	'<tpl if="icon!=null">{icon}<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}<tpl else>{category}</tpl>_<tpl if="category==4||category==103||category==120">{tripped}<tpl else>{status}</tpl>'+
 	    '<tpl elseif="category==6||category==16||category==17||category==18||category==21||category==102||category==1000">'+
 		'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_0'+
 	    '<tpl elseif="category==104">'+

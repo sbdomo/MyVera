@@ -3,10 +3,8 @@ Ext.define('myvera.profile.Tablet', {
 
     config: {
         name: 'Tablet',
-	views: ['Main', 'datalist','listclock', 'panelinfo', 'dataliston', 'datalistoff',
-		 'PanelConfig']
+	views: ['Main', 'datalist','listclock', 'panelinfo', 'dataliston', 'datalistoff', 'PanelConfig']
     },
-//'HomePanel', 
     isActive: function() {
 	    if(Ext.os.is.Phone || (Ext.Viewport.getWindowWidth()<481) ) {
 		    return false;

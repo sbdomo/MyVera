@@ -387,6 +387,11 @@ Ext.define('myvera.view.PanelConfigWebview', {
 					wwidth: formdata.wwidth
 					});
 					var device = devices.getById(newid);
+					
+					//Pour mettre à jour la vue ??
+					//device.set("left", formdata.left);
+					//device.set("top", formdata.top);
+					
 					device.setDirty();
 					//listdevice.set("state", "-4");
 				}

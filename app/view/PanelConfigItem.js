@@ -31,7 +31,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 			options: [
 			{text: 'Unknown plugin', value:'0'},
 			{text: 'Custom device',  value: '108'},
-			{text: 'Custom slider',  value: '111'},
+			{text: 'Custom control',  value: '111'},
 			{text: 'Virtual ON/OFF Switches (plugin)',  value: '101'},
 			{text: 'Variable Container (plugin)',  value: '102'},
 			{text: 'Google Calendar Switch (plugin)',  value: '103'},
@@ -95,7 +95,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 						subcat.show();
 					} else if(value=="111"){
 						var options = [
-						{text: 'Normal',  value: '0'}
+						{text: 'Horizontal slider',  value: '0'},
+						{text: 'Vertical slider',  value: '1'}
 						];
 						subcat.setOptions(options);
 						subcat.show();
@@ -142,16 +143,16 @@ Ext.define('myvera.view.PanelConfigItem', {
 						this.getParent().down('#var5').show();
 						this.getParent().down('#var6').show();
 					} else  if(value=="111") {
-						this.getParent().down('#GraphlinkItem').setLabel(locale.getSt().field.urlwidget);
+						this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max');
 						this.getParent().down('#GraphlinkItem').show();
 						this.getParent().down('#wwidth').show();
-						this.getParent().down('#height').show();
+						//this.getParent().down('#height').show();
 						this.getParent().down('#var1').show();
-						this.getParent().down('#var2').show();
-						this.getParent().down('#var3').show();
+						//this.getParent().down('#var2').show();
+						//this.getParent().down('#var3').show();
 						this.getParent().down('#var4').show();
-						this.getParent().down('#var5').show();
-						this.getParent().down('#var6').show();
+						//this.getParent().down('#var5').show();
+						//this.getParent().down('#var6').show();
 					}
 					
 					
@@ -510,6 +511,10 @@ Ext.define('myvera.view.PanelConfigItem', {
 				//Le module est déjà dans la liste
 				if (form.config.data.state=="-4") {
 					var device = devices.getById(data.id);
+					
+					//Pas de status pour le Custom control
+					if(formdata.category==111) device.set("status", 0);
+					
 					device.set("category", formdata.category);
 					device.set("subcategory", formdata.subcategory);
 					device.set("etage", formdata.etage);
@@ -595,6 +600,10 @@ Ext.define('myvera.view.PanelConfigItem', {
 						device.set("camuser", "");
 						device.set("campassword", "");
 					}
+					
+					//Pour mettre à jour la vue ??
+					//device.set("left", formdata.left);
+					//device.set("top", formdata.top);
 					
 					device.setDirty();
 					listdevice.set("state", "-4");

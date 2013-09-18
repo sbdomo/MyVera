@@ -343,7 +343,21 @@ Ext.define('myvera.controller.contdevices', {
 		if (!devices.getCount()>0) {
 			Ext.getCmp('main').setActiveItem(Ext.getCmp('PanelConfig'));
 			Ext.Msg.alert(locale.getSt().misc.nodevice, locale.getSt().msg.createdevices);
-		}
+		} /*else {
+			
+			//Pour initialiser les vues avec scene et webview et il faut faire 2 set. Non visible sinon (pourquoi?)
+			var deb="";
+			devices.data.each(function(device) {
+				deb=""+device.get('id');
+				deb=deb.substr(0,1);
+				if(deb=='s'||deb=='w') {
+					//device.set('top', device.get('top'));
+					//device.set('left', device.get('left'));
+				}
+			});
+			
+		}*/
+		
 		//*******************Debug mode
 		//this.verifsync(0);
 		//*******************
@@ -577,7 +591,8 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 										//Faudrait : taille slider et max slider
 										//A voir height, wwidth
 									if(device.get('var1')!=""&&device.get('var1')!= null) {
-										if(device.get('subcategory')==0) device.set('level', response.devices[idrecord][device.get('var1')]);
+										//if(device.get('subcategory')==0||)
+											device.set('level', response.devices[idrecord][device.get('var1')]);
 									} else device.set('level', 0);
 									
 									if(device.get('var2')!=""&&device.get('var2')!= null) {
@@ -2012,7 +2027,16 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 							items[floor.get('tab')].push({
 									xtype: 'dataplan',
 									id: ('vue' +floor.get('id')),
-									style: background
+									style: background,
+									itemConfig: {
+										//idetage: floor.get('id'),
+										//test si id pour pas de lancement du template s'il n'y a pas de record.
+										tpl: '<tpl if="id"><tpl if="category!=111&&(etage=='+floor.get('id')+'||etage1=='+floor.get('id')+'||etage2=='+floor.get('id')+')">'+
+											'<div style="top:<tpl if="etage=='+floor.get('id')+'">{top}px; left:{left}px;'+
+											'<tpl elseif="etage1=='+floor.get('id')+'">{top1}px; left:{left1}px;'+
+											'<tpl elseif="etage2=='+floor.get('id')+'">{top2}px; left:{left2}px;</tpl>'+
+											myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplpanwebview() + myvera.util.Templates.getTplpanfin() + '</tpl></tpl>'
+									}
 									//itemTpl: '<tpl if="etage=='+floor.get('id')+'||etage1=='+floor.get('id')+'||etage2=='+floor.get('id')+'">'+
 									//'<div style="top:<tpl if="etage=='+floor.get('id')+'">{top}px; left:{left}px;'+
 									//'<tpl elseif="etage1=='+floor.get('id')+'">{top1}px; left:{left1}px;'+

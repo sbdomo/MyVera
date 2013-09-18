@@ -1,7 +1,19 @@
 Ext.define('myvera.view.tablet.PanelConfig', {
-    extend: 'myvera.view.PanelConfig',
+    extend: 'Ext.tab.Panel',
     xtype: 'PanelConfig',
     config: {
+	ui: 'light',
+	tabBar: {
+		layout:{
+			pack:'center'
+		},
+		scrollable: {
+			direction: 'horizontal',
+			directionLock: true
+		}
+	},
+	activeTab: 1,
+	
 	items: [
 	{
 		xtype:'PanelConfigGenerale',

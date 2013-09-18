@@ -273,6 +273,11 @@ Ext.define('myvera.view.PanelConfigScene', {
 					ind: formdata.ind
 					});
 					var device = devices.getById("s" + data.id);
+					
+					//Pour mettre à jour la vue ??
+					//device.set("left", formdata.left);
+					//device.set("top", formdata.top);
+					
 					device.setDirty();
 					listdevice.set("state", "-4");
 				}
