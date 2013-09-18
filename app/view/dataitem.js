@@ -102,7 +102,7 @@ Ext.define('myvera.view.dataitem', {
 		//urn:upnp-org:serviceId:RenderingControl|SetVolume|DesiredVolume
 		//console.log(recordId + " " + service);
 		var commande =record.get('var4').split('|');
-		console.log('change ' + record.get('name'));
-		//myvera.app.getController('myvera.controller.contdevices').ondeviceaction(record.get('id'), commande[0], commande[1], commande[2], newValue);
+		//console.log('change ' + record.get('name'));
+		myvera.app.getController('myvera.controller.contdevices').ondeviceaction(record.get('id'), commande[0], commande[1], commande[2], newValue);
 	}
 });
