@@ -31,7 +31,8 @@ Ext.application({
 	'myvera.util.locale',
 	'myvera.util.Templates',
 	'Ext.ux.field.SliderFieldExtended',
-	'Ext.custom.MySlider'//,
+	'Ext.custom.MySlider',
+	'Ext.ux.cslider'
 	//'Ext.ux.field.customslider'
     ],
 

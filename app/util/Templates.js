@@ -109,7 +109,11 @@ tpllisticon:'<div class="devicon">'+
 				'<tpl elseif="category==109">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 				'<tpl elseif="category==111">'+
-					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_0</tpl>'+
+					'<tpl if="subcategory==2">'+
+						'{category}_2_<tpl if="icon!=null">{icon}<tpl else>0</tpl>'+
+					'<tpl else>'+
+						'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>'+
+					'</tpl>_0'+
 				'<tpl elseif="category==1001">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	   			'<tpl else>0_0</tpl>{retina}.png" />'+

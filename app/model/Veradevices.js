@@ -9,7 +9,7 @@ Ext.define('myvera.model.Veradevices', {
 			{name: 'status', type: 'int'},
 			{name: 'state', type: 'int'},
 			{name: 'room', type: 'int', defaultValue: 0},
-			{name: 'level', type: 'int'},
+			{name: 'level', type: 'string'},
 			{name: 'category', type: 'int'},
 			{name: 'subcategory', type: 'int', defaultValue: 0},
 			{name: 'watts', type: 'int'},

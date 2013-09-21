@@ -3,21 +3,13 @@ Ext.define('myvera.view.dataitem', {
 	extend: 'Ext.dataview.component.DataItem',
 	requires: ['myvera.util.Templates'],
 	config: {
-		/*items: [
-		{
-		itemId: 'module'//,
-		//tpl: '',
-		//hidden: true,
-		//data: ''
-		}
-		],*/
 		mySlider: {
-			//style: 'background-color:transparent;',
 			hidden: true,
 			minValue: 0,
 			top: 0,
 			left: 0,
 			type: 1,
+			//icon: 0,
 			witdh: 0
 		},
 		dataMap: {
@@ -26,7 +18,8 @@ Ext.define('myvera.view.dataitem', {
 				setWidth: 'wwidth',
 				setState: 'state',
 				setIncrMax: 'graphlink',
-				setHelperColorNumber: 'color',
+				setColorNumber: 'color',
+				setIcon: 'icon',
 				//setCategory: 'category',
 				setType: 'subcategory'
 			}
@@ -35,16 +28,19 @@ Ext.define('myvera.view.dataitem', {
 	applyMySlider: function(config) {
 		//console.log('Apply');
 		if(this.getRecord().get('category')==111) {
-			config.type = this.getRecord().get('subcategory');
-			//switch (this.getRecord().get('subcategory')) {
-			//case 1:
+			var subcategory = this.getRecord().get('subcategory');
+			config.type = subcategory;
+			switch (subcategory) {
+			case 1:
 				return Ext.factory(config, Ext.custom.MySlider, this.getMySlider());
-			//break;
-			//case 0:
-			//default:
-			//	return Ext.factory(config, Ext.form.customslider, this.getMySlider());
-			//break;
-			//}
+			break;
+			case 2:
+				return Ext.factory(config, Ext.ux.cslider, this.getMySlider());
+			break;
+			default:
+				return Ext.factory(config, Ext.custom.MySlider, this.getMySlider());
+			break;
+			}
 		} else {
 			return null;
 		}
@@ -97,10 +93,10 @@ Ext.define('myvera.view.dataitem', {
 	},
 	onSliderChange: function(Slider, thumb, newValue, oldValue, eOpts) {
 		var record = this.getRecord();
+		//console.log(newValue);
 		record.set("level", newValue);
 		record.set("state", -2);
 		//urn:upnp-org:serviceId:RenderingControl|SetVolume|DesiredVolume
-		//console.log(recordId + " " + service);
 		var commande =record.get('var4').split('|');
 		//console.log('change ' + record.get('name'));
 		myvera.app.getController('myvera.controller.contdevices').ondeviceaction(record.get('id'), commande[0], commande[1], commande[2], newValue);

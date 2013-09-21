@@ -96,7 +96,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 					} else if(value=="111"){
 						var options = [
 						{text: 'Horizontal slider',  value: '0'},
-						{text: 'Vertical slider',  value: '1'}
+						{text: 'Vertical slider',  value: '1'},
+						{text: 'Circle slider',  value: '2'}
 						];
 						subcat.setOptions(options);
 						subcat.show();
@@ -513,7 +514,10 @@ Ext.define('myvera.view.PanelConfigItem', {
 					var device = devices.getById(data.id);
 					
 					//Pas de status pour le Custom control
-					if(formdata.category==111) device.set("status", 0);
+					if(formdata.category==111) {
+						device.set("status", 0);
+						if(formdata.subcategory==2&&formdata.icon=="") formdata.icon=0;
+					}
 					
 					device.set("category", formdata.category);
 					device.set("subcategory", formdata.subcategory);

@@ -152,7 +152,7 @@ Ext.define('Ext.custom.MySlider',{
 			this.setMaxValue(taille[1]);
 		}
 	},
-	setHelperColorNumber: function(value) {
+	setColorNumber: function(value) {
 		this.config.helperColor='#' + value;
 		this.helperInput.setStyle('color', '#' + value);
 	},
