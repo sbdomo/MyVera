@@ -15,12 +15,15 @@
 "conf":"Konf.",
 "views":"Widoki",
 "devices":"urządzenia",
+"asso_devices":"Sklonowany urządzenia",
 "localconnect":"Połączenia Lokalne",
+"newclone": "Nowy klonów",
 "newwidget":"Nowy Widget",
 "tabs":"Zakładki",
 "edit":"Edycja",
 "scenes":"Scèny",
 "widgets":"Widgety",
+"clones":"Klonów"
 },
 "misc":{
 "nodevice":"Brak Urządzeń",
@@ -60,7 +63,7 @@
 "suppr":"Wstrzymaj",
 "iconmove":"Zredyfiniuj Położenie ikon",
 "version":"wersja",
-"shift":"shift",
+"shift":"shift"
 },
 "msg":{
 "renamed":"zmina nazwy",
@@ -109,6 +112,7 @@
 "updateapp":"Aktualizuj App,",
 "updatedone":"Zaktualizowano.Odświeżyć???",
 "addbtntab":"dodaj przycisk do paska zakładek",
+"isclone":"Urządzenia ten został sklonowany. Nie należy go usunąć. Kontynuować?",
 "savefloor":{
 "0":"Blad formatu obrazka nr.2",
 "1":"Url nr.2 niepoprawny",
@@ -117,7 +121,7 @@
 "4":"Obrazek nie dodany",
 "5":"Obrazek Retina nie dodany",
 "6":"Brak Widoku ?",
-"7":"Błąd polcenia",
+"7":"Błąd polcenia"
 }
 },
 "field":{
@@ -126,6 +130,7 @@
 "index":"Index",
 "urlimg":"Url obrazka",
 "img":"obrazek",
+"bypass":"Bypass",
 "imgonview":"Obrazek z innego widoku",
 "view":"Widok",
 "chooseimg":"Wybierz ten obrazek",
@@ -183,6 +188,7 @@
 "devicemngmt":"Zarządzanie listą modułów",
 "scenemngmnt":"Zarządzanie listą scen",
 "widgetmngmnt":"Zarządzanie listą widgtów",
+"clonemngmt":"Zarządzanie listą klonów",
 "viewposition":"Ustawianie widoku",
 "updatelist":"Aktualizuj listę",
 "addscene":"Dodaj scenę",
@@ -196,6 +202,15 @@
 "no":"Nie",
 "cancel":"Anuluj",
 "done":"Zrobione",
+},
+"days": {
+        "0":"Sun.",
+	"1":"Mon.",
+	"2":"Tue.",
+	"3":"Wed.",
+	"4":"Thu.",
+	"5":"Fri.",
+	"6":"Sat."
 },
 "device":{
 "vtherm":{

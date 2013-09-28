@@ -70,10 +70,19 @@ if($id=='sdata') {
 	if(isset($_GET['text1'])) $text1=$_GET['text1'];
 	else $text1="";
 	
+	if(isset($_GET['weekdays'])) $weekdays=$_GET['weekdays'];
+	else $weekdays="";
+	
 	$serviceId="urn:upnp-org:serviceId:VClock1";
 	///data_request&id=lu_action&output_format=json&DeviceNum=65&serviceId=urn:upnp-org:serviceId:VClock1&action=SetNewAlarmTime&NewAlarmTime=10:33:00
 	if($text1!="") {
 		$url=$vera.'/data_request?id=lu_action&DeviceNum='.$DeviceNum.'&serviceId='.$serviceId.'&action=SetText1&newText1Value='.rawurlencode($text1).'&output_format=json';
+		//echo $url;
+		$json=file_get_contents($url);
+		//echo " text : ".$json." - ";
+	}
+	if($weekdays!="") {
+		$url=$vera.'/data_request?id=lu_action&DeviceNum='.$DeviceNum.'&serviceId='.$serviceId.'&action=SetWeekdays&newWeekdaysValue='.rawurlencode($weekdays).'&output_format=json';
 		//echo $url;
 		$json=file_get_contents($url);
 		//echo " text : ".$json." - ";

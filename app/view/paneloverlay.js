@@ -16,6 +16,7 @@ Ext.define('myvera.view.paneloverlay', {
 			{
 				xtype: 'fieldset',
 				name:'fieldset1',
+				itemId: 'fieldset1',
 				id:'titleform',
 				//instructions: locale.getSt().misc.clockprogram,
 				defaults: {
@@ -24,11 +25,13 @@ Ext.define('myvera.view.paneloverlay', {
 				items: [
 				{
 					xtype: 'hiddenfield',
+					itemId: 'deviceid',
 					name: 'deviceid'
 				},
 				{
 					xtype: 'datetimepickerfield',
 					name: 'heuredeb',
+					itemId: 'heuredeb',
 					label: locale.getSt().misc.beginning,
 					dateTimeFormat : 'H:i:s',
 					picker: {
@@ -43,6 +46,7 @@ Ext.define('myvera.view.paneloverlay', {
 				{
 					xtype: 'datetimepickerfield',
 					name: 'heurefin',
+					itemId: 'heurefin',
 					label: locale.getSt().misc.stop,
 					dateTimeFormat : 'H:i:s',
 					picker: {
@@ -57,7 +61,32 @@ Ext.define('myvera.view.paneloverlay', {
 				{
 					xtype: 'textfield',
 					name: 'message',
+					itemId: 'message',
 					label: locale.getSt().misc.msg
+				},
+				{
+					xtype: 'hiddenfield',
+					name: 'weekdays',
+					itemId: 'weekdays',
+					label: 'weekdays'
+				},
+				{
+					xtype: 'multiselect',
+					itemId:'multidays',
+					label: locale.getSt().field.bypass,
+					delimiter: ' ',
+					//mode: 'SINGLE', // default is MULTI,
+					// value: ['first','second'] , init value with an array
+					// value: 'first,second', init value with a string
+					options: [
+						{text: locale.getSt().days['1'],  value: '1'},
+						{text: locale.getSt().days['2'], value: '2'},
+						{text: locale.getSt().days['3'],  value: '3'},
+						{text: locale.getSt().days['4'],  value: '4'},
+						{text: locale.getSt().days['5'],  value: '5'},
+						{text: locale.getSt().days['6'],  value: '6'},
+						{text: locale.getSt().days['0'],  value: '0'}
+						]
 				}
 				]
 			},

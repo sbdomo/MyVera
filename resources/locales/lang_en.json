@@ -15,12 +15,15 @@
       "conf":"Conf.",
       "views":"Views",
       "devices":"Modules",
+      "asso_devices":"Cloned module",
       "localconnect":"Local Area Connection",
+      "newclone": "New clone",
       "newwidget":"New widget",
       "tabs":"Tabs",
       "edit":"Edit",
       "scenes":"Scenes",
-      "widgets":"Widgets"
+      "widgets":"Widgets",
+      "clones":"Clones"
    },
    "misc":{
       "nodevice":"No module",
@@ -109,6 +112,7 @@
       "updateapp":"Update application",
       "updatedone":"Update successful. Reload now?",
       "addbtntab":"Remember to put at least one button in any view to bring up the bar tab",
+      "isclone":"This module is cloned. You should not delete it. To continue?",
       "savefloor":{
       	  "0":"image 2 format incorrect",
       	  "1":"url 2 incorrect",
@@ -126,6 +130,7 @@
       "index":"Index",
       "urlimg":"Image URL",
       "img":"Image",
+      "bypass":"Bypass",
       "imgonview":"Image another view",
       "view":"View",
       "chooseimg":"Select image",
@@ -183,6 +188,7 @@
       "devicemngmt":"Manage module list",
       "scenemngmnt":"Manage scene list",
       "widgetmngmnt":"Manage widget list",
+      "clonemngmt":"Manage clones list",
       "viewposition":"View position",
       "updatelist":"Update list",
       "addscene":"Add Scene",
@@ -196,6 +202,15 @@
       "no":"No",
       "cancel":"Cancel",
       "done":"Done"
+   },
+   "days": {
+        "0":"Sun.",
+	"1":"Mon.",
+	"2":"Tue.",
+	"3":"Wed.",
+	"4":"Thu.",
+	"5":"Fri.",
+	"6":"Sat."
    },
    "device":{
       "vtherm":{

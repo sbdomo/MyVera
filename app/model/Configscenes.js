@@ -23,6 +23,7 @@ Ext.define('myvera.model.Configscenes', {
 			{name: 'icon', type: 'int'},
 			{name: 'width', type: 'int', defaultValue:50},
 			{name: 'ind', type: 'int'},
+			{name: 'onboard', type: 'boolean', defaultValue: true},
 			{name:'retina', type: 'string', convert: function(value, record) {
 			var result="";
 			if(myvera.app.isretina=="@2x") result= "@2x"

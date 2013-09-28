@@ -15,12 +15,15 @@
       "conf":"Conf.",
       "views":"Vistas",
       "devices":"Módulos",
+      "asso_devices":"Módulo de cloned",
       "localconnect":"Conexão Local",
+      "newclone": "Clone novo",
       "newwidget":"Novo widget",
       "tabs":"Abas",
       "edit":"Editar",
       "scenes":"Cenas",
-      "widgets":"Widgets"
+      "widgets":"Widgets",
+      "clones":"Clones"
    },
    "misc":{
       "nodevice":"Sem módulo",
@@ -108,6 +111,7 @@
       "updateapp":"Atualizar aplicativo",
       "updatedone":"Atualizado. Recarregar?",
       "addbtntab":"Lembre-se de botar ao menos um  botão em cada vista para abrir a barra de abas",
+      "isclone":"Este módulo é cloned. Você não isto deveria apagar. Continuar?",
       "savefloor":{
       	  "0":"formato da imagem 2 incorreto",
       	  "1":"url 2 incorreto",
@@ -125,6 +129,7 @@
       "index":"Index",
       "urlimg":"URL da Imagem",
       "img":"Imagem",
+      "bypass":"Bypass",
       "imgonview":"Imagem de outra vista",
       "view":"Vista",
       "chooseimg":"Selecione a imagem",
@@ -182,6 +187,7 @@
       "devicemngmt":"Gerir lista de módulos",
       "scenemngmnt":"Gerir lista de cenas",
       "widgetmngmnt":"Gerir lista de widgets",
+      "clonemngmt":"Gerir lista de clones",
       "viewposition":"Ver posição",
       "updatelist":"Atualizar lista",
       "addscene":"Adicionar cena",
@@ -195,6 +201,15 @@
       "no":"Não",
       "cancel":"Cancelar",
       "done":"Feito"
+   },
+   "days": {
+        "0":"Sun.",
+	"1":"Mon.",
+	"2":"Tue.",
+	"3":"Wed.",
+	"4":"Thu.",
+	"5":"Fri.",
+	"6":"Sat."
    },
    "device":{
       "vtherm":{

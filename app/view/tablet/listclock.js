@@ -5,7 +5,7 @@ Ext.define('myvera.view.tablet.listclock', {
     requires:['myvera.util.Templates'],
     config: {
     	cls: 'carbon',
-	itemTpl:  '<tpl if="category==120||category==103">'+
+	itemTpl:  '<tpl if="onboard&&(category==120||category==103)">'+
 		 myvera.util.Templates.getTpllist() + '</tpl>',
 	styleHtmlContent:true,
 	itemCls:'deviceview',

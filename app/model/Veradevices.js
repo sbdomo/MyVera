@@ -45,6 +45,9 @@ Ext.define('myvera.model.Veradevices', {
 			{name: 'height', type: 'int', defaultValue:50},
 			{name: 'wwidth', type: 'int', defaultValue:50},
 			{name: 'forced', type: 'boolean', defaultValue: false},
+			{name: 'ref', type: 'string', defaultValue: ""},
+			{name: 'type', type: 'string', defaultValue: ""},
+			{name: 'onboard', type: 'boolean', defaultValue: true},
 			{name: 'retina', type: 'string', convert: function(value, record) {
 			var result="";
 			if(myvera.app.isretina=="@2x") result= "@2x";

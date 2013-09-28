@@ -4,7 +4,7 @@ Ext.define('myvera.view.phone.listclockphone', {
     stores: ['devicesStore'],
     requires:['myvera.util.Templates'],
     config: {
-		itemTpl:  '<tpl if="category==120||category==103">'+
+		itemTpl:  '<tpl if="onboard&&(category==120||category==103)">'+
 		 	myvera.util.Templates.getTplphone() + '</tpl>',
 		styleHtmlContent: false,
 		

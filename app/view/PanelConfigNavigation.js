@@ -18,7 +18,23 @@ Ext.define('myvera.view.PanelConfigNavigation', {
 					Ext.getCmp('PanelConfigNavigation').push({
 							xtype: 'PanelConfigWebview',
 							title: locale.getSt().title.newwidget,
-							data: { id:"", subcategory:'0', status:'-1', room:'0', icon:null, etage:"-1", etage1:"-1", etage2:"-1", width:"50", retina:myvera.app.isretina}
+							data: { id:"", subcategory:'0', status:'-1', room:'0', icon:null, etage:"-1", etage1:"-1", etage2:"-1", width:"50", onboard:true, retina:myvera.app.isretina}
+					});
+				}
+			},
+			{
+				xtype: 'button',
+				id: 'addCloneButton',
+				text: locale.getSt().button.add,
+				align: 'right',
+				hidden: true,
+				handler: function(){
+					Ext.getCmp('PanelConfigNavigation').push({
+							xtype: 'PanelConfigItem',
+							title: locale.getSt().title.newclone,
+							//typelist:'clone',
+							//state à -4 qand c'est un nouveau clone
+							data: { id:"", category:'0', state:'-4', type:'clone', subcategory:'0', room:'0', icon:null, etage:"-1", etage1:"-1", etage2:"-1", width:"50", onboard:false, retina:myvera.app.isretina}
 					});
 				}
 			}
@@ -34,8 +50,13 @@ Ext.define('myvera.view.PanelConfigNavigation', {
 			push:function(e,d){
 				if(this.getActiveItem().getItemId()=="PanelConfigWebviews") {
 					Ext.getCmp('addWebViewButton').show();
+					Ext.getCmp('addCloneButton').hide();
+				} else if(this.getActiveItem().getItemId()=="PanelConfigClones") {
+					Ext.getCmp('addWebViewButton').hide();
+					Ext.getCmp('addCloneButton').show();
 				} else {
 					Ext.getCmp('addWebViewButton').hide();
+					Ext.getCmp('addCloneButton').hide();
 				}
 			},
 			pop:function(e,d){
@@ -44,8 +65,13 @@ Ext.define('myvera.view.PanelConfigNavigation', {
 				Ext.getCmp('PanelConfigNavigation').setNavigationBar({docked: 'top'});
 				if(this.getActiveItem().getItemId()=="PanelConfigWebviews") {
 					Ext.getCmp('addWebViewButton').show();
+					Ext.getCmp('addCloneButton').hide();
+				} else if(this.getActiveItem().getItemId()=="PanelConfigClones") {
+					Ext.getCmp('addWebViewButton').hide();
+					Ext.getCmp('addCloneButton').show();
 				} else {
 					Ext.getCmp('addWebViewButton').hide();
+					Ext.getCmp('addCloneButton').hide();
 				}
 			}
 		}

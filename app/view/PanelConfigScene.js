@@ -21,6 +21,12 @@ Ext.define('myvera.view.PanelConfigScene', {
 			'</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id}</p><p>&nbsp;</p>' ]
 		},
 		{
+			xtype: 'togglefield',
+			name: 'onboard',
+			itemId: 'onboard',
+			label: locale.getSt().title.board
+		},
+		{
 			xtype: 'selectfield',
 			label: locale.getSt().field.view +' 0',
 			name: 'etage',
@@ -250,6 +256,7 @@ Ext.define('myvera.view.PanelConfigScene', {
 					device.set("width", formdata.width);
 					device.set("state", "-3");
 					device.set("ind", formdata.ind);
+					device.set("onboard", formdata.onboard);
 				} else {
 					devices.add({
 					id: "s" + data.id,
@@ -270,7 +277,8 @@ Ext.define('myvera.view.PanelConfigScene', {
 					color: formdata.color,
 					icon: formdata.icon,
 					width: formdata.width,
-					ind: formdata.ind
+					ind: formdata.ind,
+					onboard: formdata.onboard
 					});
 					var device = devices.getById("s" + data.id);
 					

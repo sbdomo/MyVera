@@ -15,12 +15,15 @@
       "conf":"Conf.",
       "views":"Vues",
       "devices":"Modules",
+      "asso_devices":"Module cloné",
       "localconnect":"Connexion locale",
+      "newclone": "Nouveau clone",
       "newwidget":"Nouveau widget",
       "tabs":"Onglets",
       "edit":"Edition",
       "scenes":"Scènes",
-      "widgets":"Widgets"
+      "widgets":"Widgets",
+      "clones":"Clones"
    },
    "misc":{
       "nodevice":"Aucun module",
@@ -109,6 +112,7 @@
       "updateapp":"Mise à jour de l'application",
       "updatedone":"Mise à jour réussie. Recharger maintenant ?",
       "addbtntab":"Pensez à mettre au moins un bouton dans une des vues pour faire apparaitre la barre d'onglet",
+      "isclone":"Ce module est cloné. Vous ne devriez pas le supprimer. Continuer?",
       "savefloor":{
       	  "0":"format image 2 incorrect",
       	  "1":"url 2 incorrecte",
@@ -126,6 +130,7 @@
       "index":"Index",
       "urlimg":"Url image",
       "img":"Image",
+      "bypass":"Bypass",
       "imgonview":"Image d'une autre vue",
       "view":"Vue",
       "chooseimg":"Choisir cette image",
@@ -183,6 +188,7 @@
       "devicemngmt":"Gestion de la liste des modules",
       "scenemngmnt":"Gestion de la liste des scènes",
       "widgetmngmnt":"Gestion des widgets et boutons",
+      "clonemngmt":"Gestion des clones de modules",
       "viewposition":"Positionner sur les vues",
       "updatelist":"Mettre à jour la liste",
       "addscene":"Ajouter la scène",
@@ -196,6 +202,15 @@
       "no":"Non",
       "cancel":"Annuler",
       "done":"Fait"
+   },
+   "days": {
+        "0":"Dim.",
+	"1":"Lun.",
+	"2":"Mar.",
+	"3":"Mer.",
+	"4":"Jeu.",
+	"5":"Ven.",
+	"6":"Sam."
    },
    "device":{
       "vtherm":{

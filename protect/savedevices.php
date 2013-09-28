@@ -48,7 +48,10 @@ foreach ($array_json['devices'] as $device) {
 		'camuser' => $device['camuser'],
 		'campassword' => $device['campassword'],
 		'graphlink' => $device['graphlink'],
-		'ind' => $device['ind']
+		'ind' => $device['ind'],
+		'ref' => $device['ref'],
+		'type' => $device['type'],
+		'onboard' => $device['onboard']
 		);
 	if($device['forced']=="1") $temparray['forced']="1";
 	$width =$device['width'];

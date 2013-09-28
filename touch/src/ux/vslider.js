@@ -1,5 +1,5 @@
-Ext.define('Ext.ux.cslider',{
-	xtype:'cslider',
+Ext.define('Ext.ux.vslider',{
+	xtype:'vslider',
 	extend:'Ext.Component',
 	config:{
 		/**

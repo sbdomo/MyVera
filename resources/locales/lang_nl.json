@@ -15,12 +15,15 @@
       "conf":"Conf.",
       "views":"View",
       "devices":"Modules",
+      "asso_devices":"Gekloonde module",
       "localconnect":"Local Area Connection",
+      "newclone": "Nieuwe kloon",
       "newwidget":"Nieuwe widget",
       "tabs":"Tabs",
       "edit":"Bewerk",
       "scenes":"Scenes",
-      "widgets":"Widgets"
+      "widgets":"Widgets",
+      "clones":"Klonen"
    },
    "misc":{
       "nodevice":"Geen module",
@@ -109,6 +112,7 @@
       "updateapp":"Update applicatie",
       "updatedone":"Update succesvol. Nu opnieuw laden?",
       "addbtntab":"Vergeet niet om op zn minst een knop aan te maken in een view om beschikbaar te maken in de bar tab",
+      "isclone":"Deze module wordt gekloneerd. Je moet het niet verwijderen. Doorgaan?",
       "savefloor":{
       	  "0":"afbeelding 2 formaat niet correct",
       	  "1":"url 2 niet correct",
@@ -126,6 +130,7 @@
       "index":"Index",
       "urlimg":"Afbeelding URL",
       "img":"Afbeelding",
+      "bypass":"Bypass",
       "imgonview":"Afbeelding van een ander view",
       "view":"View",
       "chooseimg":"Selecteer afbeelding",
@@ -183,6 +188,7 @@
       "devicemngmt":"Onderhoud module lijst",
       "scenemngmnt":"Onderhoud scene lijst",
       "widgetmngmnt":"Onderhoud widget lijst",
+      "clonemngmt":"Onderhoud lijst van klonen",
       "viewposition":"Bekijk positie",
       "updatelist":"Werk lijst bij",
       "addscene":"Voeg Scene toe",
@@ -196,6 +202,15 @@
       "no":"Nee",
       "cancel":"Annuleer",
       "done":"Klaar"
+   },
+   "days": {
+        "0":"Sun.",
+	"1":"Mon.",
+	"2":"Tue.",
+	"3":"Wed.",
+	"4":"Thu.",
+	"5":"Fri.",
+	"6":"Sat."
    },
    "device":{
       "vtherm":{

@@ -17,11 +17,27 @@ Ext.define('myvera.view.PanelConfigItem', {
 		{
 			html:"",
 			itemId: 'titlePanelConfigItem',
-			tpl: [ '<img style="float: left;" height="40px" src="resources/images/l<tpl if="icon!=null">{icon}'+
+			tpl: [ '<img style="float: left;" height="40px" src="resources/images/l<tpl if="icon!=null&&category!=111">{icon}'+
 			'<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}'+
-			'<tpl elseif="category==108&&subcategory==1">110<tpl elseif="category==108">108'+
+			'<tpl elseif="category==108&&(subcategory==1||subcategory==2)">110<tpl elseif="category==108">108'+
+			'<tpl elseif="category==111&&subcategory==2">111_2_<tpl if="icon!=null">{icon}<tpl else>0</tpl><tpl elseif="category==111"><tpl if="icon!=null">{icon}<tpl else>111</tpl>'+
 			'<tpl elseif="category==120&&subcategory==1">121<tpl elseif="category==120&&subcategory==2">122'+
-			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id}</p><p>&nbsp;</p>' ]
+			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id}<tpl if="type!=\'clone\'&&ref!=null&&ref!=\'\'"> (+{ref})</tpl></p><p>&nbsp;</p>' ]
+		},
+		{
+			itemId: 'originmodule',
+			xtype: 'selectfield',
+			hidden: 'true',
+			label: locale.getSt().title.asso_devices,
+			name: 'originmodule'
+		},
+		{
+			xtype: 'textfield',
+			itemId: 'clonename',
+			label: locale.getSt().field.name,
+			autoCapitalize: false,
+			hidden: true,
+			name: 'clonename'
 		},
 		{
 			xtype: 'selectfield',
@@ -89,7 +105,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 					} else if(value=="108"){
 						var options = [
 						{text: 'Normal',  value: '0'},
-						{text: 'Security Sensor',  value: '1'}
+						{text: 'Security Sensor',  value: '1'},
+						{text: 'Security Sensor (+armed)',  value: '2'}
 						];
 						subcat.setOptions(options);
 						subcat.show();
@@ -171,6 +188,12 @@ Ext.define('myvera.view.PanelConfigItem', {
 			itemId: 'subcategory'
 		},
 		{
+			xtype: 'togglefield',
+			name: 'onboard',
+			itemId: 'onboard',
+			label: locale.getSt().title.board
+		},
+		{
 			xtype: 'textfield',
 			itemId: 'CamuserItem',
 			label: locale.getSt().field.camerauser,
@@ -209,7 +232,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 			hidden: true,
 			name: 'var3'
 		},
-				{
+		{
 			xtype: 'textfield',
 			itemId: 'var5',
 			label: locale.getSt().field.vartext + " 2",
@@ -328,6 +351,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 		{
 			xtype: 'selectfield',
 			label: locale.getSt().misc.inison,
+			itemId: 'verif',
 			name: 'verif',
 			options: [
 			{text: locale.getSt().misc.ifon,  value: 'yes'},
@@ -507,11 +531,51 @@ Ext.define('myvera.view.PanelConfigItem', {
 				var fontsize=formdata.fontsize;
 				if(fontsize=="") fontsize="10px";
 				
-				var listdevices = Ext.getStore('ConfigDevicesStore');
-				var listdevice = listdevices.getById(data.id);
+				var listdevice="";
+				var newdevice=true;
+				if(data.type=="clone") {
+					if (data.state!="-4") newdevice=false;
+				} else {
+					//C'est l'inverse ! state = -4 qand ce n'est pas un nouveau device
+					if (data.state=="-4") newdevice=false;
+					listdevice = Ext.getStore('ConfigDevicesStore').getById(data.id);
+				}
+				
 				//Le module est déjà dans la liste
-				if (form.config.data.state=="-4") {
+				if (!newdevice) {
 					var device = devices.getById(data.id);
+					
+					//Le module est un clone
+					if(data.type=='clone') {
+						device.set("name", formdata.clonename);
+						
+						//le module d'origine à changé
+						if(formdata.originmodule!=data.ref) {
+							var ref = formdata.originmodule;
+							device.set("ref", ref);
+							//affectation de la référence au device d'origine et supression de la référence sur l'ancien
+							var deviceold = devices.getById(data.ref);
+							if(deviceold) {
+								var idclones="";
+								if(deviceold.get('ref')!=null) idclones=deviceold.get('ref').split('|');
+								var newref="";
+								for (var idclone in idclones) {
+									if(idclones[idclone]!=data.id) {
+										if(newref!="") newref=newref+"|"+idclones[idclone];
+										else newref=idclones[idclone];
+									}
+								}
+								deviceold.set('ref', newref);
+							}
+							var devicenew = devices.getById(ref);
+							if(devicenew) {
+								newref = devicenew.get('ref');
+								if(newref!=""&&newref!=null) newref=newref+"|"+data.id;
+								else newref=data.id;
+								devicenew.set('ref', newref);
+							}
+						}
+					}
 					
 					//Pas de status pour le Custom control
 					if(formdata.category==111) {
@@ -546,7 +610,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					device.set("ind", formdata.ind);
 					device.set("height", formdata.height);
 					device.set("wwidth", formdata.wwidth);
-					
+					device.set("onboard", formdata.onboard);
 					if(formdata.category=="108"||formdata.category=="111") {
 						device.set("var1", formdata.var1);
 						device.set("var2", formdata.var2);
@@ -558,9 +622,22 @@ Ext.define('myvera.view.PanelConfigItem', {
 						device.set("campassword", "");
 					}
 				} else {
+					var newid="";
+					if(data.type!="clone") {
+						newid=data.id;
+					} else {
+						//Recherche une nouvelle id
+						newid="c";
+						var count=0;
+						while(newid=="c") {
+							if(!devices.getById(newid+count)) newid=newid+count;
+							count=count+1;
+						}
+						if(formdata.clonename=="") formdata.clonename=newid;
+					}
 					//Il faut ajouter le module
 					devices.add({
-					id: data.id,
+					id: newid,
 					name: data.name,
 					state: "-3",
 					status: "0",
@@ -590,9 +667,10 @@ Ext.define('myvera.view.PanelConfigItem', {
 					forced: formdata.forced,
 					ind: formdata.ind,
 					height: formdata.height,
-					wwidth: formdata.wwidth
+					wwidth: formdata.wwidth,
+					onboard: formdata.onboard
 					});
-					var device = devices.getById(data.id);
+					var device = devices.getById(newid);
 					
 					if(formdata.category=="108"||formdata.category=="111") {
 						device.set("var1", formdata.var1);
@@ -609,17 +687,36 @@ Ext.define('myvera.view.PanelConfigItem', {
 					//device.set("left", formdata.left);
 					//device.set("top", formdata.top);
 					
+					if(data.type!="clone") {
+						listdevice.set("state", "-4");
+					} else {
+						device.set("name", formdata.clonename);
+						device.set("type", "clone");
+						var ref = formdata.originmodule;
+						device.set("ref", ref);
+						//affectation de la référence au device d'origine
+						var devicenew = devices.getById(ref);
+						if(devicenew) {
+							newref = devicenew.get('ref');
+							if(newref!=""&&newref!=null) newref=newref+"|"+newid;
+							else newref=newid;
+							devicenew.set('ref', newref);
+						}
+					}
+					
 					device.setDirty();
-					listdevice.set("state", "-4");
 				}
-				//Paramètres utilisés dans l'affichage de la liste de ConfigDevices, il faut donc les mettre à jour.
-				listdevice.set("category", formdata.category);
-				listdevice.set("subcategory", formdata.subcategory);
-				listdevice.set("icon", formdata.icon);
-				listdevice.set("ind", formdata.ind);
-				listdevice.set("room", formdata.room);
-				listdevice.set("name", data.name);
 				
+				//Si pas un clone
+				if(data.type!="clone") {
+					//Paramètres utilisés dans l'affichage de la liste de ConfigDevices, il faut donc les mettre à jour.
+					listdevice.set("category", formdata.category);
+					listdevice.set("subcategory", formdata.subcategory);
+					listdevice.set("icon", formdata.icon);
+					listdevice.set("ind", formdata.ind);
+					listdevice.set("room", formdata.room);
+					listdevice.set("name", data.name);
+				}
 				Ext.getCmp('PanelConfigNavigation').pop();
 				myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
 			}
@@ -636,50 +733,48 @@ Ext.define('myvera.view.PanelConfigItem', {
 			
 			handler: function(){
 				var form = this.getParent();
+				var data = form.config.data;
+				var formdata = form.getValues();
 				var devices = Ext.getStore('devicesStore');
 				var device = devices.getById(form.config.data.id);
 				//var width =device.get('width');
 				//var height =device.get('height');
-				devices.remove(device);
-				
-				var listdevices = Ext.getStore('ConfigDevicesStore');
-				var listdevice = listdevices.getById(form.config.data.id);
-				//Paramètres du modules transférés à configDevices pour pouvoir le réaffecter sans devoir tout paramétrer à nouveau
-				var formdata = form.getValues();
-				listdevice.set("category", formdata.category);
-				listdevice.set("subcategory", formdata.subcategory);
-				listdevice.set("etage", formdata.etage);
-				listdevice.set("left", formdata.left);
-				listdevice.set("top", formdata.top);
-				listdevice.set("etage1", formdata.etage1);
-				listdevice.set("left1", formdata.left1);
-				listdevice.set("top1", formdata.top1);
-				listdevice.set("etage2", formdata.etage2);
-				listdevice.set("left2", formdata.left2);
-				listdevice.set("top2", formdata.top2);
-				listdevice.set("color", formdata.color);
-				listdevice.set("fontsize", formdata.fontsize);
-				listdevice.set("icon", formdata.icon);
-				listdevice.set("verif", formdata.verif);
-				listdevice.set("sceneon", formdata.sceneon);
-				listdevice.set("sceneoff", formdata.sceneoff);
-				listdevice.set("camuser", formdata.camuser);
-				listdevice.set("campassword", formdata.campassword);
-				listdevice.set("graphlink", formdata.graphlink);
-				listdevice.set("state", "0");
-				listdevice.set("ind", formdata.ind);
-				listdevice.set("width", formdata.width);
-				Ext.getCmp('PanelConfigNavigation').pop();
-				myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
+				if(data.type=='clone') {
+					//supression de la référence sur le module cloné
+					var deviceold = devices.getById(data.ref);
+					if(deviceold) {
+						var idclones="";
+						if(deviceold.get('ref')!=null) idclones=deviceold.get('ref').split('|');
+						var newref="";
+						for (var idclone in idclones) {
+							if(idclones[idclone]!=data.id) {
+								if(newref!="") newref=newref+"|"+idclones[idclone];
+								else newref=idclones[idclone];
+							}
+						}
+						deviceold.set('ref', newref);
+					}
+					devices.remove(device);
+					Ext.getCmp('PanelConfigNavigation').pop();
+					myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
+				} else {
+					if(data.ref!=""&&data.ref!=null) {
+						Ext.Msg.confirm(locale.getSt().misc.suppr, locale.getSt().msg.isclone, function(confirmed) {
+						if (confirmed == 'yes') {
+							this.getParent().deletedevice(devices, device, formdata, form.config.data.id);
+						} else {
+							return;
+						}
+						}, this);
+					} else {
+						this.getParent().deletedevice(devices, device, formdata, form.config.data.id);
+					}
+				}
 			}
 		}
 		],
 		listeners:{
 		    updatedata:function(e,d){
-			    var label = this.down('#titlePanelConfigItem');
-			    var html = label.getTpl().apply(e.config.data);
-			    label.setHtml(html);
-			    
 			    var colorpicker = this.down('#color');
 			    colorpicker.setDefaultTabletPickerConfig({
 				 items: [
@@ -706,13 +801,39 @@ Ext.define('myvera.view.PanelConfigItem', {
 				    }
 				    ]
 			    });
-			    
-			    
-			    if (e.config.data.state=="-4") {
+			    var devices = Ext.getStore('devicesStore');
+			    var newdevice=true;
+			    if(e.config.data.type=="clone") {
+			    	    var options = [];
+			    	    var deb="";
+			    	    devices.data.each(function(device) {
+			    	    		    deb=(""+device.get('id')).substring(0,1);
+			    	    		    if(deb!="s"&&deb!="w"&&deb!="c") {
+			    	    		    	    options.push({ text: device.get('name'), value: device.get('id') });
+			    	    		    }
+			    	    });
+			    	   this.down('#originmodule').setOptions(options);
+			    	   this.down('#originmodule').setValue(e.config.data.ref);
+			    	   this.down('#originmodule').setHidden(false);
+			    	   this.down('#clonename').setValue(e.config.data.name);
+			    	   this.down('#clonename').setHidden(false);
+			    	   
+			    	   this.down('#forced').setHidden(true);
+			    	   this.down('#verif').setHidden(true);
+				   this.down('#onboard').setHidden(true);
+				   //state = -4 quand c'est un nouveau clone
+				   if (e.config.data.state!="-4") newdevice=false;
+			    } else {
+				    //C'est l'inverse ! state = -4 qand ce n'est pas un nouveau device
+				    if (e.config.data.state=="-4") newdevice=false;
+			    }
+			    if (!newdevice) {
 				    this.down('#SaveItem').setText(locale.getSt().button.update);
 				    this.down('#SaveItem').setIconCls('refresh');
-				    var devices = Ext.getStore('devicesStore');
 				    var device = devices.getById(e.config.data.id);
+				    
+				    e.config.data.ref=device.get('ref');
+				    
 				    e.setValues(device.getData());
 				    //if(device.get('verif')==null) e.setValues({verif:"yes"});
 				    //if(device.get('color')==null) e.setValues({color:'000000'});
@@ -769,6 +890,12 @@ Ext.define('myvera.view.PanelConfigItem', {
 				    //e.setValues({category: "" + e.config.data.category});
 				    //e.setValues({subcategory: "" + e.config.data.subcategory});
 			    }
+			    
+			    //Mise à jour de l'entête
+			    var label = this.down('#titlePanelConfigItem');
+			    var html = label.getTpl().apply(e.config.data);
+			    label.setHtml(html);
+			    
 			    //Pour changer l'icone du titre quand icon est modifié
 			    this.down('#icon').addListener('change', function(me,newvalue,oldvalue, opt){
 					if(newvalue!="") this.getParent().config.data.icon = newvalue;
@@ -794,6 +921,38 @@ Ext.define('myvera.view.PanelConfigItem', {
 				});
 		    }
 	}
+	},
+	
+	deletedevice: function(devices, device, formdata, id) {
+		var listdevices = Ext.getStore('ConfigDevicesStore');
+		var listdevice = listdevices.getById(id);
+		//Paramètres du modules transférés à configDevices pour pouvoir le réaffecter sans devoir tout paramétrer à nouveau
+		listdevice.set("category", formdata.category);
+		listdevice.set("subcategory", formdata.subcategory);
+		listdevice.set("etage", formdata.etage);
+		listdevice.set("left", formdata.left);
+		listdevice.set("top", formdata.top);
+		listdevice.set("etage1", formdata.etage1);
+		listdevice.set("left1", formdata.left1);
+		listdevice.set("top1", formdata.top1);
+		listdevice.set("etage2", formdata.etage2);
+		listdevice.set("left2", formdata.left2);
+		listdevice.set("top2", formdata.top2);
+		listdevice.set("color", formdata.color);
+		listdevice.set("fontsize", formdata.fontsize);
+		listdevice.set("icon", formdata.icon);
+		listdevice.set("verif", formdata.verif);
+		listdevice.set("sceneon", formdata.sceneon);
+		listdevice.set("sceneoff", formdata.sceneoff);
+		listdevice.set("camuser", formdata.camuser);
+		listdevice.set("campassword", formdata.campassword);
+		listdevice.set("graphlink", formdata.graphlink);
+		listdevice.set("state", "0");
+		listdevice.set("ind", formdata.ind);
+		listdevice.set("width", formdata.width);
+		devices.remove(device);
+		Ext.getCmp('PanelConfigNavigation').pop();
+		myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
 	},
 	
     openpanelimage: function(numetage) {

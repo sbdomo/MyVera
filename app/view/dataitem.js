@@ -8,7 +8,7 @@ Ext.define('myvera.view.dataitem', {
 			minValue: 0,
 			top: 0,
 			left: 0,
-			type: 1,
+			type: 0,
 			//icon: 0,
 			witdh: 0
 		},
@@ -32,13 +32,13 @@ Ext.define('myvera.view.dataitem', {
 			config.type = subcategory;
 			switch (subcategory) {
 			case 1:
-				return Ext.factory(config, Ext.custom.MySlider, this.getMySlider());
+				return Ext.factory(config, Ext.custom.vSlider, this.getMySlider());
 			break;
 			case 2:
 				return Ext.factory(config, Ext.ux.cslider, this.getMySlider());
 			break;
 			default:
-				return Ext.factory(config, Ext.custom.MySlider, this.getMySlider());
+				return Ext.factory(config, Ext.ux.hslider, this.getMySlider());
 			break;
 			}
 		} else {
@@ -57,7 +57,7 @@ Ext.define('myvera.view.dataitem', {
 	},
 	updateRecord: function(record) {
 		var me = this;
-		//if(!record) return;
+		if(!record) return;
 		if(record.get('category')==111) {
 			
 			var hidden=true;

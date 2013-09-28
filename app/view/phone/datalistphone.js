@@ -135,7 +135,7 @@ Ext.define('myvera.view.phone.datalistphone', {
 	    var listInRoom = this.down('#listInRoom');
 	    listInRoom.down('#toolbar').down('#title').setTitle(record.get('name'));
 	    //var tpl = '<tpl if="room==' + record.get('id') + '">' + myvera.util.Templates.getTplphone() +'</tpl>';
-	    var tpl= '<tpl if="!(category==1001&&(subcategory==0||subcategory==3||subcategory==4))"><div <tpl if="room==' + record.get('id') + '"> class="listdevice"<tpl else> style="display:none;"</tpl> >' + myvera.util.Templates.getTplphonefull()+ '</div></tpl>';
+	    var tpl= '<tpl if="!((category==1001&&(subcategory==0||subcategory==3||subcategory==4))||onboard==false)"><div <tpl if="room==' + record.get('id') + '"> class="listdevice"<tpl else> style="display:none;"</tpl> >' + myvera.util.Templates.getTplphonefull()+ '</div></tpl>';
 	    
 	    listInRoom.setItemTpl(tpl);
 	    listInRoom.refresh();

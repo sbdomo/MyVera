@@ -2,7 +2,7 @@ Ext.define('myvera.controller.contconfig', {
 	extend : 'Ext.app.Controller',
 	config: {
 		//stores: ['ConfigDevicesStore', 'devicesStore'],
-		views: ['PanelConfigNavigation', 'PanelConfigItemsMenu', 'PanelConfigItems', 'PanelConfigItem', 'PanelConfigScenes', , 'PanelConfigScene', 'PanelConfigWebviews', 'PanelConfigWebview', 'PanelImage', 'datamove', 'PanelConfigFloorsNavigation', 'PanelConfigFloors', 'PanelConfigFloor', 'PanelConfigMove', 'PanelConfigTabs', 'PanelConfigTab'],
+		views: ['PanelConfigNavigation', 'PanelConfigItemsMenu', 'PanelConfigItems', 'PanelConfigItem', 'PanelConfigScenes', , 'PanelConfigScene', 'PanelConfigWebviews', 'PanelConfigClones', 'PanelConfigWebview', 'PanelImage', 'datamove', 'PanelConfigFloorsNavigation', 'PanelConfigFloors', 'PanelConfigFloor', 'PanelConfigMove', 'PanelConfigTabs', 'PanelConfigTab'],
 		refs: {
 			configDevices: 'PanelConfigNavigation',
 			panelConfigItemsOpen: 'PanelConfigItemsMenu [name=openPanelConfigItems]',
@@ -10,6 +10,7 @@ Ext.define('myvera.controller.contconfig', {
 			panelConfigRTabsOpen: 'PanelConfigViewsMenu [name=openPanelConfigTabs]',
 			panelConfigScenesOpen: 'PanelConfigItemsMenu [name=openPanelConfigScenes]',
 			panelConfigWebViewsOpen: 'PanelConfigItemsMenu [name=openPanelConfigWebViews]',
+			panelConfigClonesOpen: 'PanelConfigItemsMenu [name=openPanelConfigClone]',
 			panelItemsMoveOpen: 'PanelConfigItemsMenu [name=openPanelMove]',
 			listItemsSave: 'PanelConfigItemsMenu [name=sauver]',
 			configFloors: 'PanelConfigFloorsNavigation',
@@ -49,6 +50,10 @@ Ext.define('myvera.controller.contconfig', {
 			
 			panelConfigWebViewsOpen: {
 				tap: 'onPanelConfigWebViewsOpen'
+			},
+			
+			panelConfigClonesOpen: {
+				tap: 'onPanelConfigClonesOpen'
 			},
 			
 			panelItemsMoveOpen: {
@@ -133,11 +138,14 @@ Ext.define('myvera.controller.contconfig', {
 			if (devices.getCount()>0) {
 				var count = 0;
 				var letexte = "";
+				var id="";
 				devices.data.each(function(device) {
 				    var cat = device.get('category');
+				    var type= device.get('type');
 				    //si la catégorie est 1000, c'est une scène, 1001 c'est une webview : ne pas prendre en compte, il serait possible également de vérifier que l'ID ne commence pas par s ou w
-				    if(cat!=1000&&cat!=1001) {
-					var id = device.get('id');
+				    //vérife si ce n'est pas un module cloné : type != clone				    
+				    if(cat!=1000&&cat!=1001&&type!="clone") {
+				    	id = device.get('id');
 					var configdevice = ConfigDevicesStore.getById(id);
 					if (configdevice) {
 						configdevice.set('state', '-4');
@@ -149,6 +157,8 @@ Ext.define('myvera.controller.contconfig', {
 						}
 						
 						configdevice.set('ind', device.get('ind'));
+						configdevice.set('ref', device.get('ref'));
+						configdevice.set('type', device.get('type'));
 						
 						var name = configdevice.get('name');
 						if (device.get('name') != name) {
@@ -187,6 +197,8 @@ Ext.define('myvera.controller.contconfig', {
 								room: device.get('room'),
 								category: device.get('category'),
 								subcategory: device.get('subcategory'),
+								ref: device.get('ref'),
+								type: device.get('type'),
 								icon: device.get('icon')
 						});
 					}
@@ -202,6 +214,13 @@ Ext.define('myvera.controller.contconfig', {
 				title: locale.getSt().title.devices
 		});
        },
+       
+       onPanelConfigClonesOpen: function() {
+	       	this.getConfigDevices().push({
+				xtype: 'PanelConfigClones',
+				title: locale.getSt().title.clones
+		});
+       }, 
        
        onPanelConfigViewsOpen: function() {
 		this.getConfigFloors().push({
@@ -303,7 +322,7 @@ Ext.define('myvera.controller.contconfig', {
 						//console.info('error finding ' + device.get('name'));
 						Ext.Msg.alert('Message', device.get('name') + ' ' +locale.getSt().msg.nofind +'.');
 						ConfigScenesStore.add({
-								id: device.get('id'),
+								id: device.get('id').substring(1),
 								name: device.get('name'),
 								state: "-4",
 								room: device.get('room'),
@@ -400,7 +419,8 @@ Ext.define('myvera.controller.contconfig', {
 		console.info('Record ' + record.get('name'));
 		this.getConfigDevices().push({
 				xtype: 'PanelConfigItem',
-				title: 'Edition',
+				typelist: 'normal',
+				title: locale.getSt().title.edit,
 				data: record.getData()
 		});
        },

@@ -46,11 +46,12 @@ Ext.define('myvera.controller.contdevices', {
 			versionBt: 'PanelConfigGenerale [name=versionbutton]',
 			urlversiontxt: 'PanelConfigGenerale [name=urlversion]',
 			
-			clockfieldsetCt: 'paneloverlay [name=fieldset1]',
-			clockdeiveidCt: 'paneloverlay [name=deviceid]',
-			clockheuredebCt: 'paneloverlay [name=heuredeb]',
-			clockheurefinCt: 'paneloverlay [name=heurefin]',
-			clockmessageCt: 'paneloverlay [name=message]',
+			paneloverlay: 'paneloverlay',
+			//clockfieldsetCt: 'paneloverlay [name=fieldset1]',
+			//clockdeiveidCt: 'paneloverlay [name=deviceid]',
+			//clockheuredebCt: 'paneloverlay [name=heuredeb]',
+			//clockheurefinCt: 'paneloverlay [name=heurefin]',
+			//clockmessageCt: 'paneloverlay [name=message]',
 			clocksaveclockBt: 'paneloverlay [name=saveclock]'
 		},
 		control: {
@@ -343,20 +344,20 @@ Ext.define('myvera.controller.contdevices', {
 		if (!devices.getCount()>0) {
 			Ext.getCmp('main').setActiveItem(Ext.getCmp('PanelConfig'));
 			Ext.Msg.alert(locale.getSt().misc.nodevice, locale.getSt().msg.createdevices);
-		} /*else {
+		} else {
 			
-			//Pour initialiser les vues avec scene et webview et il faut faire 2 set. Non visible sinon (pourquoi?)
-			var deb="";
+			//Pour initialiser les custom control même sans retour
+			var cat="";
 			devices.data.each(function(device) {
-				deb=""+device.get('id');
-				deb=deb.substr(0,1);
-				if(deb=='s'||deb=='w') {
-					//device.set('top', device.get('top'));
-					//device.set('left', device.get('left'));
+				cat=device.get('category');
+				if(cat==111) {
+					//console.log(device.get("name"));
+					device.set('top', device.get('top'));
+					device.set('left', device.get('left'));
 				}
 			});
 			
-		}*/
+		}
 		
 		//*******************Debug mode
 		//this.verifsync(0);
@@ -423,202 +424,14 @@ Ext.define('myvera.controller.contdevices', {
 						for (var idrecord in response.devices) {
 							var device = devices.getById(response.devices[idrecord].id);
 							if (device) {
-								//Le status des Smart Virtual Thermostat - category 105 et des sonos - 109 n'est pas dans status
-								if(device.get('category')!=7&&device.get('category')!=105&&device.get('category')!=109&&device.get('category')!=108&&device.get('category')!=111)
-								{
-									device.set('status', response.devices[idrecord].status);
-								}
-								if(device.get('category')!=111) device.set('level', response.devices[idrecord].level);
-								device.set('watts', response.devices[idrecord].watts);
-								device.set('comment', response.devices[idrecord].comment);
-								if (response.devices[idrecord].state == null) {
-									device.set('state', 0);
-								} else {
-									device.set('state', response.devices[idrecord].state);
-								}
-								device.set('tripped', response.devices[idrecord].tripped);
-								var armed =response.devices[idrecord].armed;
-								if(device.get('category')!=108) device.set('armed', armed);
-								
-								var category = device.get('category');
-								switch (category) {
-								case 6: //camera
-									device.set('var1', response.devices[idrecord].ip);
-									device.set('var2', response.devices[idrecord].url);
-								break;
-								case 7: //camera
-									device.set('status', response.devices[idrecord].locked);
-								break;
-								case 16: //humidity sensor
-									device.set('var1', response.devices[idrecord].humidity);
-								break;
-								case 17: //temperature sensor
-									device.set('var1', response.devices[idrecord].temperature);
-									device.set('var3', locale.getSt().unit.temp);//Unité utilisée ex: °C
-								break;
-								case 18: //light sensor
-									device.set('var1', response.devices[idrecord].light);
-								break;
-								case 21: //Power Meter : watts (déjà ajouté) + kwh
-									device.set('var1', response.devices[idrecord].kwh);
-								break;
-								case 101: //vswitch
-									device.set('var1', response.devices[idrecord].text1);
-									device.set('var2', response.devices[idrecord].text2);
-								break;
-								case 102: //vcontainer
-									device.set('var1', response.devices[idrecord].variable1);
-									device.set('var2', response.devices[idrecord].variable2);
-									device.set('var3', response.devices[idrecord].variable3);
-									device.set('var4', response.devices[idrecord].variable4);
-									device.set('var5', response.devices[idrecord].variable5);
-								break;
-								case 103: //gcal
-									if(response.devices[idrecord].nextevent) device.set('var1', response.devices[idrecord].nextevent);
-								break;
-								case 104:
-									device.set('var1', locale.getSt().device.pilotwire[response.devices[idrecord].status]);
-								break;
-								case 105: //Smart Virtual Thermostat
-									//Status 5 : non connu, 0 : mode off, 1 : mode CoolOn (Inactif), 2: Mode HeatOn (Forcé), 3: Auto
-									switch (response.devices[idrecord].mode) {
-									case "AutoChangeOver":
-										device.set('status', 3);
-										device.set('var6', locale.getSt().device.vtherm["3"]);//status en texte et traduit
-										break;
-									case "HeatOn":
-										device.set('status', 2);
-										device.set('var6', locale.getSt().device.vtherm["2"]);
-										break;
-									case "CoolOn":
-										device.set('status', 1);
-										device.set('var6', locale.getSt().device.vtherm["1"]);
-										break;
-									case "Off":
-										device.set('status', 0);
-										device.set('var6', locale.getSt().device.vtherm["0"]);
-										break;
-									default:
-										device.set('status', 5);
-										device.set('var6', "Unknown");
-										break;
+								this.updatedevice(device, response.devices[idrecord]);
+								if(device.get('type')!="clone"&&device.get('ref')!=""&&device.get('ref')!=null) {
+									var idclones=device.get('ref').split('|');
+									for (var idclone in idclones) {
+										//console.log(idclones[idclone]);
+										var clone = devices.getById(idclones[idclone]);
+										if(clone) this.updatedevice(clone, response.devices[idrecord]);
 									}
-									device.set('var1', response.devices[idrecord].temperature);
-									device.set('var2', response.devices[idrecord].heatsp); //Temp. utilisée en mode Auto. confort
-									device.set('var3', response.devices[idrecord].coolsp); //Temp. utilisée en mode Auto. Eco
-									device.set('var4', response.devices[idrecord].EnergyMode); //Normal pour le mode Confort et EnergySavingsMode pour Eco
-									device.set('var5', response.devices[idrecord].hvacstate); //Heating quand le radiateur est en chauffe et Idle quand il est à l'arrêt
-									device.set('camuser', locale.getSt().unit.temp);//Unité utilisée ex: °C
-									if(response.devices[idrecord].EnergyMode=="Normal") {
-										device.set('campassword', locale.getSt().device.vtherm.normal);//mode auto : Conf ou Eco, traduction de var4
-									} else {
-										device.set('campassword', locale.getSt().device.vtherm.eco);
-									}
-									
-//********Debug
-console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('status') + ", EnergyMode " + device.get('var4') + ", hvacstate "  + device.get('var5'));
-								break;
-								case 107: //colored vcontainer
-									if(!isNaN(parseInt(response.devices[idrecord].variable1))) device.set('status', parseInt(response.devices[idrecord].variable1));
-										else device.set('status', "");
-									device.set('var1', response.devices[idrecord].variable2);
-								break;
-								case 108: //Custom Device utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
-										//var4: commande, graphlink pour l'url du popup, wwidth et height
-										//Affectation : status en fonction de var1
-										//camuser : contient var2+var3
-										//campassword : contient var5+var6
-										//sous-catégorie 0 : normal var1=status
-										//sous-catégorie 1 : security sensor var1=status|armed
-									if(device.get('var1')!=""&&device.get('var1')!= null) {
-										if(device.get('subcategory')==1) {
-											var commande =device.get('var1').split('|');
-											device.set('status', response.devices[idrecord][commande[0]]);
-											device.set('armed', response.devices[idrecord][commande[1]]);
-										} else {
-											device.set('status', response.devices[idrecord][device.get('var1')]);
-										}
-									} else device.set('status', 0);
-									if(device.get('var2')!=""&&device.get('var2')!= null) {
-										device.set('camuser', response.devices[idrecord][device.get('var2')] + device.get('var3') );
-									} else device.set('camuser', "");
-									if(device.get('var5')!=""&&device.get('var5')!= null) {
-										device.set('campassword', response.devices[idrecord][device.get('var5')] + device.get('var6') );
-									} else device.set('campassword', "");									
-								break;
-								case 109: //Sonos plugin status : transportstate, level : volume, armed: mute, var1 : currentstatus
-									//var2 : version courte de currentstatus, var3 : currentalbumart
-									var status = 3;
-									switch (response.devices[idrecord].transportstate) {
-									case "PAUSED_PLAYBACK":
-										status = 0;
-										break;
-									case "PLAYING":
-										status = 1;
-										break;
-									case "STOPPED":
-										status = 2;
-										break;
-									default:
-										status = 3
-										break;
-									}
-									if(status!=3) {
-										device.set('status', status);
-									} else {
-										device.set('state', -2);
-									}
-									device.set('level', response.devices[idrecord].volume);
-									device.set('armed', response.devices[idrecord].mute);
-									device.set('var1', response.devices[idrecord].currentstatus);
-									var shorttitle = response.devices[idrecord].currentstatus;
-									if(shorttitle.length>10) shorttitle= shorttitle.substring(0,10)+"...";
-									device.set('var2', shorttitle);
-									device.set('var3', response.devices[idrecord].currentalbumart);
-									//device.set('var5', response.devices[idrecord].ip);
-									//si le menu de configuration du module est ouvert/existe, il est mis à jour
-									var popup=Ext.getCmp('sonos' + response.devices[idrecord].id);
-									if(popup) this.updatesonospopup(popup, device);
-								break;
-								case 111: //Custom Slider
-									//utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
-										//var4: commande
-										//graphlink pour la largeur du slider, increment et max
-										//Affectation : status en fonction de var1
-										//camuser : contient var2+var3
-										//campassword : contient var5+var6
-										//sous-catégorie 0 : normal var1=level
-										//Faudrait : taille slider et max slider
-										//A voir height, wwidth
-									if(device.get('var1')!=""&&device.get('var1')!= null) {
-										//if(device.get('subcategory')==0||)
-											device.set('level', response.devices[idrecord][device.get('var1')]);
-									} else device.set('level', 0);
-									
-									if(device.get('var2')!=""&&device.get('var2')!= null) {
-										device.set('camuser', response.devices[idrecord][device.get('var2')] + device.get('var3') );
-									} else device.set('camuser', "");
-									if(device.get('var5')!=""&&device.get('var5')!= null) {
-										device.set('campassword', response.devices[idrecord][device.get('var5')] + device.get('var6') );
-									} else device.set('campassword', "");	
-										
-								break;
-								case 120: //vclock
-									device.set('var1', response.devices[idrecord].alarmtime);
-									if (response.devices[idrecord].alarmtime != null) {
-										var heuredep = new Date("February 5, 2001 " + response.devices[idrecord].alarmtime);
-										var duration = response.devices[idrecord].alarmduration;
-										heuredep.setTime(heuredep.getTime() + (eval(duration) * 1000));
-										var heures = Ext.Date.format(heuredep, 'H:i:s')
-										device.set('var2', heures);
-									}
-									device.set('var3', response.devices[idrecord].next);
-									device.set('var4', response.devices[idrecord].text1);
-									device.set('var5', response.devices[idrecord].alarmtype);
-									device.set('var6', response.devices[idrecord].weekdays);
-								break;
-								default:
-									break;
 								}
 							}
 						}
@@ -648,7 +461,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 							var category = rec.get('category');
 							var isTripped = (rec.get('tripped') == 1);
 							if (
-									(rec.get('verif') != 'off' && rec.get('verif') != 'no')
+									(rec.get('type') != 'clone' && rec.get('verif') != 'off' && rec.get('verif') != 'no')
 									&&
 									(
 										((category == 4 || category == 103 || category == 120) && isTripped)
@@ -662,7 +475,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 							) {
 								count1++;
 							}
-							if (
+							if ( rec.get('type') != 'clone' && (
 									(
 										rec.get('verif') == 'off'
 										&&
@@ -676,7 +489,9 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 									)
 									||
 									(rec.get('verif')!='no' && (category == 4 || category == 103 || category == 120) && rec.get('armed')==0)
-							) {
+									)
+								)
+							{
 								count2++;
 							}
 						});
@@ -1007,20 +822,38 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			//Vclock
 			if (cat == 120&&record.get('sceneon') == null) {
 				var dateheure="";
-				this.getClockfieldsetCt().setTitle(record.get('name'));
-				this.getClockdeiveidCt().setValue(record.get('id'));
+				this.getPaneloverlay().down('#fieldset1').setTitle(record.get('name'));
+				this.getPaneloverlay().down('#deviceid').setValue(record.get('id'));
 				dateheure=new Date("February 5, 2001 "+record.get('var1'));
-				this.getClockheuredebCt().setValue(dateheure);
+				this.getPaneloverlay().down('#heuredeb').setValue(dateheure);
 				dateheure=new Date("February 5, 2001 "+record.get('var2'));
-				this.getClockheurefinCt().setValue(dateheure);
-				if(record.get('subcategory')!=1) this.getClockheurefinCt().hide();
-				else this.getClockheurefinCt().show();
-				this.getClockmessageCt().setValue(record.get('var4'));
-				if(record.get('subcategory')!=2) this.getClockmessageCt().hide();
-				else this.getClockmessageCt().show();
-				if(record.get('subcategory')!=1&&record.get('subcategory')!=2) Ext.getCmp('paneloverlay').setHeight('250px');
-				else Ext.getCmp('paneloverlay').setHeight('290px');
-				Ext.getCmp('paneloverlay').show();
+				this.getPaneloverlay().down('#heurefin').setValue(dateheure);
+				if(record.get('subcategory')!=1) this.getPaneloverlay().down('#heurefin').hide();
+				else this.getPaneloverlay().down('#heurefin').show();
+				this.getPaneloverlay().down('#message').setValue(record.get('var4'));
+				if(record.get('subcategory')!=2) {
+					this.getPaneloverlay().down('#message').hide();
+					var multidays="";
+					if(record.get('var6')!="") {
+						var days = record.get('var6').split(' ');
+						for (var day in days) {
+							if(days[day]=='1') {
+								if(multidays=="") multidays=day;
+								else multidays=multidays+" "+day;
+							}
+						}
+					}
+					this.getPaneloverlay().down('#multidays').setValue(multidays);
+					this.getPaneloverlay().down('#multidays').show();
+				} else {
+					this.getPaneloverlay().down('#message').show();
+					this.getPaneloverlay().down('#multidays').hide();
+				}
+				//this.getPaneloverlay().down('#weekdays').setValue(record.get('var6'));
+				
+				if(record.get('subcategory')!=1&&record.get('subcategory')!=2) this.getPaneloverlay().setHeight('250px');
+				else this.getPaneloverlay().setHeight('290px');
+				this.getPaneloverlay().show();
 				return;
 			}
 			
@@ -1144,12 +977,19 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			
 			//Custom Device
 			if(cat == 108&&record.get('sceneon') == null) {
-				if(record.get('var4')!=""&&record.get('var4')!=null&&record.get('subcategory')==0) {
+				if(record.get('var4')!=""&&record.get('var4')!=null&&(record.get('subcategory')==0||record.get('subcategory')==2)) {
 					//Exemple : urn:upnp-org:serviceId:VSwitch1|SetTarget|newTargetValue
 					var commande =record.get('var4').split('|')
 					dservice = commande[0];
 					daction = commande[1];
 					dtargetvalue = commande[2];
+					if(record.get('subcategory')==2) {
+						if (record.get('armed') == 1) {
+							newstatus = "0";
+						} else {
+							newstatus = "1";
+						}
+					}
 				} else {
 					if(record.get('graphlink')!=""&&record.get('graphlink')!=null) {
 						this.widgetPopup(record.get('wwidth'), record.get('height'), record.get('graphlink'));
@@ -1252,6 +1092,9 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 		//Lancement de l'action
 		console.log("switch : " + record.get('name'));
 		record.set('state', -2);
+		var recordid="";
+		if(record.get('type')!='clone') recordid=record.get('id');
+		else recordid=record.get('ref');
 		var vera_url = './protect/syncvera.php';
 		var syncheader = "";
 		syncheader = {'Authorization': 'Basic ' + this.loggedUserId};
@@ -1260,12 +1103,12 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			url: vera_url,
 			headers: syncheader,
 			method: 'GET',
-			timeout: 40000,
+			timeout: 90000,
 			scope: this,
 			params: {
 				id: 'lu_action',
 				ipvera: ipvera,
-				DeviceNum: record.get('id'),
+				DeviceNum: recordid,
 				serviceId: dservice,
 				action: daction,
 				newvalue: newstatus,
@@ -1291,12 +1134,10 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 	},
 	
 	onDeviceHoldTap: function(view, index, target, record, event) {
-		
 		var me = this;
 		//record.set('state', 2);
 		//return;
 		if(record.get('category')==109) { //Sonos
-			
 			var popup=new Ext.Panel({
 			modal:true,
 			hideOnMaskTap: true,
@@ -1842,15 +1683,15 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 	},
 	
 	onClockSaveTap: function() {
-		Ext.getCmp('paneloverlay').hide();
-		var id = this.getClockdeiveidCt().getValue();
-		var datedeb = this.getClockheuredebCt().getValue();
+		this.getPaneloverlay().hide();
+		var id = this.getPaneloverlay().down('#deviceid').getValue();
+		var datedeb = this.getPaneloverlay().down('#heuredeb').getValue();
 		//le controleur, change le jour (il met le jour en cours). il faut donc le corriger.
 		datedeb = new Date("February 5, 2001 " + Ext.Date.format(datedeb, 'H:i:s'));
-		var datefin = this.getClockheurefinCt().getValue();
+		var datefin = this.getPaneloverlay().down('#heurefin').getValue();
 		datefin = new Date("February 5, 2001 " + Ext.Date.format(datefin, 'H:i:s'));
 			//Ext.Msg.alert('Message',Ext.Date.format(datedeb, 'd/m/y H:i:s')+' '+Ext.Date.format(datefin, 'd/m/y H:i:s'));
-		var message = this.getClockmessageCt().getValue();
+		var message = this.getPaneloverlay().down('#message').getValue();		
 		var devices = Ext.getStore('devicesStore');
 		var device=devices.getById(id);
 		var devicetype=device.get('subcategory');
@@ -1871,9 +1712,32 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 		if(devicetype=="2"&&message!=device.get('var4')) {
 			change=true;
 		} else message="";
+		
+		var weekdays=device.get('var6');
+		if (devicetype != "2") {
+			var multidays = eval(this.getPaneloverlay().down('#multidays').getValue());
+			var week = [0, 0, 0, 0, 0, 0, 0];
+			for (var day in multidays) {
+				week[multidays[day]]=1;
+			}
+			weekdays="";
+			for (var day in week) {
+				weekdays=weekdays+" "+week[day];
+			}
+			weekdays=weekdays.substring(1);
+			//console.log(weekdays);
+			//var result = 
+			//ex: ["0", "3", "6"] 
+		}
+		if(weekdays!=device.get('var6')) change=true;
+		else weekdays="";
+		
 		//change=false;
 		if (change == true) {
 			device.set('state', -2);
+			var recordid="";
+			if(device.get('type')!='clone') recordid=device.get('id');
+			else recordid=device.get('ref');
 			var vera_url = './protect/syncvera.php';
 			var syncheader = "";
 			syncheader={'Authorization': 'Basic ' + this.loggedUserId};
@@ -1884,10 +1748,11 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 				params: {
 					id: 'vclock',
 					ipvera: ipvera,
-					DeviceNum: id,
+					DeviceNum: recordid,
 					alarmtime: heuredeb,
 					alarmduration: heurefin,
-					text1: message
+					text1: message,
+					weekdays: weekdays
 				},
 				method: 'GET',
 				timeout: 10000,
@@ -1916,6 +1781,9 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 		//switch status
 		console.log("switch : " + device.get('name'));
 		device.set('state', -2);
+		var recordid="";
+		if(device.get('type')!='clone') recordid=device.get('id');
+		else recordid=device.get('ref');
 		var vera_url = './protect/syncvera.php';
 		var syncheader = "";
 		syncheader = {'Authorization': 'Basic ' + this.loggedUserId};
@@ -1929,7 +1797,7 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			params: {
 				id: 'lu_action',
 				ipvera: ipvera,
-				DeviceNum: iddevice,
+				DeviceNum: recordid,
 				serviceId: dservice,
 				action: daction,
 				newvalue: newstatus,
@@ -2548,7 +2416,9 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 		if(statechange!="nostate") device.set('state', -2);
 		
 		//var cat=device.get('category');
-		
+		var recordid="";
+		if(device.get('type')!='clone') recordid=device.get('id');
+		else recordid=device.get('ref');
 		var vera_url = './protect/syncvera.php';
 		var syncheader = "";
 		syncheader = {'Authorization': 'Basic ' + this.loggedUserId};
@@ -2557,12 +2427,12 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 			url: vera_url,
 			headers: syncheader,
 			method: 'GET',
-			timeout: 10000,
+			timeout: 40000,
 			scope: this,
 			params: {
 				id: 'lu_action',
 				ipvera: ipvera,
-				DeviceNum: iddevice,
+				DeviceNum: recordid,
 				serviceId: dservice,
 				action: daction,
 				newvalue: newstatus,
@@ -2570,7 +2440,7 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 			},
 			success: function(response) {
 				if (Ext.Array.contains([2, 3, 8], device.get('category'))) {
-					if(statechange!="nostate") record.set('state', -2);
+					if(statechange!="nostate") device.set('state', -2);
 				}
 			},
 			failure: function(response) {
@@ -2580,6 +2450,206 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 		});
 		} else {
 			console.log("Erreur - module non trouvé.");
+		}
+	},
+	updatedevice: function(device, deviceupdate) {
+		//Le status des Smart Virtual Thermostat - category 105 et des sonos - 109 n'est pas dans status
+		if(device.get('category')!=7&&device.get('category')!=105&&device.get('category')!=109&&device.get('category')!=108&&device.get('category')!=111)
+		{
+			device.set('status', deviceupdate.status);
+		}
+		if(device.get('category')!=111) device.set('level', deviceupdate.level);
+		device.set('watts', deviceupdate.watts);
+		device.set('comment', deviceupdate.comment);
+		if (deviceupdate.state == null) {
+			device.set('state', 0);
+		} else {
+			device.set('state', deviceupdate.state);
+		}
+		device.set('tripped', deviceupdate.tripped);
+		var armed =deviceupdate.armed;
+		if(device.get('category')!=108) device.set('armed', armed);
+		
+		var category = device.get('category');
+		switch (category) {
+		case 6: //camera
+			device.set('var1', deviceupdate.ip);
+			device.set('var2', deviceupdate.url);
+			break;
+		case 7: //camera
+			device.set('status', deviceupdate.locked);
+			break;
+		case 16: //humidity sensor
+			device.set('var1', deviceupdate.humidity);
+			break;
+		case 17: //temperature sensor
+			device.set('var1', deviceupdate.temperature);
+			device.set('var3', locale.getSt().unit.temp);//Unité utilisée ex: °C
+			break;
+		case 18: //light sensor
+			device.set('var1', deviceupdate.light);
+			break;
+		case 21: //Power Meter : watts (déjà ajouté) + kwh
+			device.set('var1', deviceupdate.kwh);
+			break;
+		case 101: //vswitch
+			device.set('var1', deviceupdate.text1);
+			device.set('var2', deviceupdate.text2);
+			break;
+		case 102: //vcontainer
+			device.set('var1', deviceupdate.variable1);
+			device.set('var2', deviceupdate.variable2);
+			device.set('var3', deviceupdate.variable3);
+			device.set('var4', deviceupdate.variable4);
+			device.set('var5', deviceupdate.variable5);
+			break;
+		case 103: //gcal
+			if(deviceupdate.nextevent) device.set('var1', deviceupdate.nextevent);
+			break;
+		case 104:
+			device.set('var1', locale.getSt().device.pilotwire[deviceupdate.status]);
+			break;
+		case 105: //Smart Virtual Thermostat
+			//Status 5 : non connu, 0 : mode off, 1 : mode CoolOn (Inactif), 2: Mode HeatOn (Forcé), 3: Auto
+			switch (deviceupdate.mode) {
+			case "AutoChangeOver":
+				device.set('status', 3);
+				device.set('var6', locale.getSt().device.vtherm["3"]);//status en texte et traduit
+				break;
+			case "HeatOn":
+				device.set('status', 2);
+				device.set('var6', locale.getSt().device.vtherm["2"]);
+				break;
+			case "CoolOn":
+				device.set('status', 1);
+				device.set('var6', locale.getSt().device.vtherm["1"]);
+				break;
+			case "Off":
+				device.set('status', 0);
+				device.set('var6', locale.getSt().device.vtherm["0"]);
+				break;
+			default:
+				device.set('status', 5);
+				device.set('var6', "Unknown");
+				break;
+			}
+			device.set('var1', deviceupdate.temperature);
+			device.set('var2', deviceupdate.heatsp); //Temp. utilisée en mode Auto. confort
+			device.set('var3', deviceupdate.coolsp); //Temp. utilisée en mode Auto. Eco
+			device.set('var4', deviceupdate.EnergyMode); //Normal pour le mode Confort et EnergySavingsMode pour Eco
+			device.set('var5', deviceupdate.hvacstate); //Heating quand le radiateur est en chauffe et Idle quand il est à l'arrêt
+			device.set('camuser', locale.getSt().unit.temp);//Unité utilisée ex: °C
+			if(deviceupdate.EnergyMode=="Normal") {
+				device.set('campassword', locale.getSt().device.vtherm.normal);//mode auto : Conf ou Eco, traduction de var4
+			} else {
+				device.set('campassword', locale.getSt().device.vtherm.eco);
+			}
+									
+//********Debug
+console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('status') + ", EnergyMode " + device.get('var4') + ", hvacstate "  + device.get('var5'));
+			break;
+		case 107: //colored vcontainer
+			if(!isNaN(parseInt(deviceupdate.variable1))) device.set('status', parseInt(deviceupdate.variable1));
+			else device.set('status', "");
+			device.set('var1', deviceupdate.variable2);
+			break;
+		case 108: //Custom Device utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
+			//var4: commande, graphlink pour l'url du popup, wwidth et height
+			//Affectation : status en fonction de var1
+			//camuser : contient var2+var3
+			//campassword : contient var5+var6
+			//sous-catégorie 0 : normal var1=status
+			//sous-catégorie 1 : security sensor var1=status|armed
+			if(device.get('var1')!=""&&device.get('var1')!= null) {
+				if(device.get('subcategory')==1||device.get('subcategory')==2) {
+					var commande=device.get('var1').split('|');
+					device.set('status', deviceupdate[commande[0]]);
+					device.set('armed', deviceupdate[commande[1]]);
+				} else {
+					device.set('status', deviceupdate[device.get('var1')]);
+				}
+			} else device.set('status', 0);
+			if(device.get('var2')!=""&&device.get('var2')!= null) {
+				device.set('camuser', deviceupdate[device.get('var2')] + device.get('var3') );
+			} else device.set('camuser', "");
+			if(device.get('var5')!=""&&device.get('var5')!= null) {
+				device.set('campassword', deviceupdate[device.get('var5')] + device.get('var6') );
+			} else device.set('campassword', "");
+			
+			break;
+		case 109: //Sonos plugin status : transportstate, level : volume, armed: mute, var1 : currentstatus
+			//var2 : version courte de currentstatus, var3 : currentalbumart
+			var status = 3;
+			switch (deviceupdate.transportstate) {
+			case "PAUSED_PLAYBACK":
+				status = 0;
+				break;
+			case "PLAYING":
+				status = 1;
+				break;
+			case "STOPPED":
+				status = 2;
+				break;
+			default:
+				status = 3
+				break;
+			}
+			if(status!=3) {
+				device.set('status', status);
+			} else {
+				device.set('state', -2);
+			}
+			device.set('level', deviceupdate.volume);
+			device.set('armed', deviceupdate.mute);
+			device.set('var1', deviceupdate.currentstatus);
+			var shorttitle = deviceupdate.currentstatus;
+			if(shorttitle.length>10) shorttitle= shorttitle.substring(0,10)+"...";
+			device.set('var2', shorttitle);
+			device.set('var3', deviceupdate.currentalbumart);
+			//device.set('var5', deviceupdate.ip);
+			//si le menu de configuration du module est ouvert/existe, il est mis à jour
+			var popup=Ext.getCmp('sonos' + deviceupdate.id);
+			if(popup) this.updatesonospopup(popup, device);
+			break;
+		case 111: //Custom Slider
+			//utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
+			//var4: commande
+			//graphlink pour la largeur du slider, increment et max
+			//Affectation : status en fonction de var1
+			//camuser : contient var2+var3
+			//campassword : contient var5+var6
+			//sous-catégorie 0 : normal var1=level
+			//Faudrait : taille slider et max slider
+			//A voir height, wwidth
+			if(device.get('var1')!=""&&device.get('var1')!= null) {
+				//if(device.get('subcategory')==0||)
+				device.set('level', deviceupdate[device.get('var1')]);
+			} else device.set('level', 0);
+			
+			if(device.get('var2')!=""&&device.get('var2')!= null) {
+				device.set('camuser', deviceupdate[device.get('var2')] + device.get('var3') );
+			} else device.set('camuser', "");
+			if(device.get('var5')!=""&&device.get('var5')!= null) {
+				device.set('campassword', deviceupdate[device.get('var5')] + device.get('var6') );
+			} else device.set('campassword', "");
+			
+			break;
+		case 120: //vclock
+			device.set('var1', deviceupdate.alarmtime);
+			if (deviceupdate.alarmtime != null) {
+				var heuredep = new Date("February 5, 2001 " + deviceupdate.alarmtime);
+				var duration = deviceupdate.alarmduration;
+				heuredep.setTime(heuredep.getTime() + (eval(duration) * 1000));
+				var heures = Ext.Date.format(heuredep, 'H:i:s');
+				device.set('var2', heures);
+			}
+			device.set('var3', deviceupdate.next);
+			device.set('var4', deviceupdate.text1);
+			device.set('var5', deviceupdate.alarmtype);
+			device.set('var6', deviceupdate.weekdays);
+			break;
+		default:
+			break;
 		}
 	}
 });

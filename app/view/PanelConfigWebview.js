@@ -112,6 +112,12 @@ Ext.define('myvera.view.PanelConfigWebview', {
 			valueField: 'id'
 		},
 		{
+			xtype: 'togglefield',
+			name: 'onboard',
+			itemId: 'onboard',
+			label: locale.getSt().title.board
+		},
+		{
 			xtype: 'selectfield',
 			label: locale.getSt().field.go,
 			name: 'status',
@@ -352,6 +358,7 @@ Ext.define('myvera.view.PanelConfigWebview', {
 					device.set("icon", formdata.icon);
 					device.set("room", formdata.room);
 					device.set("wwidth", formdata.wwidth);
+					device.set("onboard", formdata.onboard);
 				} else {
 					//Recherche une nouvelle id
 					var newid="w";
@@ -384,7 +391,8 @@ Ext.define('myvera.view.PanelConfigWebview', {
 					subcategory: data.subcategory,
 					icon: formdata.icon,
 					status: formdata.status,
-					wwidth: formdata.wwidth
+					wwidth: formdata.wwidth,
+					onboard: formdata.onboard
 					});
 					var device = devices.getById(newid);
 					

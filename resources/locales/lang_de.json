@@ -15,12 +15,15 @@
       "conf":"Konf.",
       "views":"Ansichten",
       "devices":"Ger&auml;te",
+      "asso_devices":"Module cloné",
       "localconnect":"Lokale Netzwerkverbindung",
+      "newclone": "Nouveau clone",
       "newwidget":"Neues Widget",
       "tabs":"Tabs",
       "edit":"Bearbeiten",
       "scenes":"Szenen",
       "widgets":"Widgets"
+      "clones":"Clones"
    },
    "misc":{
       "nodevice":"Kein Ger&auml;t",
@@ -109,6 +112,7 @@
       "updateapp":"Aktualisieren der Anwendung",
       "updatedone":"Aktualisierung erfolgreich. Jetzt neu starten?",
       "addbtntab":"Wenigstens ein Button muss in einer Ansicht vorhanden sein, damit die Tab-Zeile sichtbar wird.",
+      "isclone":"Ce module est cloné. Vous ne devriez pas le supprimer. Continuer?",
       "savefloor":{
            "0":"image 2 falsches Format",
            "1":"url 2 fehlerhaft",
@@ -126,6 +130,7 @@
       "index":"Index",
       "urlimg":"Abbildung URL",
       "img":"Abbildung",
+      "bypass":"Bypass",
       "imgonview":"Abbildung einer anderen Ansicht",
       "view":"Ansicht",
       "chooseimg":"Abbildung ausw&auml;hlen",
@@ -183,6 +188,7 @@
       "devicemngmt":"Ger&auml;te-Liste verwalten",
       "scenemngmnt":"Szenen-Liste verwalten",
       "widgetmngmnt":"Widgets-Liste verwalten",
+      "clonemngmt":"Gestion des clones de modules",
       "viewposition":"Position auf Ansicht",
       "updatelist":"Liste aktualisieren",
       "addscene":"Szene hinzuf&uuml;gen",
@@ -196,6 +202,15 @@
       "no":"Nein",
       "cancel":"Abbrechen",
       "done":"Erledigt"
+   },
+   "days": {
+        "0":"Sun.",
+	"1":"Mon.",
+	"2":"Tue.",
+	"3":"Wed.",
+	"4":"Thu.",
+	"5":"Fri.",
+	"6":"Sat."
    },
    "device":{
       "vtherm":{
