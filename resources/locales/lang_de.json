@@ -15,15 +15,15 @@
       "conf":"Konf.",
       "views":"Ansichten",
       "devices":"Ger&auml;te",
-      "asso_devices":"Module cloné",
+      "asso_devices":"Geklontes Element",
       "localconnect":"Lokale Netzwerkverbindung",
-      "newclone": "Nouveau clone",
+      "newclone": "Neu Klon",
       "newwidget":"Neues Widget",
       "tabs":"Tabs",
       "edit":"Bearbeiten",
       "scenes":"Szenen",
       "widgets":"Widgets"
-      "clones":"Clones"
+      "clones":"Klone"
    },
    "misc":{
       "nodevice":"Kein Ger&auml;t",
@@ -112,7 +112,7 @@
       "updateapp":"Aktualisieren der Anwendung",
       "updatedone":"Aktualisierung erfolgreich. Jetzt neu starten?",
       "addbtntab":"Wenigstens ein Button muss in einer Ansicht vorhanden sein, damit die Tab-Zeile sichtbar wird.",
-      "isclone":"Ce module est cloné. Vous ne devriez pas le supprimer. Continuer?",
+      "isclone":"Dieses Element ist geklont. Sie sollten ihn nicht beseitigen. Fortlaufen?",
       "savefloor":{
            "0":"image 2 falsches Format",
            "1":"url 2 fehlerhaft",
@@ -188,6 +188,7 @@
       "devicemngmt":"Ger&auml;te-Liste verwalten",
       "scenemngmnt":"Szenen-Liste verwalten",
       "widgetmngmnt":"Widgets-Liste verwalten",
+      "clonemngmt":"Verwaltung der Liste der Klone",
       "clonemngmt":"Gestion des clones de modules",
       "viewposition":"Position auf Ansicht",
       "updatelist":"Liste aktualisieren",
