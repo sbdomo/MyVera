@@ -20,7 +20,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 			tpl: [ '<img style="float: left;" height="40px" src="resources/images/l<tpl if="icon!=null&&category!=111">{icon}'+
 			'<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}'+
 			'<tpl elseif="category==108&&(subcategory==1||subcategory==2)">110<tpl elseif="category==108">108'+
-			'<tpl elseif="category==111&&subcategory==2">111_2_<tpl if="icon!=null">{icon}<tpl else>0</tpl><tpl elseif="category==111"><tpl if="icon!=null">{icon}<tpl else>111</tpl>'+
+			'<tpl elseif="category==111"><tpl if="icon!=null">{icon}<tpl else>111</tpl>'+
 			'<tpl elseif="category==120&&subcategory==1">121<tpl elseif="category==120&&subcategory==2">122'+
 			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id}<tpl if="type!=\'clone\'&&ref!=null&&ref!=\'\'"> (+{ref})</tpl></p><p>&nbsp;</p>' ]
 		},
@@ -114,7 +114,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 						var options = [
 						{text: 'Horizontal slider',  value: '0'},
 						{text: 'Vertical slider',  value: '1'},
-						{text: 'Circle slider',  value: '2'}
+						{text: 'Circle slider',  value: '2'},
+						{text: 'Img. Vert. slider',  value: '3'}
 						];
 						subcat.setOptions(options);
 						subcat.show();
@@ -156,23 +157,48 @@ Ext.define('myvera.view.PanelConfigItem', {
 						this.getParent().down('#height').show();
 						this.getParent().down('#var1').show();
 						this.getParent().down('#var2').show();
+						this.getParent().down('#var2').setLabel(locale.getSt().field.vartext + " 1");
+						
 						this.getParent().down('#var3').show();
+						this.getParent().down('#var3').setLabel(locale.getSt().field.suffix + " 1");
+						
 						this.getParent().down('#var4').show();
 						this.getParent().down('#var5').show();
+						this.getParent().down('#var5').setLabel(locale.getSt().field.vartext + " 2");
+						
 						this.getParent().down('#var6').show();
 					} else  if(value=="111") {
 						this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max');
 						this.getParent().down('#GraphlinkItem').show();
+						
 						this.getParent().down('#wwidth').show();
 						//this.getParent().down('#height').show();
 						this.getParent().down('#var1').show();
-						//this.getParent().down('#var2').show();
-						//this.getParent().down('#var3').show();
+						
+						this.getParent().down('#var2').setLabel(locale.getSt().field.img);
+						
+						
+						this.getParent().down('#var3').setLabel(locale.getSt().field.width);
+						
 						this.getParent().down('#var4').show();
-						//this.getParent().down('#var5').show();
+						this.getParent().down('#var5').show();
+						this.getParent().down('#var5').setLabel(locale.getSt().field.suffix);
+						
 						//this.getParent().down('#var6').show();
+						
+						//console.log("subcat:"+subcat.getValue());
+						if(subcat.getValue()==1||subcat.getValue()==3) {
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
+						} else {
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
+						}
+						if(subcat.getValue()==3||subcat.getValue()==2) {
+							this.getParent().down('#var2').show();
+						}
+						if(subcat.getValue()==3) this.getParent().down('#var3').show();
+						
 					}
-					
+					if(value!="111") this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
 					
 					this.getParent().config.data.category = value;
 					var label = this.getParent().down('#titlePanelConfigItem');
@@ -185,7 +211,27 @@ Ext.define('myvera.view.PanelConfigItem', {
 			xtype: 'selectfield',
 			label: locale.getSt().field.subcategory,
 			name: 'subcategory',
-			itemId: 'subcategory'
+			itemId: 'subcategory',
+			listeners: 
+			{
+				change:function(selectbox,value,oldvalue){
+					if(this.getParent().down('#category').getValue()==111) {
+						if(value==1||value==3) {
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
+						} else {
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
+						}
+						if(value==3||value==2) {
+							this.getParent().down('#var2').show();
+						} else this.getParent().down('#var2').hide();
+						
+						if(value==3) this.getParent().down('#var3').show();
+						else this.getParent().down('#var3').hide();
+					} else {
+						this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
+					}
+				}
+			}
 		},
 		{
 			xtype: 'togglefield',
@@ -531,6 +577,9 @@ Ext.define('myvera.view.PanelConfigItem', {
 				var fontsize=formdata.fontsize;
 				if(fontsize=="") fontsize="10px";
 				
+				var icon=formdata.icon;
+				if(icon=="") icon=null;
+				
 				var listdevice="";
 				var newdevice=true;
 				if(data.type=="clone") {
@@ -596,7 +645,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					device.set("top2", formdata.top2);
 					device.set("color", formdata.color);
 					device.set("fontsize", fontsize);
-					device.set("icon", formdata.icon);
+					device.set("icon", icon);
 					device.set("width", formdata.width);
 					device.set("verif", formdata.verif);
 					device.set("sceneon", formdata.sceneon);
@@ -656,7 +705,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					top2: formdata.top2,
 					color: formdata.color,
 					fontsize: fontsize,
-					icon: formdata.icon,
+					icon: icon,
 					width: formdata.width,
 					verif: formdata.verif,
 					sceneon: formdata.sceneon,
@@ -712,7 +761,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					//Paramètres utilisés dans l'affichage de la liste de ConfigDevices, il faut donc les mettre à jour.
 					listdevice.set("category", formdata.category);
 					listdevice.set("subcategory", formdata.subcategory);
-					listdevice.set("icon", formdata.icon);
+					listdevice.set("icon", icon);
 					listdevice.set("ind", formdata.ind);
 					listdevice.set("room", formdata.room);
 					listdevice.set("name", data.name);
@@ -926,6 +975,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 	deletedevice: function(devices, device, formdata, id) {
 		var listdevices = Ext.getStore('ConfigDevicesStore');
 		var listdevice = listdevices.getById(id);
+		var icon=formdata.icon;
+		if(icon=="") icon=null;
 		//Paramètres du modules transférés à configDevices pour pouvoir le réaffecter sans devoir tout paramétrer à nouveau
 		listdevice.set("category", formdata.category);
 		listdevice.set("subcategory", formdata.subcategory);
@@ -940,7 +991,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 		listdevice.set("top2", formdata.top2);
 		listdevice.set("color", formdata.color);
 		listdevice.set("fontsize", formdata.fontsize);
-		listdevice.set("icon", formdata.icon);
+		listdevice.set("icon", icon);
 		listdevice.set("verif", formdata.verif);
 		listdevice.set("sceneon", formdata.sceneon);
 		listdevice.set("sceneoff", formdata.sceneoff);

@@ -2612,15 +2612,24 @@ console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('statu
 			if(popup) this.updatesonospopup(popup, device);
 			break;
 		case 111: //Custom Slider
-			//utilise: var1: variable status, var2: text 1, var3: suffixe 1, var5: text 2, var 6: suffixe 2,
-			//var4: commande
-			//graphlink pour la largeur du slider, increment et max
-			//Affectation : status en fonction de var1
-			//camuser : contient var2+var3
-			//campassword : contient var5+var6
-			//sous-catégorie 0 : normal var1=level
-			//Faudrait : taille slider et max slider
-			//A voir height, wwidth
+			//var1 : pour indiquer quel paramètre est repris pour le level
+			//graphlink pour l'increment et le max de slider
+			//wwidth pour la largeur/hauteur si vertical du slider
+			//color: pour la couleur du texte
+			//var4: la commande de level
+			//var2: Image pour la largeur de l'image pour un Img. Vert. Slider
+			//var3: largeur
+			//var5: suffixe
+			
+			//icon : pour l'icône du tableau de bord
+			//width: pas utilisé
+			
+			//A faire:
+			//suffixe et taille du texte: fontsize
+			
+			
+			//pas utilisé : height, var6, camuser, campassword
+			
 			if(device.get('var1')!=""&&device.get('var1')!= null) {
 				//if(device.get('subcategory')==0||)
 				device.set('level', deviceupdate[device.get('var1')]);

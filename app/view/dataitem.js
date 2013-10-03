@@ -9,8 +9,9 @@ Ext.define('myvera.view.dataitem', {
 			top: 0,
 			left: 0,
 			type: 0,
-			//icon: 0,
-			witdh: 0
+			//icon: 1,
+			witdh: 200,
+			iconWidth: 30,
 		},
 		dataMap: {
 			getMySlider: {
@@ -19,7 +20,10 @@ Ext.define('myvera.view.dataitem', {
 				setState: 'state',
 				setIncrMax: 'graphlink',
 				setColorNumber: 'color',
-				setIcon: 'icon',
+				setIcon: 'var2',
+				setIconWidth: 'var3',
+				setFontsize:'fontsize',
+				setSuffix:'var5',
 				//setCategory: 'category',
 				setType: 'subcategory'
 			}
@@ -32,10 +36,15 @@ Ext.define('myvera.view.dataitem', {
 			config.type = subcategory;
 			switch (subcategory) {
 			case 1:
-				return Ext.factory(config, Ext.custom.vSlider, this.getMySlider());
+				return Ext.factory(config, Ext.ux.vslider, this.getMySlider());
+				//return Ext.factory(config, Ext.custom.vSlider, this.getMySlider());
 			break;
 			case 2:
 				return Ext.factory(config, Ext.ux.cslider, this.getMySlider());
+			break;
+			case 3:
+				return Ext.factory(config, Ext.ux.vslider, this.getMySlider());
+				//return Ext.factory(config, Ext.ux.imgslider, this.getMySlider());
 			break;
 			default:
 				return Ext.factory(config, Ext.ux.hslider, this.getMySlider());

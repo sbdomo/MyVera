@@ -33,7 +33,8 @@ Ext.application({
 	'Ext.ux.field.SliderFieldExtended',
 	//'Ext.custom.MySlider',
 	'Ext.ux.hslider',
-	'Ext.custom.vSlider',
+	//'Ext.custom.vSlider',
+	'Ext.ux.vslider',
 	'Ext.ux.cslider',
 	'Ext.ux.field.Multiselect'
 	//'Ext.ux.field.customslider'

@@ -330,6 +330,9 @@ Ext.define('myvera.view.PanelConfigWebview', {
 				var data = form.config.data;
 				var devices = Ext.getStore('devicesStore');
 				
+				var icon=formdata.icon;
+				if(icon=="") icon=null;
+				
 				//var listdevices = Ext.getStore('ConfigDevicesStore');
 				//var listdevice = listdevices.getById(data.id);
 				
@@ -355,7 +358,7 @@ Ext.define('myvera.view.PanelConfigWebview', {
 					device.set("ind", formdata.ind);
 					device.set("subcategory", formdata.subcategory);
 					device.set("status", formdata.status);
-					device.set("icon", formdata.icon);
+					device.set("icon", icon);
 					device.set("room", formdata.room);
 					device.set("wwidth", formdata.wwidth);
 					device.set("onboard", formdata.onboard);
@@ -389,7 +392,7 @@ Ext.define('myvera.view.PanelConfigWebview', {
 					graphlink: formdata.graphlink,
 					ind: formdata.ind,
 					subcategory: data.subcategory,
-					icon: formdata.icon,
+					icon: icon,
 					status: formdata.status,
 					wwidth: formdata.wwidth,
 					onboard: formdata.onboard

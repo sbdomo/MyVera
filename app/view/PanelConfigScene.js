@@ -234,6 +234,8 @@ Ext.define('myvera.view.PanelConfigScene', {
 				var formdata = form.getValues();
 				var data = form.config.data;
 				var devices = Ext.getStore('devicesStore');
+				var icon=formdata.icon;
+				if(icon=="") icon=null;
 				
 				var listdevices = Ext.getStore('ConfigScenesStore');
 				var listdevice = listdevices.getById(data.id);
@@ -252,7 +254,7 @@ Ext.define('myvera.view.PanelConfigScene', {
 					device.set("left2", formdata.left2);
 					device.set("top2", formdata.top2);
 					device.set("color", formdata.color);
-					device.set("icon", formdata.icon);
+					device.set("icon", icon);
 					device.set("width", formdata.width);
 					device.set("state", "-3");
 					device.set("ind", formdata.ind);
@@ -275,7 +277,7 @@ Ext.define('myvera.view.PanelConfigScene', {
 					left2: formdata.left2,
 					top2: formdata.top2,
 					color: formdata.color,
-					icon: formdata.icon,
+					icon: icon,
 					width: formdata.width,
 					ind: formdata.ind,
 					onboard: formdata.onboard
@@ -291,7 +293,7 @@ Ext.define('myvera.view.PanelConfigScene', {
 				}
 				//Paramètres utilsés dans l'affichage de la liste de ConfigDevices, il faut donc les mettre à jour.
 				//listdevice.set("category", formdata.category);
-				listdevice.set("icon", formdata.icon);
+				listdevice.set("icon", icon);
 				listdevice.set("ind", formdata.ind);
 				
 				Ext.getCmp('PanelConfigNavigation').pop();
@@ -312,6 +314,10 @@ Ext.define('myvera.view.PanelConfigScene', {
 				var form = this.getParent();
 				var devices = Ext.getStore('devicesStore');
 				var device = devices.getById("s" + form.config.data.id);
+				
+				var icon=formdata.icon;
+				if(icon=="") icon=null;
+				
 				//var width =device.get('width');
 				//var height =device.get('height');
 				devices.remove(device);
@@ -331,7 +337,7 @@ Ext.define('myvera.view.PanelConfigScene', {
 				listdevice.set("left2", formdata.left2);
 				listdevice.set("top2", formdata.top2);
 				listdevice.set("color", formdata.color);
-				listdevice.set("icon", formdata.icon);
+				listdevice.set("icon", icon);
 				listdevice.set("state", "0");
 				listdevice.set("ind", formdata.ind);
 				listdevice.set("width", formdata.width);
