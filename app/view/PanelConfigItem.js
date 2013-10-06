@@ -168,9 +168,6 @@ Ext.define('myvera.view.PanelConfigItem', {
 						
 						this.getParent().down('#var6').show();
 					} else  if(value=="111") {
-						this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max');
-						this.getParent().down('#GraphlinkItem').show();
-						
 						this.getParent().down('#wwidth').show();
 						//this.getParent().down('#height').show();
 						this.getParent().down('#var1').show();
@@ -195,7 +192,11 @@ Ext.define('myvera.view.PanelConfigItem', {
 						if(subcat.getValue()==3||subcat.getValue()==2) {
 							this.getParent().down('#var2').show();
 						}
-						if(subcat.getValue()==3) this.getParent().down('#var3').show();
+						if(subcat.getValue()==3) {
+							this.getParent().down('#var3').show();
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max|Th.');
+						} else this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max');
+						this.getParent().down('#GraphlinkItem').show();
 						
 					}
 					if(value!="111") this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
@@ -225,8 +226,13 @@ Ext.define('myvera.view.PanelConfigItem', {
 							this.getParent().down('#var2').show();
 						} else this.getParent().down('#var2').hide();
 						
-						if(value==3) this.getParent().down('#var3').show();
-						else this.getParent().down('#var3').hide();
+						if(value==3) {
+							this.getParent().down('#var3').show();
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max|Th.');
+						} else {
+							this.getParent().down('#var3').hide();
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max');
+						}
 					} else {
 						this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
 					}

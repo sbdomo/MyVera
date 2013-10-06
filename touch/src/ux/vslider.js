@@ -11,7 +11,8 @@ Ext.define('Ext.ux.vslider',{
 		suffix: '',
 		colorNumber:'000000',
 		width: 200, //c'est en fait le height du slider car il est vertical.
-		thumbHeight:0,
+		thumbHeight:30,
+		toptext:215,
 		type: 1,
 		iconWidth: 30
 	},
@@ -20,7 +21,7 @@ Ext.define('Ext.ux.vslider',{
 			reference:'element',
 			children:[{
 				reference:'sliderBox',
-				cls:'vclisder',
+				cls:'vslider',
 				children:[
 				{
 					reference:'fond',
@@ -63,6 +64,9 @@ Ext.define('Ext.ux.vslider',{
 			this.fond.removeCls('fond');
 			this.thumb.removeCls('thumb2');
 			this.thumb.addCls('thumb');
+			//console.log("height"+this.config.thumbHeight);
+			//this.thumb.dom.src="./resources/images/imgslider/thumb"+value+".png";
+			//this.updateIcon(this.config.icon);
 		}
 		
 		//this.timerTimeTextBox.on('tap', me.onTimerTimeTextBoxTap, me);
@@ -91,7 +95,7 @@ Ext.define('Ext.ux.vslider',{
 		//console.log(e.getPageY() + " " +  e.getPageX());
 		var Box = this.getBox();
 		var x = e.getPageX();
-		var y= e.getPageY()+this.thumb.getHeight()/2;
+		var y= e.getPageY();//+this.config.thumbHeight/2;
 		//console.log(this.thumb.getHeight());
 		if(x>=Box.x-10&&x<=Box.x+Box.width+10) {
 			var slidevalue=0;
@@ -109,7 +113,7 @@ Ext.define('Ext.ux.vslider',{
 	updateIcon:function(value){
 		var oldvalue = this.config.icon;
 		//console.log("updateIcon"+value+ " " + oldvalue);
-		if(oldvalue!=value&&this.config.type!=1) {
+		if(oldvalue!=value) {
 			//console.log("icon:"+value + " " + oldvalue);
 			this.config.icon=value;
 			if(this.config.type!=1) {
@@ -171,7 +175,7 @@ Ext.define('Ext.ux.vslider',{
 			//this.thumb.setStyle("width", value+"px");
 			//this.minText.setStyle("width", value+"px");
 			this.config.iconWidth = value;
-			//	this.updateThumbValue(this.config.value);
+				//this.updateThumbValue(this.config.value);
 		}
 	},
 	updateValues:function(value, oldValue){
@@ -181,7 +185,9 @@ Ext.define('Ext.ux.vslider',{
 	updateThumbValue:function(value){
 		var getBox = this.getBox();
 		var height = getBox.height;
-		var thumbHeight=this.thumb.getHeight();
+		//var thumbHeight=this.thumb.getHeight();
+		var thumbHeight=this.config.thumbHeight;
+		//console.log("thumbHeight"+thumbHeight);
 		//var width = getBox.width;
 		//console.log(value + "new width" + width);
 		var top = (this.getMaxValue() - value)*height/this.getMaxValue();
@@ -190,11 +196,14 @@ Ext.define('Ext.ux.vslider',{
 		top = Math.round(top);
 		this.clipper.setStyle("height", top+"px");
 		
+		var toptext = this.config.width + Math.round(thumbHeight/2);
+		if(toptext!=this.config.toptext) {
 		//Positionne le texte si thumbHeight à changé (ne marche pas avant. Pourquoi?
-		if(this.thumbHeight!=thumbHeight) {
-			this.thumbHeight=thumbHeight;
+		//if(this.config.thumbHeight!=thumbHeight&&this.thumbHeight!=0) {
+			//this.thumbHeight=thumbHeight;
 			//décale de la hauteur et de la moitié du thumb
-			var toptext = this.config.width + Math.round(thumbHeight/2);
+			//var toptext = this.config.width + Math.round(thumbHeight/2);
+			this.config.toptext=toptext;
 			this.minText.setStyle("top", toptext+"px");
 		}
 		
@@ -208,6 +217,7 @@ Ext.define('Ext.ux.vslider',{
 			this.config.maxValue=taille[1];
 			this.setIncrement(taille[0]);
 			this.setMaxValue(taille[1]);
+			if(taille[2]) this.config.thumbHeight=taille[2];
 		}
 	},
 	setState: function(value) {
