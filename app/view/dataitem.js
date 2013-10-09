@@ -11,7 +11,7 @@ Ext.define('myvera.view.dataitem', {
 			type: 0,
 			//icon: 1,
 			witdh: 200,
-			iconWidth: 30,
+			iconWidth: 30//,
 		},
 		dataMap: {
 			getMySlider: {

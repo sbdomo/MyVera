@@ -8,7 +8,7 @@ Ext.define('Ext.ux.hslider',{
 		suffix: '',
 		//helperColor: 'black',
 		value: 0,
-		values:null,
+		values:null//,
 	},
 	initialize:function(){
 		this.callParent(arguments);

@@ -102,6 +102,13 @@ Ext.define('myvera.view.PanelConfigItem', {
 						];
 						subcat.setOptions(options);
 						subcat.show();
+					} else if(value=="5"){
+						var options = [
+						{text: 'Hvac',  value: '1'},
+						{text: 'Heater',  value: '2'}
+						];
+						subcat.setOptions(options);
+						subcat.show();
 					} else if(value=="108"){
 						var options = [
 						{text: 'Normal',  value: '0'},
@@ -604,9 +611,9 @@ Ext.define('myvera.view.PanelConfigItem', {
 					if(data.type=='clone') {
 						device.set("name", formdata.clonename);
 						
+						var ref = formdata.originmodule;
 						//le module d'origine à changé
 						if(formdata.originmodule!=data.ref) {
-							var ref = formdata.originmodule;
 							device.set("ref", ref);
 							//affectation de la référence au device d'origine et supression de la référence sur l'ancien
 							var deviceold = devices.getById(data.ref);
@@ -628,6 +635,21 @@ Ext.define('myvera.view.PanelConfigItem', {
 								if(newref!=""&&newref!=null) newref=newref+"|"+data.id;
 								else newref=data.id;
 								devicenew.set('ref', newref);
+							}
+						} else {
+							var idclones="";
+							var deviceold = devices.getById(ref);
+							if(deviceold.get('ref')==null||deviceold.get('ref')=="") {
+								deviceold.set('ref', data.id);
+							} else {
+								idclones=deviceold.get('ref').split('|');
+								var newref=true;
+								for (var idclone in idclones) {
+									if(idclones[idclone]==data.id) {
+										newref=false
+									}
+								}
+								if(newref) deviceold.set('ref', deviceold.get('ref')+"|"+data.id);
 							}
 						}
 					}

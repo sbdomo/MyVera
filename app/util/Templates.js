@@ -38,6 +38,8 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	'<img <tpl if="retina==\'@2x\'">width="{width}px"</tpl>src="./resources/images/d'+
 	    '<tpl if="category==2||category==3||category==4||category==7||category==8||category==101||category==103||category==106||category==120">'+
 	    	'<tpl if="icon!=null">{icon}<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}<tpl else>{category}</tpl>_<tpl if="category==4||category==103||category==120">{tripped}<tpl else>{status}</tpl>'+
+	    '<tpl elseif="category==5&&subcategory==2">'+
+	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_0'+
 	    '<tpl elseif="category==6||category==16||category==17||category==18||category==21||category==102||category==1000">'+
 		'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_0'+
 	    '<tpl elseif="category==104">'+
@@ -78,6 +80,13 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    	'<tpl if="status==1">{var2}</tpl></div>'+
 	    '<tpl elseif="category==104"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
 	    	'{var1}</div>'+
+	    '<tpl elseif="category==5&&subcategory==2">'+
+	    	'<tpl if="var1!=\'\'&&var1!=null"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
+	    	'{var2}{camuser}</div></tpl>'+
+		'<div style=\'font-weight:bold; text-shadow: 0 0 5px white; font-size:{fontsize}; position: absolute; '+
+		'color:<tpl if="var1!=\'\'&&var1!=null">#009ade<tpl else>#<tpl if="color!=null">{color}<tpl else>000000</tpl></tpl>; width:50px; text-align:center; top: 25%;"\' > '+
+		'<tpl if="var1!=\'\'&&var1!=null">{var1}<tpl else>{var2}</tpl>{camuser} </div>'+
+	    
 	    '<tpl elseif="category==105"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >'+
 	    	'<tpl if="status==3">{var6} {campassword}<br/><tpl if="var4==\'Normal\'">{var2}<tpl else>{var3}</tpl>{camuser}'+
 		'<tpl else>{var6}<br/>&nbsp;</tpl></div>'+
@@ -107,6 +116,8 @@ tpllisticon:'<div class="devicon">'+
 					'<tpl elseif="category==120&&subcategory==1">121<tpl elseif="category==120&&subcategory==2">122'+
 					'<tpl else>{category}</tpl>'+
 					'_<tpl if="category==4||category==103||category==120">{tripped}<tpl else>{status}</tpl>'+
+				'<tpl elseif="category==5&&subcategory==2">'+
+					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_0'+
 				'<tpl elseif="category==6||category==16||category==17||category==18||category==21||category==102||category==104||category==1000">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_0'+
 				'<tpl elseif="category==105">'+
@@ -134,6 +145,9 @@ tplfooter: '<div class="footer"><tpl if="watts != null&&category!=3&&category!=2
 tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 					'<img class="armed" src="./resources/images/indic/arm{armed}{retina}.png" /> '+
 					'</div>'+
+			'<tpl elseif="category==5&&subcategory==2">'+
+				'<div class="vargros"><tpl if="var1!=\'\'&&var1!=null">{var1}{camuser}</tpl></div><div class="varcenter">'+
+				'{var2}{camuser}</div>'+
 			'<tpl elseif="category==16"><div class="vargros"><tpl if="var1==null">&nbsp;<tpl else>{var1} %</tpl></div>'+
 			'<tpl elseif="category==17"><div class="vargros"><tpl if="var1==null">&nbsp;<tpl else>{var1} {var3}</tpl></div>'+
 			'<tpl elseif="category==18"><div class="vargros"><tpl if="var1==null">&nbsp;<tpl else>{var1} %</tpl></div>'+
@@ -189,11 +203,11 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 				'</div>'+
 			'</tpl>',
 
-tplliston: '<tpl if="onboard&&(verif!=\'off\'&&verif!=\'no\')&&(((category==4||category==103||category==120)&&tripped==1)||(category!=4&&category!=106&&category!=7&&category!=1001&&status==1)||(category==7&&status==0)||((category==104||category==105)&&(status==2||status==3)))">',
+tplliston: '<tpl if="onboard&&(verif!=\'off\'&&verif!=\'no\')&&(((category==4||category==103||category==120)&&tripped==1)||(category!=4&&category!=106&&category!=7&&category!=1001&&status==1)||(category==7&&status==0)||((category==104||category==105||category==5)&&(status==2||status==3)))">',
 tpllistoff: '<tpl if="onboard&&((verif==\'off\'&&('+
 	'((category==4||category==103||category==120)&&tripped==0)||'+
 	'(category!=4&&category!=103&&category!=120&&category!=7&&category!=1001&&status==0)||(category==7&&status==1)))||'+
-	'(verif!=\'no\'&&(category==4||category==103||category==120)&&armed==0))">{onboard}'
+	'(verif!=\'no\'&&(category==4||category==103||category==120)&&armed==0))">'
     },
     
     constructor: function(config) {

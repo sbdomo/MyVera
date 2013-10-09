@@ -461,7 +461,7 @@ Ext.define('myvera.controller.contdevices', {
 							var category = rec.get('category');
 							var isTripped = (rec.get('tripped') == 1);
 							if (
-									(rec.get('type') != 'clone' && rec.get('verif') != 'off' && rec.get('verif') != 'no')
+									(rec.get('onboard')==true&&rec.get('type') != 'clone' && rec.get('verif') != 'off' && rec.get('verif') != 'no')
 									&&
 									(
 										((category == 4 || category == 103 || category == 120) && isTripped)
@@ -470,12 +470,12 @@ Ext.define('myvera.controller.contdevices', {
 										||
 										(category ==7 && status == 0)
 										||
-										((category ==104||category ==105) && (status == 2 || status==3))
+										((category ==104||category ==105||category ==5) && (status == 2 || status==3))
 									)
 							) {
 								count1++;
 							}
-							if ( rec.get('type') != 'clone' && (
+							if ( rec.get('onboard')==true&&rec.get('type') != 'clone' && (
 									(
 										rec.get('verif') == 'off'
 										&&
@@ -607,9 +607,12 @@ Ext.define('myvera.controller.contdevices', {
 		
 		var icontap = false;
 		var cat=record.get('category');
-		if (!Ext.Array.contains([2, 3, 4, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
+		if (!Ext.Array.contains([2, 3, 4, 5, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
 			return;
 		}
+		//Si c'est un hvac non heater, sort de la commande
+		if(cat==5&&record.get('subcategory')!=2) return;
+		
 		//Si c'est une webview, sort de la commande
 		if(cat==1001&&record.get('subcategory')==0) return;
 		
@@ -969,6 +972,15 @@ Ext.define('myvera.controller.contdevices', {
 				return;
 			}
 			
+			//Hvac Heater
+			if(cat == 5&&record.get('sceneon') == null) {
+				this.onDeviceHoldTap(view, index, target, record, event);
+				//this.vthermPopup(record.get('id'), record.get('name'), record.get('var2'));
+				return;
+			}
+			
+			
+			
 			//Smart Virtual Thermostat
 			if(cat == 105&&record.get('sceneon') == null) {
 				this.vthermPopup(record.get('id'), record.get('name'), record.get('status'), record.get('var4'), record.get('var2'), record.get('var3'));
@@ -1314,7 +1326,43 @@ Ext.define('myvera.controller.contdevices', {
 				//record.set('var6', "nojaq");
 			}
 			popup.toogleplay = true;
-			this.updatesonospopup(popup, record);	
+			this.updatesonospopup(popup, record);
+		} else if(record.get('category')==5) { //hvac - heater (sous-cat:2)
+			var dservice = 'urn:upnp-org:serviceId:TemperatureSetpoint1_Heat';
+			var daction = 'SetCurrentSetpoint';
+			var dtargetvalue = 'NewCurrentSetpoint';		
+			var popup=new Ext.Panel({
+			modal:true,
+			hideOnMaskTap: true,
+			width:300,
+			height:55,
+			centered: true,
+			items:[{
+				xtype:'sliderfieldextended',
+				value:record.data.var2,
+				
+				//labelAlign: 'top',
+				//labelText: locale.getSt().device.vtherm.tempnorm,
+				//label: locale.getSt().device.vtherm.tempnorm+ " ("+locale.getSt().unit.temp+")",
+				minValue: 0,
+				maxValue: 35,
+				increment: 0.1,
+				
+				
+				listeners: {
+					change: function(Slider, thumb, newValue, oldValue, eOpts) {
+						//console.log(Slider.getHelperValue());
+						me.ondeviceaction(record.get('id'), dservice, daction, dtargetvalue, newValue);
+					}
+				}
+			}],
+			listeners: {
+				hide: function(panel) {
+					//delete myvera.view.dataplan.lastTapHold;
+					this.destroy();
+				}
+			}
+			});
 		} else if(record.get('category')==111) { //Custom Slider
 			var commande =record.get('var4').split('|');
 			//var dservice = 'urn:upnp-org:serviceId:Dimming1';
@@ -2472,6 +2520,11 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 		
 		var category = device.get('category');
 		switch (category) {
+		case 5: //hvac
+			device.set('var1', deviceupdate.temperature);
+			device.set('var2', deviceupdate.heatsp);
+			device.set('camuser', locale.getSt().unit.temp);//Unité utilisée ex: °C
+			break;
 		case 6: //camera
 			device.set('var1', deviceupdate.ip);
 			device.set('var2', deviceupdate.url);

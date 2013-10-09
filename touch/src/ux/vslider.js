@@ -46,10 +46,11 @@ Ext.define('Ext.ux.vslider',{
 				},
 				{
 					reference:'thumb',
-					tag: 'img',
-					draggable:false,
-					cls: 'thumb2',
-					src:"./resources/images/indic/vide.png"
+					//tag: 'img',
+					//draggable:false,
+					cls: 'thumb2'
+					//,
+					//src:"./resources/images/indic/vide.png"
 					//src:"./resources/images/imgslider/thumb0.png"
 				}
 				]
@@ -122,7 +123,10 @@ Ext.define('Ext.ux.vslider',{
 				
 				this.clipper.setStyle('background', "url(resources/images/imgslider/clipper"+value+".png)");
 				this.clipper.setStyle('background-size', "cover");
-				this.thumb.dom.src="./resources/images/imgslider/thumb"+value+".png";
+				
+				this.thumb.setStyle('background', "url(resources/images/imgslider/thumb"+value+".png)");
+				this.thumb.setStyle('background-size', "contain");
+				//this.thumb.dom.src="./resources/images/imgslider/thumb"+value+".png";
 			}
 			//***this.sliderBox.setStyle('background-size', "104px auto");
 		}
@@ -217,7 +221,10 @@ Ext.define('Ext.ux.vslider',{
 			this.config.maxValue=taille[1];
 			this.setIncrement(taille[0]);
 			this.setMaxValue(taille[1]);
-			if(taille[2]) this.config.thumbHeight=taille[2];
+			if(taille[2]) {
+				this.config.thumbHeight=taille[2];
+				this.thumb.setStyle("height", taille[2]+"px");
+			}
 		}
 	},
 	setState: function(value) {
