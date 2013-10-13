@@ -40,6 +40,8 @@
     "ipad.html",
     "iphone.html",
     "galaxytab.html",
+    "ipadmini.html",
+    "favicon.ico",
     "readme.txt"
   ],
   "ignore": [

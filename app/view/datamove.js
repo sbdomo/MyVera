@@ -1,23 +1,53 @@
 Ext.define('myvera.view.datamove', {
 	extend: 'Ext.DataView',
 	xtype: 'datamove',
-	requires:['Ext.util.Draggable', 'myvera.util.Templates'],
+	//requires:['Ext.util.Draggable', 'myvera.util.Templates'],
+	requires:['myvera.util.Templates'],
 	stores: ['devicesStore'],
-	draggablerecord: new Array(),
+	//draggablerecord: new Array(),
 	config: {
 		emptyText: locale.getSt().misc.nodevice,
 		store: 'devicesStore',
 		scrollable: null,
-		currentrecord: null,
-		autoDestroy: false,
+		//currentrecord: null,
+		changeitem: false,
+		initX: 0,
+		initY: 0,
+		autoDestroy: true,
+		itemConfig: {
+			draggable: false
+		},
 		listeners:{
 			painted:function(e,d){
-				this.draggablerecord= [];
+				//this.draggablerecord= [];
 				myvera.app.getController('myvera.controller.contdevices').stopsynchro();
 				console.log(this.id + " painted");
 			},
+			itemtouchmove: function(me, index, target, record, e, eOpts ) {
+				var x = e.getPageX() + this.initX;
+				var y = e.getPageY() + this.initY;
+				//console.log("move " + x + " " + y);
+				
+				record.set('left', x);
+				record.set('top', y);
+				this.changeitem= true;
+				
+			},
+			itemtouchend: function(me, index, target, record, e, eOpts) {
+				if(this.changeitem==true) {
+					record.set('state', -2);
+					myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
+					this.changeitem=false;
+				}
+
+			},
+			
 			itemtouchstart: function(me, index, target, record, e, eOpts) {
-				this.setCurrentrecord(record);				
+				this.initX = record.get('left') - e.getPageX();
+				this.initY = record.get('top') - e.getPageY();
+				
+				
+				/*this.setCurrentrecord(record);				
 				if(!Ext.Array.contains(this.draggablerecord, record.get('id'))) {
 					//console.log("create draggable", target);
 					this.draggablerecord.push(record.get('id'));
@@ -34,10 +64,10 @@ Ext.define('myvera.view.datamove', {
 							scope: this
 						}
 					});
-				}
+				}*/
 			}
 		}
-	},
+	}/*,
 	onDrop: function(el, e, offsetX, offsetY, eOpts) {
 		var currecord=this.getCurrentrecord();
 		console.log("drop left: " + currecord.get('left') + " offsetX: " + offsetX);
@@ -56,5 +86,5 @@ Ext.define('myvera.view.datamove', {
 		}
 		el.setOffset(0,0);
 		myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();		
-	}
+	}*/
 });

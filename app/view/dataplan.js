@@ -11,6 +11,9 @@ Ext.define('myvera.view.dataplan', {
 		defaultType: 'dataitem',
 		styleHtmlContent: true,
 		scrollable: null,
+		itemConfig: {
+			draggable: false
+		},
 		listeners:{
 			itemtaphold: function(view, index, target, record, event){
 				//2: Dimmable light, 8: Window Covering, 109: sonos
