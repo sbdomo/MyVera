@@ -489,7 +489,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 		},
 		{
 			xtype: 'selectfield',
-			label: "Format d'icône",
+			label: locale.getSt().field.iconformat,
 			itemId: 'imgformat',
 			name: 'imgformat',
 			options: [

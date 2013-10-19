@@ -987,6 +987,13 @@ Ext.define('myvera.controller.contdevices', {
 				return;
 			}
 			
+			//Day and night : peut forcer l'état jour et nuit.
+			if(cat == 106&&record.get('sceneon') == null) {
+				dservice = "urn:rts-services-com:serviceId:DayTime";
+				//daction = 'SetTarget';
+				//dtargetvalue = 'newTargetValue';
+			}
+			
 			//Custom Device
 			if(cat == 108&&record.get('sceneon') == null) {
 				if(record.get('var4')!=""&&record.get('var4')!=null&&(record.get('subcategory')==0||record.get('subcategory')==2)) {
@@ -1076,7 +1083,7 @@ Ext.define('myvera.controller.contdevices', {
 					newstatus = record.get('sceneoff');
 				}
 			//Pas d'action pour les modules qui ne lancent rien sauf sceneon et sceneoff
-			} else if (Ext.Array.contains([0, 4, 102, 103, 106, 107, 120], cat)) {
+			} else if (Ext.Array.contains([0, 4, 102, 103, 107, 120], cat)) {
 				return;
 			}
 			

@@ -175,6 +175,7 @@
       "icon":"Ícone",
       "type":"Tipo",
       "go":"ir para",
+      "iconformat":"Formato de ícone",
       "url":"URL"
    },
    "button":{
