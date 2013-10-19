@@ -474,7 +474,8 @@ Ext.define('myvera.controller.contconfig', {
 	    if( record.get('id') != -1 ) {
 	       	Ext.getCmp('main').getTabBar().hide();
 		Ext.getCmp('PanelConfig').getTabBar().hide();
-		Ext.getCmp('PanelConfigNavigation').setNavigationBar({ docked : 'bottom'});
+		//Ext.getCmp('PanelConfigNavigation').setNavigationBar({ docked : 'bottom'});
+		Ext.getCmp('PanelConfigNavigation').getNavigationBar().hide();
 		var floorid= record.get('id');
 		var background="";
 		if(myvera.app.isretina=="@2x"&&record.get('pathretina')!="") {

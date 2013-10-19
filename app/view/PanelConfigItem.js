@@ -151,7 +151,10 @@ Ext.define('myvera.view.PanelConfigItem', {
 					this.getParent().down('#var4').hide();
 					this.getParent().down('#var5').hide();
 					this.getParent().down('#var6').hide();
-					if(value=="6") {
+					if(value=="5") {
+						this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max');
+						this.getParent().down('#GraphlinkItem').show();
+					} else if(value=="6") {
 						this.getParent().down('#CamuserItem').show();
 						this.getParent().down('#CampasswordItem').show();
 					} else  if(value=="16" || value=="17" || value=="21") {
@@ -190,19 +193,29 @@ Ext.define('myvera.view.PanelConfigItem', {
 						
 						//this.getParent().down('#var6').show();
 						
-						//console.log("subcat:"+subcat.getValue());
-						if(subcat.getValue()==1||subcat.getValue()==3) {
-							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
-						} else {
-							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
-						}
-						if(subcat.getValue()==3||subcat.getValue()==2) {
+						switch (subcat.getValue()) {
+						case '3'://vslider - image
 							this.getParent().down('#var2').show();
-						}
-						if(subcat.getValue()==3) {
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
 							this.getParent().down('#var3').show();
-							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max|Th.');
-						} else this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max');
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max|Th.');
+							break;
+						case '2'://cslider
+							this.getParent().down('#var2').show();
+							//A voir pour la largeur.
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max|Th.');
+							break;
+						case '1'://vslider
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max');
+							break;
+						default://hslider 0
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max');
+							break;
+						}
+						
 						this.getParent().down('#GraphlinkItem').show();
 						
 					}
@@ -224,22 +237,34 @@ Ext.define('myvera.view.PanelConfigItem', {
 			{
 				change:function(selectbox,value,oldvalue){
 					if(this.getParent().down('#category').getValue()==111) {
-						if(value==1||value==3) {
-							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
-						} else {
-							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
-						}
-						if(value==3||value==2) {
+						switch (value) {
+						case '3'://vslider - image
 							this.getParent().down('#var2').show();
-						} else this.getParent().down('#var2').hide();
-						
-						if(value==3) {
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
 							this.getParent().down('#var3').show();
-							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max|Th.');
-						} else {
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max|Th.');
+							break;
+						case '2'://cslider
+							this.getParent().down('#var2').show();
+							//A voir pour la largeur.
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
 							this.getParent().down('#var3').hide();
-							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Max');
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max|Th.');
+							break;
+						case '1'://vslider
+							this.getParent().down('#var2').hide();
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.height);
+							this.getParent().down('#var3').hide();
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max');
+							break;
+						default://hslider 0
+							this.getParent().down('#var2').hide();
+							this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
+							this.getParent().down('#var3').hide();
+							this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max');
+							break;
 						}
+						
 					} else {
 						this.getParent().down('#wwidth').setLabel(locale.getSt().field.width);
 					}
@@ -461,6 +486,16 @@ Ext.define('myvera.view.PanelConfigItem', {
 			label: locale.getSt().field.iconwidth,
 			name: 'width',
 			itemId: 'width'
+		},
+		{
+			xtype: 'selectfield',
+			label: "Format d'icône",
+			itemId: 'imgformat',
+			name: 'imgformat',
+			options: [
+			{text: "png",  value: 0},
+			{text: "jpg",  value: 1}
+			]
 		},
 		{
 			xtype: 'textfield',
@@ -688,6 +723,7 @@ Ext.define('myvera.view.PanelConfigItem', {
 					device.set("height", formdata.height);
 					device.set("wwidth", formdata.wwidth);
 					device.set("onboard", formdata.onboard);
+					device.set("imgformat", formdata.imgformat);
 					if(formdata.category=="108"||formdata.category=="111") {
 						device.set("var1", formdata.var1);
 						device.set("var2", formdata.var2);
@@ -745,7 +781,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 					ind: formdata.ind,
 					height: formdata.height,
 					wwidth: formdata.wwidth,
-					onboard: formdata.onboard
+					onboard: formdata.onboard,
+					imgformat: formdata.imgformat
 					});
 					var device = devices.getById(newid);
 					

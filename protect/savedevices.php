@@ -51,7 +51,8 @@ foreach ($array_json['devices'] as $device) {
 		'ind' => $device['ind'],
 		'ref' => $device['ref'],
 		'type' => $device['type'],
-		'onboard' => $device['onboard']
+		'onboard' => $device['onboard'],
+		'imgformat' => $device['imgformat']
 		);
 	if($device['forced']=="1") $temparray['forced']="1";
 	$width =$device['width'];

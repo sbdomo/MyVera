@@ -1,9 +1,10 @@
-Ext.define('Ext.ux.vslider',{
+Ext.define('Ext.ux.slider.vslider',{
 	xtype:'vslider',
 	extend:'Ext.Component',
 	config:{
 		values: 0,
 		maxValue:100,
+		minValue:0,
 		thumbValue:0,
 		increment: 1,
 		icon:-1,
@@ -101,11 +102,11 @@ Ext.define('Ext.ux.vslider',{
 		if(x>=Box.x-10&&x<=Box.x+Box.width+10) {
 			var slidevalue=0;
 			if(y>=Box.y+Box.height) {
-				slidevalue = 0
+				slidevalue = this.getMinValue();
 			} else if(y<=Box.y) {
 				slidevalue=this.getMaxValue();
 			} else {
-				slidevalue = this.getMaxValue() - (y-Box.y)/Box.height*this.getMaxValue();
+				slidevalue = this.getMaxValue() - (y-Box.y)/Box.height*(this.getMaxValue()-this.getMinValue());
 				slidevalue= Math.round(slidevalue/this.config.increment)*this.config.increment;
 			}
 			this.setValues(slidevalue);
@@ -194,7 +195,7 @@ Ext.define('Ext.ux.vslider',{
 		//console.log("thumbHeight"+thumbHeight);
 		//var width = getBox.width;
 		//console.log(value + "new width" + width);
-		var top = (this.getMaxValue() - value)*height/this.getMaxValue();
+		var top = (this.getMaxValue() - value)*height/(this.getMaxValue()-this.getMinValue());
 		var topthumb = Math.round(top-thumbHeight/2);
 		this.thumb.setStyle('top', topthumb+"px");
 		top = Math.round(top);
@@ -217,13 +218,15 @@ Ext.define('Ext.ux.vslider',{
 	setIncrMax: function(value) {
 		if(value!=null&&value!="") {
 			var taille=value.split('|');
-			this.config.increment=taille[0];
-			this.config.maxValue=taille[1];
+			//this.config.increment=taille[0];
+			//this.config.minValue=taille[1];
+			//this.config.maxValue=taille[2];
 			this.setIncrement(taille[0]);
-			this.setMaxValue(taille[1]);
-			if(taille[2]) {
-				this.config.thumbHeight=taille[2];
-				this.thumb.setStyle("height", taille[2]+"px");
+			this.setMinValue(taille[1]);
+			this.setMaxValue(taille[2]);
+			if(taille[3]) {
+				this.config.thumbHeight=taille[3];
+				this.thumb.setStyle("height", taille[3]+"px");
 			}
 		}
 	},

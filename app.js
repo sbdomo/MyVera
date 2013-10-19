@@ -31,11 +31,12 @@ Ext.application({
 	'myvera.util.locale',
 	'myvera.util.Templates',
 	'Ext.ux.field.SliderFieldExtended',
+	'Ext.ux.field.sliderText',
 	//'Ext.custom.MySlider',
-	'Ext.ux.hslider',
+	'Ext.ux.slider.hslider',
 	//'Ext.custom.vSlider',
-	'Ext.ux.vslider',
-	'Ext.ux.cslider',
+	'Ext.ux.slider.vslider',
+	'Ext.ux.slider.cslider',
 	'Ext.ux.field.Multiselect'
 	//'Ext.ux.field.customslider'
     ],

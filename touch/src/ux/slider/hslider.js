@@ -1,4 +1,4 @@
-Ext.define('Ext.ux.hslider',{
+Ext.define('Ext.ux.slider.hslider',{
 	extend:'Ext.slider.Slider',
 	xtype: 'hslider',
 	config:{
@@ -122,10 +122,14 @@ Ext.define('Ext.ux.hslider',{
 	setIncrMax: function(value) {
 		if(value!=null&&value!="") {
 			var taille=value.split('|');
-			this.config.increment=taille[0];
-			this.config.maxValue=taille[1];
+			//this.config.increment=taille[0];
+			//this.config.maxValue=taille[1];
+			//this.config.maxValue=100;
+			//this.config.minValue=taille[1];
+			//this.config.maxValue=taille[2];
 			this.setIncrement(taille[0]);
-			this.setMaxValue(taille[1]);
+			this.setMinValue(Number(taille[1]));
+			this.setMaxValue(taille[2]);
 		}
 	},
 	setColorNumber: function(value) {

@@ -1158,6 +1158,7 @@ Ext.define('myvera.controller.contdevices', {
 			centered: true,
 			id: "sonos" + record.get('id'),
 			showart: 'none',
+			nodirectip: "",
 			toogleplay:true,
 			items:[
 			{
@@ -1316,10 +1317,13 @@ Ext.define('myvera.controller.contdevices', {
 			var hostname= window.location.hostname.substring(0, ip.length);
 			//if(ip&&ip.length>hostname.length) window.location.hostname.substring(0, ip.length)
 			
-			console.log(hostname, ip);
+			//console.log(hostname, ip);
 			
-			if(this.getApplication().getCurrentProfile().getName()=='Tablet'&&hostname==ip) {
+			if(this.getApplication().getCurrentProfile().getName()=='Tablet') {
 				popup.down('#sonosimg').setHeight(300);
+				//pas besoin de passer par sonosart.php
+				if(hostname!=ip) popup.nodirectip="sonosart.php?art=";
+				else  popup.nodirectip="";
 				popup.showart = "";
 			} else {
 				popup.showart = "none";
@@ -1330,28 +1334,40 @@ Ext.define('myvera.controller.contdevices', {
 		} else if(record.get('category')==5) { //hvac - heater (sous-cat:2)
 			var dservice = 'urn:upnp-org:serviceId:TemperatureSetpoint1_Heat';
 			var daction = 'SetCurrentSetpoint';
-			var dtargetvalue = 'NewCurrentSetpoint';		
+			var dtargetvalue = 'NewCurrentSetpoint';
+			if(record.get('graphlink')!="") {
+				var incrminmax=record.get('graphlink').split('|');
+				var incr=Number(incrminmax[0]);
+				var min = Number(incrminmax[1]);
+				var max = Number(incrminmax[2]);
+			} else {
+				var incr=0.1;
+				var min = 0;
+				var max = 35;
+			}
 			var popup=new Ext.Panel({
 			modal:true,
 			hideOnMaskTap: true,
-			width:300,
+			width:290,
 			height:55,
 			centered: true,
 			items:[{
-				xtype:'sliderfieldextended',
-				value:record.data.var2,
-				
+				xtype:'sliderText',
+				values:record.data.var2,
+				width: 200,
 				//labelAlign: 'top',
 				//labelText: locale.getSt().device.vtherm.tempnorm,
 				//label: locale.getSt().device.vtherm.tempnorm+ " ("+locale.getSt().unit.temp+")",
-				minValue: 0,
-				maxValue: 35,
-				increment: 0.1,
-				
-				
+				increment: incr,
+				minValue: min,
+				maxValue: max,
+				fontsize: '20px',
+				suffix: record.data.camuser,
 				listeners: {
-					change: function(Slider, thumb, newValue, oldValue, eOpts) {
+					changeValues: function(Slider, thumb, newValue, oldValue, eOpts) {
 						//console.log(Slider.getHelperValue());
+						//console.log(newValue);
+						record.set('var2', newValue);
 						me.ondeviceaction(record.get('id'), dservice, daction, dtargetvalue, newValue);
 					}
 				}
@@ -1427,12 +1443,20 @@ Ext.define('myvera.controller.contdevices', {
 		//Mise à jour de la jaquette
 		//_name: "Tablet"
 		//console.log(this.getApplication().getCurrentProfile().getName());
-		console.log("popup.showart:" +popup.showart);
-		console.log("popup.toogleplay:" +popup.toogleplay);
+		//console.log("popup.showart:" +popup.showart);
+		//console.log("popup.toogleplay:" +popup.toogleplay);
+		console.log("new image:"+ record.get('var3'));
 		if(popup.showart!="none"&&record.get('var3')!=popup.showart) {
 			var img = popup.down('#sonosimg');
-			console.log('new image');
-			img.setSrc(record.get('var3'));
+			var imgurl="";
+			if(record.get('var3').substr(record.get('var3').lastIndexOf("/") + 1)=="Sonos.png") {
+				imgurl="./resources/images/plugin/sonos.jpg";
+			} else {
+				imgurl=popup.nodirectip+record.get('var3');
+			}
+			//console.log('new image');
+			//console.log("new image:"+ record.get('var3'));
+			img.setSrc(imgurl);
 			popup.showart = record.get('var3');
 		}
 		

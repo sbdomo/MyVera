@@ -63,6 +63,7 @@ Ext.define('myvera.view.PanelConfigNavigation', {
 				Ext.getCmp('main').getTabBar().show();
 				Ext.getCmp('PanelConfig').getTabBar().show();
 				Ext.getCmp('PanelConfigNavigation').setNavigationBar({docked: 'top'});
+				Ext.getCmp('PanelConfigNavigation').getNavigationBar().show();
 				if(this.getActiveItem().getItemId()=="PanelConfigWebviews") {
 					Ext.getCmp('addWebViewButton').show();
 					Ext.getCmp('addCloneButton').hide();

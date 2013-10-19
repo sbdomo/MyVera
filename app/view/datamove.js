@@ -1,56 +1,86 @@
 Ext.define('myvera.view.datamove', {
 	extend: 'Ext.DataView',
 	xtype: 'datamove',
-	//requires:['Ext.util.Draggable', 'myvera.util.Templates'],
-	requires:['myvera.util.Templates'],
+	requires:['Ext.util.Draggable', 'myvera.util.Templates'],
 	stores: ['devicesStore'],
-	//draggablerecord: new Array(),
 	config: {
 		emptyText: locale.getSt().misc.nodevice,
 		store: 'devicesStore',
 		scrollable: null,
-		//currentrecord: null,
-		changeitem: false,
-		initX: 0,
-		initY: 0,
+		currendid: null,
+		recordmove: new Array(),
+		draggablerecord: new Array(),
 		autoDestroy: true,
-		itemConfig: {
-			draggable: false
-		},
+		items: [
+		{
+			xtype: 'toolbar',
+			docked: 'bottom',
+			//ui: 'light',
+			items: [
+			{
+			xtype: 'button',
+			name: 'backbutton',
+			text: locale.getSt().button.back,
+			ui: 'back',
+			handler: function() {
+				var records = this.getParent().getParent().config.recordmove;
+				var idfloor = this.getParent().getParent().config.idfloor;
+				var offsetx=0;
+				var offsety=0;
+				var left = "";
+				var top = "";
+				for (var idrecord in records) {
+					offsetx=records[idrecord]['offsetx'];
+					offsety=records[idrecord]['offsety'];
+					
+					//records[idrecord]['offsetx']=0;
+					//records[idrecord]['offsety']=0;
+					
+					if(records[idrecord]['record'].get('etage')==idfloor) {
+						left='left';
+						top='top';
+					} else if(records[idrecord]['record'].get('etage1')==idfloor) {
+						left='left1';
+						top='top1';
+					} else if(records[idrecord]['record'].get('etage2')==idfloor) {
+						left='left2';
+						top='top2';
+					} else {
+						alert(locale.getSt().misc.noview +" !");
+						left="";
+					}
+					if(left!="") {
+						records[idrecord]['record'].set(left, records[idrecord]['record'].get(left)+offsetx);
+						records[idrecord]['record'].set(top, records[idrecord]['record'].get(top)+offsety);
+					}
+					//console.log(records[idrecord]);
+				}
+				//this.getParent().getParent().config.recordmove.length = 0;
+				//this.getParent().getParent().config.recordmove=[];
+				//records=[];
+				//console.log(this.getParent().getParent().config.draggablerecord);
+				Ext.getCmp('PanelConfigNavigation').pop();
+			}
+			}
+			]
+		}],
 		listeners:{
 			painted:function(e,d){
-				//this.draggablerecord= [];
+				this.config.draggablerecord= [];
 				myvera.app.getController('myvera.controller.contdevices').stopsynchro();
 				console.log(this.id + " painted");
 			},
-			itemtouchmove: function(me, index, target, record, e, eOpts ) {
-				var x = e.getPageX() + this.initX;
-				var y = e.getPageY() + this.initY;
-				//console.log("move " + x + " " + y);
-				
-				record.set('left', x);
-				record.set('top', y);
-				this.changeitem= true;
-				
-			},
-			itemtouchend: function(me, index, target, record, e, eOpts) {
-				if(this.changeitem==true) {
-					record.set('state', -2);
-					myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
-					this.changeitem=false;
-				}
-
-			},
-			
 			itemtouchstart: function(me, index, target, record, e, eOpts) {
-				this.initX = record.get('left') - e.getPageX();
-				this.initY = record.get('top') - e.getPageY();
-				
-				
-				/*this.setCurrentrecord(record);				
-				if(!Ext.Array.contains(this.draggablerecord, record.get('id'))) {
+				this.setCurrendid(record.get('id'));	
+				if(!Ext.Array.contains(this.config.draggablerecord, record.get('id'))) {
 					//console.log("create draggable", target);
-					this.draggablerecord.push(record.get('id'));
+					this.config.draggablerecord.push(record.get('id'));
+					this.config.recordmove[record.get('id')] = {
+						'record':record,
+						'offsetx':0,
+						'offsety':0
+					};
+					
 					var currentdrag = new Ext.util.Draggable({
 						element: target,
 						constraint: ({
@@ -59,32 +89,20 @@ Ext.define('myvera.view.datamove', {
 						}),
 						listeners: {
 							//drag: this.onDrag,
-							dragend: this.onDrop,
+							dragend: this.onDragend,
 							//dragstart: this.onDragStart,
 							scope: this
 						}
 					});
-				}*/
+				}
 			}
 		}
-	}/*,
-	onDrop: function(el, e, offsetX, offsetY, eOpts) {
-		var currecord=this.getCurrentrecord();
-		console.log("drop left: " + currecord.get('left') + " offsetX: " + offsetX);
-		if(currecord.get('etage')==this.config.idfloor) {
-			currecord.set('left', currecord.get('left')+ offsetX);
-			currecord.set('top', currecord.get('top')+ offsetY);
-		} else if(currecord.get('etage1')==this.config.idfloor) {
-			currecord.set('left1', currecord.get('left1')+ offsetX);
-			currecord.set('top1', currecord.get('top1')+ offsetY);
-		} else if(currecord.get('etage2')==this.config.idfloor) {
-			currecord.set('left2', currecord.get('left2')+ offsetX);
-			currecord.set('top2', currecord.get('top2')+ offsetY);
-		} else {
-			alert(locale.getSt().misc.noview +" !");
-			return;
-		}
-		el.setOffset(0,0);
-		myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();		
-	}*/
+	},
+	onDragend: function(el, e, offsetX, offsetY, eOpts) {
+		//e.stopEvent();
+		var currendid=this.getCurrendid();
+		this.config.recordmove[currendid]['offsetx']=el.offset.x;
+		this.config.recordmove[currendid]['offsety']=el.offset.y;
+		myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
+	}
 });

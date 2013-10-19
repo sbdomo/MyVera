@@ -36,18 +36,18 @@ Ext.define('myvera.view.dataitem', {
 			config.type = subcategory;
 			switch (subcategory) {
 			case 1:
-				return Ext.factory(config, Ext.ux.vslider, this.getMySlider());
+				return Ext.factory(config, Ext.ux.slider.vslider, this.getMySlider());
 				//return Ext.factory(config, Ext.custom.vSlider, this.getMySlider());
 			break;
 			case 2:
-				return Ext.factory(config, Ext.ux.cslider, this.getMySlider());
+				return Ext.factory(config, Ext.ux.slider.cslider, this.getMySlider());
 			break;
 			case 3:
-				return Ext.factory(config, Ext.ux.vslider, this.getMySlider());
+				return Ext.factory(config, Ext.ux.slider.vslider, this.getMySlider());
 				//return Ext.factory(config, Ext.ux.imgslider, this.getMySlider());
 			break;
 			default:
-				return Ext.factory(config, Ext.ux.hslider, this.getMySlider());
+				return Ext.factory(config, Ext.ux.slider.hslider, this.getMySlider());
 			break;
 			}
 		} else {
