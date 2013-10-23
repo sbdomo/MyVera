@@ -30,7 +30,7 @@ Ext.application({
         'Ext.MessageBox',
 	'myvera.util.locale',
 	'myvera.util.Templates',
-	'Ext.ux.field.SliderFieldExtended',
+	//'Ext.ux.field.SliderFieldExtended',
 	'Ext.ux.field.sliderText',
 	//'Ext.custom.MySlider',
 	'Ext.ux.slider.hslider',

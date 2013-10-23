@@ -983,7 +983,7 @@ Ext.define('myvera.controller.contdevices', {
 			
 			//Smart Virtual Thermostat
 			if(cat == 105&&record.get('sceneon') == null) {
-				this.vthermPopup(record.get('id'), record.get('name'), record.get('status'), record.get('var4'), record.get('var2'), record.get('var3'));
+				this.vthermPopup(record.get('id'), record.get('name'), record.get('status'), record.get('var4'), record.get('var2'), record.get('var3'), record.get('graphlink'));
 				return;
 			}
 			
@@ -1362,9 +1362,6 @@ Ext.define('myvera.controller.contdevices', {
 				xtype:'sliderText',
 				values:record.data.var2,
 				width: 200,
-				//labelAlign: 'top',
-				//labelText: locale.getSt().device.vtherm.tempnorm,
-				//label: locale.getSt().device.vtherm.tempnorm+ " ("+locale.getSt().unit.temp+")",
 				increment: incr,
 				minValue: min,
 				maxValue: max,
@@ -2208,13 +2205,22 @@ Ext.define('myvera.controller.contdevices', {
 
 	},
 	
-	vthermPopup: function(deviceid, name, status, energymode, heatsp, coolsp) {
+	vthermPopup: function(deviceid, name, status, energymode, heatsp, coolsp, incrminmax) {
 		//device.set('var2', response.devices[idrecord].heatsp);
 		//device.set('var3', response.devices[idrecord].coolsp);
 		//device.set('var4', response.devices[idrecord].hvacstate);
 		
 		var me=this;
-		
+		if(incrminmax!=""&&incrminmax!=null) {
+			incrminmax=incrminmax.split('|');
+			var incr=Number(incrminmax[0]);
+			var min = Number(incrminmax[1]);
+			var max = Number(incrminmax[2]);
+		} else {
+			var incr=0.1;
+			var min = 0;
+			var max = 35;
+		}
 //		var automode=1;
 //		if(hvacstate=="Heating") automode=0;
 			
@@ -2273,28 +2279,34 @@ Ext.define('myvera.controller.contdevices', {
 				label: locale.getSt().device.vtherm["3"]+" "+locale.getSt().device.vtherm.normal
 			},
 			{
-				xtype: 'sliderfieldextended',
-				name: 'coolsp',
-				itemId: 'coolsp',
-				labelAlign: 'top',
-				labelText: locale.getSt().device.vtherm.tempeco,
-				label: locale.getSt().device.vtherm.tempeco+ " ("+locale.getSt().unit.temp+")",
-				value: coolsp,
-				minValue: 0,
-				maxValue: 35,
-				increment: 0.1
+				html:'<span class="formlabel">'+locale.getSt().device.vtherm.tempeco+'</span>'
 			},
 			{
-				xtype: 'sliderfieldextended',
+				xtype: 'sliderText',
+				name: 'coolsp',
+				itemId: 'coolsp',
+				values: coolsp,
+				minValue: min,
+				maxValue: max,
+				increment: incr,
+				width: 270,
+				fontsize: '20px',
+				suffix: locale.getSt().unit.temp
+			},
+			{
+				html:'<span class="formlabel">'+locale.getSt().device.vtherm.tempnorm+'</span>'
+			},
+			{
+				xtype: 'sliderText',
 				name: 'heatsp',
 				itemId: 'heatsp',
-				labelAlign: 'top',
-				labelText: locale.getSt().device.vtherm.tempnorm,
-				label: locale.getSt().device.vtherm.tempnorm+ " ("+locale.getSt().unit.temp+")",
-				value: heatsp,
-				minValue: 0,
-				maxValue: 35,
-				increment: 0.1
+				values: heatsp,
+				minValue: min,
+				maxValue: max,
+				increment: incr,
+				width: 270,
+				fontsize: '20px',
+				suffix: locale.getSt().unit.temp
 			},
 			{
 				xtype: 'button',
@@ -2308,30 +2320,26 @@ Ext.define('myvera.controller.contdevices', {
 					var result="";
 					var newvalue="";
 					var form = popup.down('#fieldset1');
-					if(form.down('#coolsp').getHelperValue() != coolsp) {
-						newvalue=form.down('#coolsp').getHelperValue();
+					if(form.down('#coolsp').getValues() != coolsp) {
+						newvalue=form.down('#coolsp').getValues();
 						//data_request?id=lu_action&serviceId=urn:upnp-org:serviceId:TemperatureSetpoint1_Cool&DeviceNum=86&action=SetCurrentSetpoint&NewCurrentSetpoint=18.2
 						me.ondeviceaction(deviceid, "urn:upnp-org:serviceId:TemperatureSetpoint1_Cool", "SetCurrentSetpoint", "NewCurrentSetpoint", newvalue);
 						//result=result +"Temp. Eco:" + newvalue;
 					}
 					
-					if(form.down('#heatsp').getHelperValue() != heatsp) {
-						newvalue=form.down('#heatsp').getHelperValue();
+					if(form.down('#heatsp').getValues() != heatsp) {
+						newvalue=form.down('#heatsp').getValues();
 						//data_request?id=lu_action&serviceId=urn:upnp-org:serviceId:TemperatureSetpoint1_Heat&DeviceNum=86&action=SetCurrentSetpoint&NewCurrentSetpoint=18.2
 						me.ondeviceaction(deviceid, "urn:upnp-org:serviceId:TemperatureSetpoint1_Heat", "SetCurrentSetpoint", "NewCurrentSetpoint", newvalue);
 						//result=result +"Temp. Confort:" + newvalue;
 					}
 					
-//********Debug
-console.log("Debug: Automode "+energymode+ " new: "+form.down('#automodeconf').getGroupValues());
 					if(form.down('#automodeconf').getGroupValues() != energymode) {
 						//alert(form.down('#automodeconf').getGroupValues());
 //					//if(form.down('#automode').getValue() != automode) {
 //						if(form.down('#automode').getValue()==1) newvalue="EnergySavingsMode";
 						if(form.down('#automodeconf').getGroupValues()=="EnergySavingsMode") newvalue="EnergySavingsMode";
 						else newvalue="Normal";
-//********Debug
-console.log("Debug: NewEnergyModeTarget="+ newvalue);
 						//data_request?id=lu_action&serviceId=urn:upnp-org:serviceId:HVAC_UserOperatingMode1&DeviceNum=86&action=SetEnergyModeTarget&NewEnergyModeTarget=EnergySavingsMode
 						me.ondeviceaction(deviceid, "urn:upnp-org:serviceId:HVAC_UserOperatingMode1", "SetEnergyModeTarget", "NewEnergyModeTarget", newvalue);
 						//result=result +" Mode auto:" + newvalue;
@@ -2628,9 +2636,6 @@ console.log("Debug: NewEnergyModeTarget="+ newvalue);
 			} else {
 				device.set('campassword', locale.getSt().device.vtherm.eco);
 			}
-									
-//********Debug
-console.log("Debug: VT "+ device.get('name') + ": mode OCHA "+ device.get('status') + ", EnergyMode " + device.get('var4') + ", hvacstate "  + device.get('var5'));
 			break;
 		case 107: //colored vcontainer
 			if(!isNaN(parseInt(deviceupdate.variable1))) device.set('status', parseInt(deviceupdate.variable1));

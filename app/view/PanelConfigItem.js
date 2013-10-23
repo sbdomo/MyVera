@@ -112,6 +112,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 					} else if(value=="108"){
 						var options = [
 						{text: 'Normal',  value: '0'},
+						{text: 'One state 0',  value: '3'},
+						{text: 'One state 1',  value: '4'},
 						{text: 'Security Sensor',  value: '1'},
 						{text: 'Security Sensor (+armed)',  value: '2'}
 						];
@@ -159,6 +161,9 @@ Ext.define('myvera.view.PanelConfigItem', {
 						this.getParent().down('#CampasswordItem').show();
 					} else  if(value=="16" || value=="17" || value=="21") {
 						this.getParent().down('#GraphlinkItem').setLabel(locale.getSt().field.urlgraph);
+						this.getParent().down('#GraphlinkItem').show();
+					} else if(value=="105") {
+						this.getParent().down('#GraphlinkItem').setLabel('Incr.|Min|Max');
 						this.getParent().down('#GraphlinkItem').show();
 					} else  if(value=="108") {
 						this.getParent().down('#GraphlinkItem').setLabel(locale.getSt().field.urlwidget);

@@ -11,16 +11,18 @@ Ext.define('Ext.ux.field.sliderText', {
   },
   initialize: function() {
     this.callParent(arguments);
+    //console.log(this.getWidth());
+    this.slidervalue.setStyle('left', this.getWidth()+"px");
     this.on({
       scope: this,
       change: 'onSliderChange',
-      drag: 'onSliderDrag'
+      drag: 'onSliderDrag',
+      widthchange: 'onWidthchange'
     });
   },
   getElementConfig: function() {
     var self = this;
     var originalConfig = self.callParent();
-
     originalConfig.children = [{
       reference: 'helper',
       tag: 'div',
@@ -37,7 +39,8 @@ Ext.define('Ext.ux.field.sliderText', {
     return originalConfig;
   },
   onWidthchange: function(me, value, oldValue, eOpts) {
-    this.slidervalue.setStyle('left', value+"px");
+	  //console.log("slider width:" + value);
+	  this.slidervalue.setStyle('left', value+"px");
   },
   onSliderChange: function(me, thumb, newValue, oldValue) {
     this.setSliderValue(newValue);

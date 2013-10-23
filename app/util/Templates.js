@@ -20,9 +20,9 @@ tplpanwebview:	'<tpl elseif="category==1001&&subcategory==0">'+
 	'<iframe style="width:{wwidth}px;height:{height}px;" src="{graphlink}" frameborder="no" scrolling="no" marginwidth="0" marginheight="0" noresize >Your device does not support iframes.</iframe></div>',
 //Pour ne pas afficher l'iframe lors du drag and drop ou mettre un carré pour le slider (catégorie 111)
 tplpanwebviewmove: '<tpl elseif="category==1001&&subcategory==0">'+
-		' z-index:6;width:{wwidth}px;height:{height}px; background-color:rgba(137,224,156,0.6);" class="x-img x-floating">{name}</div>'+
+		' z-index:5;width:{wwidth}px;height:{height}px; background-color:rgba(137,224,156,0.6);" class="x-img x-floating">{name}</div>'+
 	'<tpl elseif="category==111">'+
-			' z-index:6;'+
+			' z-index:5;'+
 				'<tpl if="subcategory==0">padding-left:28px;padding-top:15px;'+
 				'<tpl elseif="subcategory==1">padding-left:28px;padding-top:15px;'+
 				'<tpl elseif="subcategory==2">padding-left:20px;padding-top:30px;'+
@@ -31,11 +31,16 @@ tplpanwebviewmove: '<tpl elseif="category==1001&&subcategory==0">'+
 				'<tpl if="subcategory==1">width:30px;height:{wwidth}px;'+
 				'<tpl elseif="subcategory==2">width:104px;height:118px;'+
 				'<tpl elseif="subcategory==3">width:{var3}px;height:{wwidth}px;'+
-				'<tpl else>width:{wwidth}px;height:30px;</tpl>\'>S</div></div>',
+				'<tpl else>width:{wwidth}px;height:30px;</tpl>\'>S</div></div>'+
+	'<tpl elseif="(category==108&&subcategory==3)||(category==108&&subcategory==4)">'+
+			' z-index:5;> </div>',
 
 	
 tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
-	'<img draggable="false" <tpl if="retina==\'@2x\'">width="{width}px"</tpl>src="./resources/images/d'+
+	'<img draggable="false" <tpl if="retina==\'@2x\'">width="{width}px"</tpl>src="'+
+	'<tpl if="(category==108&&subcategory==3&&status!=0)||(category==108&&subcategory==4&&status!=1)">'+
+		'./resources/images/indic/vide.png'+
+	'<tpl else>./resources/images/d'+
 	    '<tpl if="category==2||category==3||category==4||category==7||category==8||category==101||category==103||category==106||category==120">'+
 	    	'<tpl if="icon!=null">{icon}<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}<tpl else>{category}</tpl>_<tpl if="category==4||category==103||category==120">{tripped}<tpl else>{status}</tpl>'+
 	    '<tpl elseif="category==5&&subcategory==2">'+
@@ -55,7 +60,8 @@ tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 	    '<tpl elseif="category==1001&&subcategory!=0">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
-	    '<tpl else>0_0</tpl>{retina}.<tpl if="imgformat==1">jpg<tpl else>png</tpl>" />'+
+	    '<tpl else>0_0</tpl>{retina}.<tpl if="imgformat==1">jpg<tpl else>png</tpl>'+
+	'</tpl>" />'+
 	    
 	    
 	    '<tpl if="category==16&&var1!=null"><div class="texticon" style=\'font-size:{fontsize};<tpl if="color!=null"> color:#{color};</tpl>\' >{var1} %</div>'+
