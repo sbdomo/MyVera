@@ -17,9 +17,10 @@ Ext.define('myvera.view.PanelConfigItem', {
 		{
 			html:"",
 			itemId: 'titlePanelConfigItem',
-			tpl: [ '<img style="float: left;" height="40px" src="resources/images/l<tpl if="icon!=null&&category!=111">{icon}'+
+			tpl: [ '<img style="float: left;" height="40px" src="resources/images/l<tpl if="icon!=null&&category!=111&&!(category==108&&(subcategory==3||subcategory==4))">{icon}'+
 			'<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}'+
-			'<tpl elseif="category==108&&(subcategory==1||subcategory==2)">110<tpl elseif="category==108">108'+
+			'<tpl elseif="category==108&&(subcategory==1||subcategory==2)">110'+
+				'<tpl elseif="category==108">108'+
 			'<tpl elseif="category==111"><tpl if="icon!=null">{icon}<tpl else>111</tpl>'+
 			'<tpl elseif="category==120&&subcategory==1">121<tpl elseif="category==120&&subcategory==2">122'+
 			'<tpl else>{category}</tpl>_0{retina}.png" /><p style="line-height: 30px">&nbsp;&nbsp;{name} - ID:{id}<tpl if="type!=\'clone\'&&ref!=null&&ref!=\'\'"> (+{ref})</tpl></p><p>&nbsp;</p>' ]
@@ -836,6 +837,11 @@ Ext.define('myvera.view.PanelConfigItem', {
 					listdevice.set("room", formdata.room);
 					listdevice.set("name", data.name);
 				}
+				//Refaire les vues si c'est un custom control
+				if(formdata.category=="111") {
+					myvera.app.getController('myvera.controller.contconfig').resettabs();
+				}
+				
 				Ext.getCmp('PanelConfigNavigation').pop();
 				myvera.app.getController('myvera.controller.contconfig').alertDirtydevices();
 			}

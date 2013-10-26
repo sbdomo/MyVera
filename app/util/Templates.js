@@ -29,14 +29,13 @@ tplpanwebviewmove: '<tpl elseif="category==1001&&subcategory==0">'+
 				'<tpl elseif="subcategory==3">padding-left:18px;padding-top:18px;</tpl>'+
 				'" class="x-img x-floating"><div style=\'background-color:rgba(137,224,156,0.6);'+
 				'<tpl if="subcategory==1">width:30px;height:{wwidth}px;'+
-				'<tpl elseif="subcategory==2">width:104px;height:118px;'+
+				'<tpl elseif="subcategory==2">width:{wwidth}px;height:{wwidth}px;'+
 				'<tpl elseif="subcategory==3">width:{var3}px;height:{wwidth}px;'+
 				'<tpl else>width:{wwidth}px;height:30px;</tpl>\'>S</div></div>'+
 	'<tpl elseif="(category==108&&subcategory==3)||(category==108&&subcategory==4)">'+
 			' z-index:5;> </div>',
 
-	
-tplpanfin: '<tpl else> z-index: 6;" class="x-img x-floating">'+
+tplpanfin: '<tpl else><tpl if="!(category==108&&subcategory==3)&&!(category==108&&subcategory==4)"> z-index: 6;</tpl>" class="x-img x-floating">'+
 	'<img draggable="false" <tpl if="retina==\'@2x\'">width="{width}px"</tpl>src="'+
 	'<tpl if="(category==108&&subcategory==3&&status!=0)||(category==108&&subcategory==4&&status!=1)">'+
 		'./resources/images/indic/vide.png'+

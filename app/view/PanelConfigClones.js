@@ -11,7 +11,7 @@ Ext.define('myvera.view.PanelConfigClones', {
 		selectedCls: 'listroomselect',
 		itemTpl: '<tpl if="type==\'clone\'"><div class="listwebview">'+
 		'<div class="listwebviewimg"><img style="height:18px; margin-bottom:10px;" src="resources/images/indic/<tpl if="state==-3">drouge<tpl else>dvert</tpl>{retina}.png" />'+
-		'<img style="height:40px;" src="resources/images/l<tpl if="icon!=null&&category!=111">{icon}'+
+		'<img style="height:40px;" src="resources/images/l<tpl if="icon!=null&&category!=111&&!(category==108&&(subcategory==3||subcategory==4))">{icon}'+
 			'<tpl elseif="category==4&&(subcategory==4||subcategory==1)">4{subcategory}'+
 			'<tpl elseif="category==108&&(subcategory==1||subcategory==2)">110<tpl elseif="category==108">108'+
 			'<tpl elseif="category==111"><tpl if="icon!=null">{icon}<tpl else>111</tpl>'+
