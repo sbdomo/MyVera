@@ -30,7 +30,8 @@ Ext.define('myvera.view.PanelConfigFloorsNavigation', {
 				handler: function(){
 					Ext.getCmp('PanelConfigFloorsNavigation').push({
 							xtype: 'PanelConfigTab',
-							title: locale.getSt().misc.newtab
+							title: locale.getSt().misc.newtab,
+							data: { id:"", cls:97, ind:90 }
 					});
 				}
 			}

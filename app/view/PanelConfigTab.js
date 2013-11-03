@@ -49,8 +49,7 @@ Ext.define('myvera.view.PanelConfigTab', {
 			xtype: 'textfield',
 			label: locale.getSt().field.index,
 			name: 'ind',
-			itemId: 'ind',
-			value: 90
+			itemId: 'ind'
 		},
 		{
 			xtype: 'button',
