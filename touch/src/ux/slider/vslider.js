@@ -114,7 +114,7 @@ Ext.define('Ext.ux.slider.vslider',{
 		}
 	},
 	updateIcon:function(value, oldValue){
-		//var oldvalue = this.config.icon;
+		//var oldValue = this.config.icon;
 		if(value!=oldValue&&value!="") {
 			//console.log('icon' + value + "/" + oldValue);
 			if(this.config.type!=1) {
@@ -133,16 +133,16 @@ Ext.define('Ext.ux.slider.vslider',{
 	onWidthchange: function(me, value, oldValue, eOpts) {
 			this.sliderBox.setStyle("height", value+"px");
 			//console.log('width' + this.getWidth());
-			if(this.getValues()) this.ThumbValue(this.getValues(), "setWidth");
+			if(this.getValues()) this.ThumbValue(this.getValues());
 	},
 	updateValues:function(value, oldValue){
 		//console.log('updateValues' + value +" " + oldValue);
 		//this.config.values = value;
 		//if(this.getSuffix()) suffix= this.getSuffix();
 		this.minText.setHtml(value +this.getSuffix());
-		this.ThumbValue(value, "updateValues");
+		this.ThumbValue(value);
 	},
-	ThumbValue:function(value, origin){
+	ThumbValue:function(value){
 		var height = this.getWidth();
 		var thumbHeight=this.config.thumbHeight;
 		var top = (this.getMaxValue() - value)*height/(this.getMaxValue()-this.getMinValue());
@@ -176,17 +176,17 @@ Ext.define('Ext.ux.slider.vslider',{
 			this.setMinValue(taille[1]);
 			this.setMaxValue(taille[2]);
 			if(taille[3]) {
-				if(this.config.thumbHeight=taille[3]) {
+				if(this.config.thumbHeight!=taille[3]) {
 					//console.log("thumbHeight" + taille[3]);
 					this.config.thumbHeight=taille[3];
 					this.thumb.setStyle("height", taille[3]+"px");
-					if(this.getValues()) this.ThumbValue(this.getValues(), "setIncrMax");
+					if(this.getValues()) this.ThumbValue(this.getValues());
 				}
 			}
 		}
 	},
 	updateSuffix: function(value, oldValue) {
-		//var oldvalue = this.config.suffix;
+		//var oldValue = this.config.suffix;
 		if(value!=oldValue) {
 			//console.log("suffix" + value + "/" + oldValue);
 			//this.config.suffix = value;
@@ -196,7 +196,7 @@ Ext.define('Ext.ux.slider.vslider',{
 	
 	
 	updateColorNumber: function(value, oldValue) {
-		//var oldvalue = this.config.icon;
+		//var oldValue = this.config.icon;
 		if(value!=oldValue) {
 			//console.log("updateColorNumber"+ value);
 			//this.config.colorNumber = value;
@@ -205,7 +205,7 @@ Ext.define('Ext.ux.slider.vslider',{
 	},
 
 	updateFontsize: function(value, oldValue) {
-		//var oldvalue = this.config.fontsize;
+		//var oldValue = this.config.fontsize;
 		if(value!=oldValue) {
 			//console.log('updateFontsize' + value);
 			//this.config.fontsize = value;

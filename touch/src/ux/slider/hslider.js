@@ -3,12 +3,14 @@ Ext.define('Ext.ux.slider.hslider',{
 	xtype: 'hslider',
 	config:{
 		width: 200,
-		colorNumber:'000000',
-		fontsize: '10px',
-		suffix: '',
+		incrMax: null,
+		colorNumber: null,
+		fontsize: null,
+		suffix: null,
 		//helperColor: 'black',
 		value: 0,
-		values:null//,
+		values:null,
+		state: null
 	},
 	initialize:function(){
 		this.callParent(arguments);
@@ -65,10 +67,13 @@ Ext.define('Ext.ux.slider.hslider',{
 		//this.fireEvent('drag', this, thumb, newValue, oldValue);
 	},	
 	setValues: function(value) {
+			//console.log("values");
 			this.setValue(value);
 			this.setHelperValue(value);
 	},
-	setState: function(value) {
+	updateState: function(value, oldValue) {
+	//setState: function(value) {
+		if(value!=oldValue) {
 		switch (value) {
 		case -2:
 			this.moduleState.addCls("djaune");
@@ -85,55 +90,52 @@ Ext.define('Ext.ux.slider.hslider',{
 			this.moduleState.removeCls('dalert');
 			break;
 		}
+		}
 	},
 	setHelperValue: function(value) {
+		//console.log('setHelperValue');
 		if(value!=null) {
 			//Modification pour mettre un arrondi à une décimale
 			value=Math.round(value*10)/10;
 			if(value!=this.config.values) {
 				this.config.values = value;
-				this.helperInput.setHtml(value + this.config.suffix);
+				this.helperInput.setHtml(value +this.getSuffix());
 			}
 		}
 	},
-	setSuffix: function(value) {
-		var oldvalue = this.config.suffix;
-		if(oldvalue!=value) {
-			this.config.suffix = value;
+	updateSuffix: function(value, oldValue) {
+	//setSuffix: function(value) {
+		//var oldvalue = this.config.suffix;
+		if(value!=oldValue) {
+			//this.config.suffix = value;
 			if(this.getValue()!=null) {
-				this.helperInput.setHtml(this.getValue() + this.config.suffix);
+				this.helperInput.setHtml(this.getValue() + value);
 				//this.setHelperValue(this.getValue());
 			}
 		}
 	},
-	setFontsize: function(value) {
-		var oldvalue = this.config.fontsize;
-		if(oldvalue!=value) {
-			this.config.fontsize = value;
+	updateFontsize: function(value, oldValue) {
+	//setFontsize: function(value) {
+		//var oldvalue = this.config.fontsize;
+		if(value!=oldValue) {
+			//this.config.fontsize = value;
 			this.helperInput.setStyle('font-size', value);
 		}
 	},
-	
-	
-	//setHelperColor: function(value) {
-	//	this.config.helperColor=value;
-		//this.helperInput.setStyle('color', value);
-	//},
 	setIncrMax: function(value) {
-		if(value!=null&&value!="") {
+		if(value!=null&&value!=""&&value!=this.config.incrMax) {
+			this.config.incrMax=value;
 			var taille=value.split('|');
-			//this.config.increment=taille[0];
-			//this.config.maxValue=taille[1];
-			//this.config.maxValue=100;
-			//this.config.minValue=taille[1];
-			//this.config.maxValue=taille[2];
 			this.setIncrement(taille[0]);
 			this.setMinValue(Number(taille[1]));
 			this.setMaxValue(taille[2]);
 		}
 	},
-	setColorNumber: function(value) {
-		this.config.colorNumber=value;
-		this.helperInput.setStyle('color', '#' + value);
+	updateColorNumber: function(value, oldValue) {
+	//setColorNumber: function(value) {
+		if(value!=oldValue) {
+			//this.config.colorNumber=value;
+			this.helperInput.setStyle('color', '#' + value);
+		}
 	}
 });

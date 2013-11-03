@@ -2,18 +2,20 @@ Ext.define('Ext.ux.slider.cslider',{
 	xtype:'cslider',
 	extend:'Ext.Component',
 	config:{
-		values: 0,
+		values: null,
+		incrMax: null,
 		maxValue:100,
 		minValue:0,
-		thumbValue:0,
+		//thumbValue:0,
 		increment: 1,
-		icon:-1,
-		fontsize: '10px',
-		suffix: '',
-		colorNumber:'000000',
+		icon: null,
+		fontsize: null,
+		suffix: null,
+		colorNumber: null,
 		width: 92,
 		thumbHeight:24,
 		toptext:39,
+		state: null,
 		
 		dragStepModular:2
 	},	
@@ -52,6 +54,10 @@ Ext.define('Ext.ux.slider.cslider',{
 	},
 	initialize:function(){
 		this.callParent(arguments);
+		this.on({
+			scope: this,
+			widthchange: 'onWidthchange'
+		});
 		this.thumb.on({
 			scope: this,
 			drag: 'onDrag',
@@ -98,11 +104,11 @@ Ext.define('Ext.ux.slider.cslider',{
 		value=Math.round(deg*amplitude/360/this.config.increment)*this.config.increment+min;
 		this.setValues(value);
 	},
-	updateIcon:function(value){
-		var oldvalue = this.config.icon;
-		if(oldvalue!=value) {
-			//console.log("icon:"+value + " " + oldvalue);
-			this.config.icon=value;
+	updateIcon:function(value, oldValue){
+		//var oldValue = this.config.icon;
+		if(value!=oldValue&&value!="") {
+			//console.log('icon' + value + "/" + oldValue);
+			//this.config.icon=value;
 			this.sliderBox.setStyle('background', "url(resources/images/cslider/fond"+value+".png)");
 			this.sliderBox.setStyle('background-size', "contain");
 			
@@ -111,71 +117,89 @@ Ext.define('Ext.ux.slider.cslider',{
 			
 		}
 	},
-	updateColorNumber: function(value) {
-		var oldvalue = this.config.icon;
-		if(oldvalue!=value) {
+	updateColorNumber: function(value, oldValue) {
+		//var oldValue = this.config.icon;
+		if(value!=oldValue) {
 			//console.log("color:" + value);
-			this.config.colorNumber = value;
+			//this.config.colorNumber = value;
 			this.minText.setStyle('color', '#' + value);
 		}
 	},
-	updateSuffix: function(value) {
-		var oldvalue = this.config.suffix;
-		if(oldvalue!=value) {
-			this.config.suffix = value;
+	updateSuffix: function(value, oldValue) {
+		//var oldValue = this.config.suffix;
+		if(value!=oldValue) {
+			//this.config.suffix = value;
 			this.minText.setHtml(this.getValues() + value);
 		}
 	},
-	updateFontsize: function(value) {
-		var oldvalue = this.config.fontsize;
-		if(oldvalue!=value) {
-			this.config.fontsize = value;
+	updateFontsize: function(value, oldValue) {
+		//var oldValue = this.config.fontsize;
+		if(value!=oldValue) {
+			//this.config.fontsize = value;
 			this.minText.setStyle('font-size', value);
-			var toptext = Math.round(this.config.width/2-Number(value.substring(0, value.length-2))*3/4);
-			this.minText.setStyle("top", toptext+"px");
+			if(this.getWidth()!=null) {
+				var toptext = Math.round(this.getWidth()/2-Number(value.substring(0, value.length-2))*3/4);
+				this.minText.setStyle("top", toptext+"px");
+				//console.log('updateFontsize' + value+ "/" + this.getWidth());
+			}
 		}
 	},
 	//Changement de la taille du slider
-	setWidth:function(value){
-		if(value!=this.config.width) {
+	onWidthchange: function(me, value, oldValue, eOpts) {
+	//setWidth:function(value){
+		//if(value!=this.config.width) {
 			this.sliderBox.setStyle("height", value+"px");
 			this.sliderBox.setStyle("width", value+"px");			
-			this.config.width = value;
-			//décale de la hauteur moitié de la hauter et de la hauteur du fontsize
-			var toptext = Math.round(value/2-Number(this.config.fontsize.substring(0, this.config.fontsize.length-2))*3/4);
-			this.minText.setStyle("top", toptext+"px");
+			//this.config.width = value;
+			if(fontsizepx!=null) {
+				var fontsizepx = this.getFontsize();
+				//var fontsize=0;
+				//if(fontsizepx!=null&&fontsizepx.length>2) fontsize=Number(fontsizepx.substring(0, fontsizepx.length-2));
+				var fontsize=Number(fontsizepx.substring(0, fontsizepx.length-2));
+				//console.log('setwidth'+fontsizepx+ "/" + fontsize + "/" + value);
+			
+				//décale de la hauteur moitié de la hauter et de la hauteur du fontsize
+				var toptext = Math.round(value/2-fontsize*3/4);
+				this.minText.setStyle("top", toptext+"px");
+			}
 			
 			var leftmarker=Math.round(value/2);
 			this.marker.setStyle('left', leftmarker+"px");
 			this.marker.setStyle('height', value+"px");
-		}
+		//}
 	},
 	updateValues:function(value, oldValue){
-		this.minText.setHtml(value + this.config.suffix);
-		this.setThumbValue(value);
+		this.minText.setHtml(value +this.getSuffix());
+		this.ThumbValue(value);
 	},
-	updateThumbValue:function(value){
+	ThumbValue:function(value){
 		deg=this.value2deg(value);
 		deg=this.adjustDeg(deg);
 		this.marker.setStyle('-webkit-transform', 'rotate('+deg+'deg)');
 		this.marker.setStyle('transform', 'rotate('+deg+'deg)');
 	},
 	setIncrMax: function(value) {
-		if(value!=null&&value!="") {
+		if(value!=null&&value!=""&&value!=this.config.incrMax) {
+			this.config.incrMax=value;
+			//console.log('setIncrMax');
 			var taille=value.split('|');
 			this.setIncrement(Number(taille[0]));
 			this.setMinValue(Number(taille[1]));
 			this.setMaxValue(Number(taille[2]));
-			this.config.thumbHeight=taille[3];
-			this.thumb.setStyle("height", taille[3]+"px");
-			this.thumb.setStyle("width", taille[3]+"px");
-			
-			var topthumb = Math.round(taille[3]/2);
-			this.thumb.setStyle('top', -topthumb+"px");
-			this.thumb.setStyle('left', -topthumb+"px");
+			if(this.config.thumbHeight!=taille[3]) {
+				//console.log("thumbHeight" + taille[3]);
+				this.config.thumbHeight=taille[3];
+				this.thumb.setStyle("height", taille[3]+"px");
+				this.thumb.setStyle("width", taille[3]+"px");
+				var topthumb = Math.round(taille[3]/2);
+				this.thumb.setStyle('top', -topthumb+"px");
+				this.thumb.setStyle('left', -topthumb+"px");
+			}
 		}
 	},
-	setState: function(value) {
+	updateState: function(value, oldValue) {
+	//setState: function(value) {
+		if(value!=oldValue) {
 		switch (value) {
 		case -2:
 			this.moduleState.addCls("djaune");
@@ -191,6 +215,7 @@ Ext.define('Ext.ux.slider.cslider',{
 			this.moduleState.removeCls('djaune');
 			this.moduleState.removeCls('dalert');
 			break;
+		}
 		}
 	},
 	getBox:function(){
