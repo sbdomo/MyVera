@@ -2,20 +2,22 @@ Ext.define('Ext.ux.slider.vslider',{
 	xtype:'vslider',
 	extend:'Ext.Component',
 	config:{
-		values: 0,
+		values: null,
+		incrMax: null,
 		maxValue:100,
 		minValue:0,
-		thumbValue:0,
+		//thumbValue:null,
 		increment: 1,
-		icon:-1,
-		fontsize: '10px',
-		suffix: '',
-		colorNumber:'000000',
+		icon:null,
+		fontsize: null,
+		suffix: null,
+		colorNumber:null,
 		width: 200, //c'est en fait le height du slider car il est vertical.
 		thumbHeight:30,
 		toptext:215,
 		type: 1,
-		iconWidth: 30
+		iconWidth: null,
+		state: null
 	},
 	getElementConfig:function(){
 		return {
@@ -36,7 +38,7 @@ Ext.define('Ext.ux.slider.vslider',{
 					tag:'span',
 					reference:'minText',
 					cls:'basetext',
-					html:'0'
+					html:''
 				},
 				{
 					reference: 'moduleState',
@@ -59,16 +61,11 @@ Ext.define('Ext.ux.slider.vslider',{
 		}
 	},
 	initialize:function(){
-		//***this.sliderBox.setStyle('background', "url(resources/images/cslider/fond"+this.config.icon+".png) center");
-		//***this.sliderBox.setStyle('background-size', "104px auto");
 		this.callParent(arguments);
 		if(this.config.type!=1) {
 			this.fond.removeCls('fond');
 			this.thumb.removeCls('thumb2');
 			this.thumb.addCls('thumb');
-			//console.log("height"+this.config.thumbHeight);
-			//this.thumb.dom.src="./resources/images/imgslider/thumb"+value+".png";
-			//this.updateIcon(this.config.icon);
 		}
 		
 		//this.timerTimeTextBox.on('tap', me.onTimerTimeTextBoxTap, me);
@@ -82,6 +79,10 @@ Ext.define('Ext.ux.slider.vslider',{
 			drag: 'onDrag',
 			dragend: 'onDragEnd'
 		});*/
+		this.on({
+			scope: this,
+			widthchange: 'onWidthchange'
+		});
 		this.sliderBox.on({
 			scope: this,
 			drag: 'onDrag',
@@ -112,12 +113,10 @@ Ext.define('Ext.ux.slider.vslider',{
 			this.setValues(slidevalue);
 		}
 	},
-	updateIcon:function(value){
-		var oldvalue = this.config.icon;
-		//console.log("updateIcon"+value+ " " + oldvalue);
-		if(oldvalue!=value) {
-			//console.log("icon:"+value + " " + oldvalue);
-			this.config.icon=value;
+	updateIcon:function(value, oldValue){
+		//var oldvalue = this.config.icon;
+		if(value!=oldValue&&value!="") {
+			//console.log('icon' + value + "/" + oldValue);
 			if(this.config.type!=1) {
 				this.sliderBox.setStyle('background', "url(resources/images/imgslider/fond"+value+".png)");
 				this.sliderBox.setStyle('background-size', "contain");
@@ -127,81 +126,33 @@ Ext.define('Ext.ux.slider.vslider',{
 				
 				this.thumb.setStyle('background', "url(resources/images/imgslider/thumb"+value+".png)");
 				this.thumb.setStyle('background-size', "contain");
-				//this.thumb.dom.src="./resources/images/imgslider/thumb"+value+".png";
 			}
-			//***this.sliderBox.setStyle('background-size', "104px auto");
-		}
-		
-	},
-	updateColorNumber: function(value) {
-		var oldvalue = this.config.icon;
-		if(oldvalue!=value) {
-			this.config.colorNumber = value;
-			this.minText.setStyle('color', '#' + value);
-		}
-	},
-	updateSuffix: function(value) {
-		var oldvalue = this.config.suffix;
-		if(oldvalue!=value) {
-			this.config.suffix = value;
-			this.minText.setHtml(this.getValues() + value);
-		}
-	},
-	updateFontsize: function(value) {
-		var oldvalue = this.config.fontsize;
-		if(oldvalue!=value) {
-			this.config.fontsize = value;
-			this.minText.setStyle('font-size', value);
 		}
 	},
 	//Changement de la hauteur du slider
-	setWidth:function(value){
-		if(value!=this.config.width) {
+	onWidthchange: function(me, value, oldValue, eOpts) {
 			this.sliderBox.setStyle("height", value+"px");
-			
-			//décale de la hauteur et de la moitié du thumb
-			//var toptext = value + Math.round(this.thumb.getHeight()/2);
-			//this.minText.setStyle("top", toptext+"px");
-			
-			this.config.width = value;
-			if(this.config.value) this.updateThumbValue(this.config.value);
-		}
-	},
-	//Changement de la largeur
-	setIconWidth:function(value){
-		if(value!=this.config.iconWidth&&this.config.type!=1) {
-			this.sliderBox.setStyle("width", value+"px");
-			//this.clipper.setStyle("width", value+"px");
-			//this.thumb.setWidth(value);
-			//console.log(value+"IconWidth"+this.thumb.getHeight());
-			//var toptext = this.config.width + Math.round(this.thumb.getHeight()/2);
-			//this.minText.setStyle("top", toptext+"px");
-			
-			//this.thumb.setStyle("width", value+"px");
-			//this.minText.setStyle("width", value+"px");
-			this.config.iconWidth = value;
-				//this.updateThumbValue(this.config.value);
-		}
+			//console.log('width' + this.getWidth());
+			if(this.getValues()) this.ThumbValue(this.getValues(), "setWidth");
 	},
 	updateValues:function(value, oldValue){
-		this.minText.setHtml(value + this.config.suffix);
-		this.setThumbValue(value);
+		//console.log('updateValues' + value +" " + oldValue);
+		//this.config.values = value;
+		//if(this.getSuffix()) suffix= this.getSuffix();
+		this.minText.setHtml(value +this.getSuffix());
+		this.ThumbValue(value, "updateValues");
 	},
-	updateThumbValue:function(value){
-		var getBox = this.getBox();
-		var height = getBox.height;
-		//var thumbHeight=this.thumb.getHeight();
+	ThumbValue:function(value, origin){
+		var height = this.getWidth();
 		var thumbHeight=this.config.thumbHeight;
-		//console.log("thumbHeight"+thumbHeight);
-		//var width = getBox.width;
-		//console.log(value + "new width" + width);
 		var top = (this.getMaxValue() - value)*height/(this.getMaxValue()-this.getMinValue());
 		var topthumb = Math.round(top-thumbHeight/2);
 		this.thumb.setStyle('top', topthumb+"px");
 		top = Math.round(top);
 		this.clipper.setStyle("height", top+"px");
 		
-		var toptext = this.config.width + Math.round(thumbHeight/2);
+		var toptext = height + Math.round(thumbHeight/2);
+		//console.log("toptext" + toptext + "/"+ value + "/" + origin);
 		if(toptext!=this.config.toptext) {
 		//Positionne le texte si thumbHeight à changé (ne marche pas avant. Pourquoi?
 		//if(this.config.thumbHeight!=thumbHeight&&this.thumbHeight!=0) {
@@ -214,9 +165,9 @@ Ext.define('Ext.ux.slider.vslider',{
 		
 		//this.clipper.setStyle("clip", "rect(0px,"+width+"px,"+top+ "px,0px)");
 	},
-	
 	setIncrMax: function(value) {
-		if(value!=null&&value!="") {
+		if(value!=null&&value!=""&&value!=this.config.incrMax) {
+			this.config.incrMax=value;
 			var taille=value.split('|');
 			//this.config.increment=taille[0];
 			//this.config.minValue=taille[1];
@@ -225,12 +176,57 @@ Ext.define('Ext.ux.slider.vslider',{
 			this.setMinValue(taille[1]);
 			this.setMaxValue(taille[2]);
 			if(taille[3]) {
-				this.config.thumbHeight=taille[3];
-				this.thumb.setStyle("height", taille[3]+"px");
+				if(this.config.thumbHeight=taille[3]) {
+					//console.log("thumbHeight" + taille[3]);
+					this.config.thumbHeight=taille[3];
+					this.thumb.setStyle("height", taille[3]+"px");
+					if(this.getValues()) this.ThumbValue(this.getValues(), "setIncrMax");
+				}
 			}
 		}
 	},
-	setState: function(value) {
+	updateSuffix: function(value, oldValue) {
+		//var oldvalue = this.config.suffix;
+		if(value!=oldValue) {
+			//console.log("suffix" + value + "/" + oldValue);
+			//this.config.suffix = value;
+			if(this.getValues()) this.minText.setHtml(this.getValues() + value);
+		}
+	},
+	
+	
+	updateColorNumber: function(value, oldValue) {
+		//var oldvalue = this.config.icon;
+		if(value!=oldValue) {
+			//console.log("updateColorNumber"+ value);
+			//this.config.colorNumber = value;
+			this.minText.setStyle('color', '#' + value);
+		}
+	},
+
+	updateFontsize: function(value, oldValue) {
+		//var oldvalue = this.config.fontsize;
+		if(value!=oldValue) {
+			//console.log('updateFontsize' + value);
+			//this.config.fontsize = value;
+			this.minText.setStyle('font-size', value);
+		}
+	},
+
+	//Changement de la largeur
+	updateIconWidth: function(value, oldValue) {
+	//setIconWidth:function(value){
+		if(value!=oldValue&&this.config.type!=1) {
+			//console.log("iconwidth" + value);
+		//if(value!=this.config.iconWidth&&this.config.type!=1) {
+			this.sliderBox.setStyle("width", value+"px");
+			//this.config.iconWidth = value;
+		}
+	},
+	updateState: function(value, oldValue) {
+	//setState: function(value) {
+		if(value!=oldValue) {
+		//console.log("setState"+value);
 		switch (value) {
 		case -2:
 			this.moduleState.addCls("djaune");
@@ -246,6 +242,7 @@ Ext.define('Ext.ux.slider.vslider',{
 			this.moduleState.removeCls('djaune');
 			this.moduleState.removeCls('dalert');
 			break;
+		}
 		}
 	},
 	getBox:function(){

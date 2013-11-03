@@ -188,7 +188,7 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 					'<div class="varlong">{var1}</div>'+
 				'</div>'+
 			'<tpl elseif="category==111">'+
-				'<div class="vargros">{level}</div>'+
+				'<div class="vargros">{level}<tpl if="var5!=null>{var5}</tpl></div>'+
 			'<tpl elseif="category==120"><div class="floatleft">'+
 					'<div class="clock1"><tpl if="var1==null">&nbsp;<tpl else>{var1}</tpl><br /><tpl if="var2==null||subcategory!=1">&nbsp;<tpl else>{var2}</tpl></div>'+
 					'<tpl if="armed!= null"><div class="clock2"><img class="armed2" src="./resources/images/indic/arm{armed}{retina}.png" /></div></tpl>'+

@@ -2689,35 +2689,30 @@ Ext.define('myvera.controller.contdevices', {
 			if(popup) this.updatesonospopup(popup, device);
 			break;
 		case 111: //Custom Slider
-			//var1 : pour indiquer quel paramètre est repris pour le level
-			//graphlink pour l'increment et le max de slider
 			//wwidth pour la largeur/hauteur si vertical du slider
-			//color: pour la couleur du texte
+			//graphlink pour l'increment le min, max et hauteur du thumb. du slider
+			//var1 : pour indiquer quel paramètre est repris pour le level
+			//var2: n° d'image
+			//var3: largeur pour vslider - image
 			//var4: la commande de level
-			//var2: Image pour la largeur de l'image pour un Img. Vert. Slider
-			//var3: largeur
 			//var5: suffixe
+			//color: pour la couleur du texte
+			//fontsize
 			
 			//icon : pour l'icône du tableau de bord
-			//width: pas utilisé
-			
-			//A faire:
-			//suffixe et taille du texte: fontsize
-			
-			
-			//pas utilisé : height, var6, camuser, campassword
+			//pas utilisé : width, height, var6, camuser, campassword
 			
 			if(device.get('var1')!=""&&device.get('var1')!= null) {
 				//if(device.get('subcategory')==0||)
 				device.set('level', deviceupdate[device.get('var1')]);
 			} else device.set('level', 0);
 			
-			if(device.get('var2')!=""&&device.get('var2')!= null) {
-				device.set('camuser', deviceupdate[device.get('var2')] + device.get('var3') );
-			} else device.set('camuser', "");
-			if(device.get('var5')!=""&&device.get('var5')!= null) {
-				device.set('campassword', deviceupdate[device.get('var5')] + device.get('var6') );
-			} else device.set('campassword', "");
+			//if(device.get('var2')!=""&&device.get('var2')!= null) {
+			//	device.set('camuser', deviceupdate[device.get('var2')] + device.get('var3') );
+			//} else device.set('camuser', "");
+			//if(device.get('var5')!=""&&device.get('var5')!= null) {
+			//	device.set('campassword', deviceupdate[device.get('var5')] + device.get('var6') );
+			//} else device.set('campassword', "");
 			
 			break;
 		case 120: //vclock
