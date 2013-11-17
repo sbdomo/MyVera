@@ -57,6 +57,8 @@ tplpanfin: '<tpl else><tpl if="!(category==108&&subcategory==3)&&!(category==108
 		'<tpl if="subcategory==1||subcategory==2"><tpl if="armed!=null">{armed}<tpl else>1</tpl></tpl>'+
 	    '<tpl elseif="category==109">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
+	    '<tpl elseif="category==112">'+
+	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_<tpl if="status!=3">{status}</tpl>'+
 	    '<tpl elseif="category==1001&&subcategory!=0">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	    '<tpl else>0_0</tpl>{retina}.<tpl if="imgformat==1">jpg<tpl else>png</tpl>'+
@@ -135,6 +137,8 @@ tpllisticon:'<div class="devicon">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 				'<tpl elseif="category==111">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_0'+
+				'<tpl elseif="category==112">'+
+					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_<tpl if="status!=3">{status}</tpl>'+
 				'<tpl elseif="category==1001">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	   			'<tpl else>0_0</tpl>{retina}.png" />'+

@@ -121,6 +121,7 @@ Ext.define('myvera.controller.contdevices', {
 		//this.nbrtimer=0;
 		//this.nbrforce = 0;
 		//this.syncdate = 0;
+		this.datesync=0;
 		//*******************
 		this.synccount=0;
 		this.autosync = true;
@@ -262,7 +263,7 @@ Ext.define('myvera.controller.contdevices', {
 		var storeRooms = Ext.getStore('Rooms');
 		if (storeRooms.getCount()>0) {
 			if(locale.getSt().lang!="fr") {
-				var noroom = storeRooms.getById(0)
+				var noroom = storeRooms.getById(0);
 				if(noroom) noroom.set("name",locale.getSt().misc.noroom);
 			}
 			var DevicesStore = Ext.getStore('devicesStore');
@@ -536,6 +537,14 @@ Ext.define('myvera.controller.contdevices', {
 //			this.nbrsync= this.nbrsync + 1;
 //***********			Ext.getCmp('tabbarlabel').setHtml(this.nbrsync + "/" + this.nbrtimer + "/" + this.nbrforce);
 //			this.syncdate = Date.now();
+			if((Date.now()-this.datesync>90000) && this.autosync==true) {
+				Ext.Viewport.setMasked({
+						xtype: 'loadmask',
+						message: 'Synchro...'
+				});
+				console.log('resync');
+			}
+			this.datesync= Date.now();
 //			syncstamp = this.syncdate;
 //		}
 		//*******************
@@ -564,6 +573,13 @@ Ext.define('myvera.controller.contdevices', {
 				var date = new Date();
 				console.log("Vera Sync : OK " + Ext.Date.format(date, 'h:i:s'));
 				var response = Ext.decode(result.responseText, true);
+				
+				//****Synchro quand réouvre
+				//if(Ext.Viewport.getMasked().getMessage()=="Synchro...")
+				Ext.Viewport.setMasked(false);
+				
+				
+				
 				if (response) {
 					var devices = Ext.getStore('devicesStore');
 					if (devices) {
@@ -613,7 +629,7 @@ Ext.define('myvera.controller.contdevices', {
 									(
 										((category == 4 || category == 103 || category == 120) && isTripped)
 										||
-										(category !=4 && category !=106 && category !=7 && category !=1001 && status == 1)
+										(category !=4 && category !=106 && category !=112 && category !=7 && category !=1001 && status == 1)
 										||
 										(category ==7 && status == 0)
 										||
@@ -629,7 +645,7 @@ Ext.define('myvera.controller.contdevices', {
 										(
 											((category == 4 || category == 103 || category == 120) && !isTripped)
 											||
-											(category !=4 && category != 103 && category != 120 && category != 7 && category != 1001 && status == 0)
+											(category !=4 && category != 103 && category !=112 && category != 120 && category != 7 && category != 1001 && status == 0)
 											||
 											(category == 7 && status == 1)
 										)
@@ -665,10 +681,16 @@ Ext.define('myvera.controller.contdevices', {
 				} else {
 					//*******************Debug mode
 					this.synccount=this.synccount+1;
+					//if(Ext.Viewport.getMasked().getMessage()=="Synchro...") {
+					//	Ext.Viewport.setMasked(false);
+					//	this.synccount=10;
+					//}
+					
 					if(this.autosync==true&&nonewsync==false) {//&&syncstamp==this.syncdate
-						if(this.synccount<10) {
+						if(this.synccount<10) {								
 							this.newsync(0, 0);//, syncstamp
 						} else {
+							//if(Ext.Viewport.getMasked().getMessage()=="Synchro...") Ext.Viewport.setMasked(false);
 							Ext.Msg.confirm(locale.getSt().misc.error, locale.getSt().msg.nosynchro+" "+locale.getSt().msg.newtry, function(confirmed) {
 								if (confirmed == 'yes') {
 									//this.devicesync(0,0, nonewsync);
@@ -686,8 +708,19 @@ Ext.define('myvera.controller.contdevices', {
 			},
 			failure: function(response) {
 				this.ajaxsynchro=null;
+				
+				//****Synchro quand réouvre
+				//if(Ext.Viewport.getMasked().getMessage()=="Synchro...")
+				Ext.Viewport.setMasked(false);
+				
+				
 				if(this.dostopsynchro) {
 					console.log("Vera Sync stop: " + newloadtime + ", " + newdataversion);
+					
+					//if(Ext.Viewport.getMasked().getMessage()=="Synchro...") {
+					//	Ext.Viewport.setMasked(false);
+					//}
+					
 					this.dostopsynchro=false;
 					this.newsync(newloadtime, newdataversion, 1000);
 					//alert("stop");
@@ -695,6 +728,11 @@ Ext.define('myvera.controller.contdevices', {
 					console.log("Vera Sync : Error");
 					//console.log(this.stopsynchro);
 					this.synccount=this.synccount+1;
+					//if(Ext.Viewport.getMasked().getMessage()=="Synchro...") {
+					//	Ext.Viewport.setMasked(false);
+					//	this.synccount=10;
+					//}
+					
 					if(this.autosync==true&&nonewsync==false) {//&&syncstamp==this.syncdate
 						if(this.synccount<10) {
 							this.newsync(0, 0);//, syncstamp
@@ -754,7 +792,7 @@ Ext.define('myvera.controller.contdevices', {
 		
 		var icontap = false;
 		var cat=record.get('category');
-		if (!Ext.Array.contains([2, 3, 4, 5, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
+		if (!Ext.Array.contains([2, 3, 4, 5, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 112, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
 			return;
 		}
 		//Si c'est un hvac non heater, sort de la commande
@@ -1184,6 +1222,11 @@ Ext.define('myvera.controller.contdevices', {
 				this.onDeviceHoldTap(view, index, target, record, event);
 				return;
 			}
+			//Battery Monitor
+			if(cat == 112&&record.get('sceneon') == null) {
+				this.onDeviceHoldTap(view, index, target, record, event);
+				return;
+			}
 			//Scene
 			if (cat == 1000) {
 				dservice = "urn:micasaverde-com:serviceId:HomeAutomationGateway1";
@@ -1556,7 +1599,87 @@ Ext.define('myvera.controller.contdevices', {
 					this.destroy();
 				}
 			}
-			});			
+			});
+		} else if(record.get('category')==112) { //Battery Monitor
+			var isretina = myvera.app.isretina;
+			var status=record.get('status')
+			//var high =record.get('var3').split(',');
+			//var mid =record.get('var2').split(',');
+			//var low =record.get('var1').split(',');
+			var devices = Ext.getStore('devicesStore');
+			var device = "";
+			var html='';
+			if(status==2) {
+				html='<br /><img src="./resources/images/l112_2'+isretina+'.png" width=25/>';
+				if(record.get('var3')!="") {
+					var id =record.get('var3').split(',');
+					for (var iddevice in id) {
+						device= devices.getById(id[iddevice]);
+						if(device) html=html+"<br /> "+device.get("name")+" ("+device.get("batterylevel")+"%)";
+						else  html=html+"<br /> ID:"+id[iddevice];
+					}
+				}
+
+			} else {
+				if(record.get('var2')!="") {
+					html='<br /><img src="./resources/images/l112_1'+isretina+'.png" width=25/>';
+					var id =record.get('var2').split(',');
+					for (var iddevice in id) {
+						device= devices.getById(id[iddevice]);
+						if(device) html=html+"<br /> "+device.get("name")+" ("+device.get("batterylevel")+"%)";
+						else  html=html+"<br /> ID:"+id[iddevice];
+					}
+				}
+				if(record.get('var1')!="") {
+					html='<br /><img src="./resources/images/l112_0'+isretina+'.png" width=25/>';
+					var id =record.get('var1').split(',');
+					for (var iddevice in id) {
+						device= devices.getById(id[iddevice]);
+						if(device) html=html+"<br /> "+device.get("name")+" ("+device.get("batterylevel")+"%)";
+						else  html=html+"<br /> ID:"+id[iddevice];
+					}
+				}
+			}
+			var popup=new Ext.Panel({
+			modal:true,
+			hideOnMaskTap: true,
+			width: '400px',
+			height: '290px',
+			maxWidth: '95%',
+			maxHeight: '95%',
+			centered: true,
+			scrollable: {
+				direction: 'vertical',
+				directionLock: true
+			},
+			items:[{
+				html: html
+			},
+			{
+				xtype:'toolbar',
+				docked: 'bottom',
+				items: [{xtype: 'spacer'},
+				{
+					text: locale.getSt().msg.updating,
+					ui: 'action',
+					centered  :true,
+					maxWidth:150,
+					handler: function(){
+					me.ondeviceaction(record.get('id'), "urn:upnp-org:serviceId:BatteryMonitor1", 'Check', "targetvalue", "", "notarget");
+					this.getParent().getParent().hide();
+					}
+				}]
+			}
+			],
+			listeners: {
+				hide: function(panel) {;
+					this.destroy();
+				}
+			}
+			});
+			
+			
+			
 		} else {
 			var dservice = 'urn:upnp-org:serviceId:Dimming1';
 			var daction = 'SetLoadLevelTarget';
@@ -2528,6 +2651,8 @@ Ext.define('myvera.controller.contdevices', {
 		}
 	},
 	updatedevice: function(device, deviceupdate) {
+		//Niveau de batterie s'il existe
+		device.set('batterylevel', deviceupdate.batterylevel);
 		//Le status des Smart Virtual Thermostat - category 105 et des sonos - 109 n'est pas dans status
 		if(device.get('category')!=7&&device.get('category')!=105&&device.get('category')!=109&&device.get('category')!=108&&device.get('category')!=111)
 		{
@@ -2714,6 +2839,11 @@ Ext.define('myvera.controller.contdevices', {
 			//	device.set('campassword', deviceupdate[device.get('var5')] + device.get('var6') );
 			//} else device.set('campassword', "");
 			
+			break;
+		case 112: //Battery Monitor
+			device.set('var1', deviceupdate.lowdevicelist);
+			device.set('var2', deviceupdate.middevicelist);
+			device.set('var3', deviceupdate.highdevicelist);
 			break;
 		case 120: //vclock
 			device.set('var1', deviceupdate.alarmtime);
