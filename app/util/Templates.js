@@ -212,10 +212,15 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 				'</div>'+
 			'</tpl>',
 
-tplliston: '<tpl if="onboard&&(verif!=\'off\'&&verif!=\'no\')&&(((category==4||category==103||category==120)&&tripped==1)||(category!=4&&category!=106&&category!=7&&category!=1001&&status==1)||(category==7&&status==0)||((category==104||category==105||category==5)&&(status==2||status==3)))">',
-tpllistoff: '<tpl if="onboard&&((verif==\'off\'&&('+
+tplliston: '<tpl if="onboard&&type!=\'clone\'&&(verif!=\'off\'&&verif!=\'no\')&&('+
+	'((category==4||category==103||category==120)&&tripped==1)||'+
+	'(category!=4&&category!=106&&category!=112&&category!=7&&category!=1001&&status==1)||'+
+	'(category==7&&status==0)||'+
+	'((category==104||category==105||category==5)&&(status==2||status==3)))">',
+tpllistoff: '<tpl if="onboard&&type!=\'clone\'&&((verif==\'off\'&&('+
 	'((category==4||category==103||category==120)&&tripped==0)||'+
-	'(category!=4&&category!=103&&category!=120&&category!=7&&category!=1001&&status==0)||(category==7&&status==1)))||'+
+	'(category!=4&&category!=103&&category!=112&&category!=120&&category!=7&&category!=1001&&status==0)||'+
+	'(category==7&&status==1)))||'+
 	'(verif!=\'no\'&&(category==4||category==103||category==120)&&armed==0))">'
     },
     

@@ -143,6 +143,13 @@ Ext.define('myvera.view.PanelConfigItem', {
 						subcat.setOptions(options);
 						subcat.hide();
 					}
+					if (Ext.Array.contains(["6", "16", "17", "18", "21", "111", "102", "106", "109", "112"], value) || this.getParent().config.data.type=="clone") {
+						this.getParent().down('#verif').hide();
+					} else {
+						this.getParent().down('#verif').show();
+					}
+					
+					
 					
 					this.getParent().down('#CamuserItem').hide();
 					this.getParent().down('#CampasswordItem').hide();

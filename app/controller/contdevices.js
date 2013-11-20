@@ -1603,14 +1603,11 @@ Ext.define('myvera.controller.contdevices', {
 		} else if(record.get('category')==112) { //Battery Monitor
 			var isretina = myvera.app.isretina;
 			var status=record.get('status')
-			//var high =record.get('var3').split(',');
-			//var mid =record.get('var2').split(',');
-			//var low =record.get('var1').split(',');
 			var devices = Ext.getStore('devicesStore');
 			var device = "";
 			var html='';
 			if(status==2) {
-				html='<br /><img src="./resources/images/l112_2'+isretina+'.png" width=25/>';
+				html='<img src="./resources/images/l112_2'+isretina+'.png" width=25/>';
 				if(record.get('var3')!="") {
 					var id =record.get('var3').split(',');
 					for (var iddevice in id) {
@@ -1622,7 +1619,7 @@ Ext.define('myvera.controller.contdevices', {
 
 			} else {
 				if(record.get('var2')!="") {
-					html='<br /><img src="./resources/images/l112_1'+isretina+'.png" width=25/>';
+					html='<img src="./resources/images/l112_1'+isretina+'.png" width=25/>';
 					var id =record.get('var2').split(',');
 					for (var iddevice in id) {
 						device= devices.getById(id[iddevice]);
@@ -1631,7 +1628,8 @@ Ext.define('myvera.controller.contdevices', {
 					}
 				}
 				if(record.get('var1')!="") {
-					html='<br /><img src="./resources/images/l112_0'+isretina+'.png" width=25/>';
+					if(record.get('var2')!="") html=html+'<br />';
+					html=html+'<img src="./resources/images/l112_0'+isretina+'.png" width=25/>';
 					var id =record.get('var1').split(',');
 					for (var iddevice in id) {
 						device= devices.getById(id[iddevice]);
@@ -1653,6 +1651,9 @@ Ext.define('myvera.controller.contdevices', {
 				directionLock: true
 			},
 			items:[{
+				style: {
+					'margin': '5px'
+				},
 				html: html
 			},
 			{
