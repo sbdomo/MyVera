@@ -315,7 +315,7 @@ Ext.define('myvera.view.PanelConfigScene', {
 				var devices = Ext.getStore('devicesStore');
 				var device = devices.getById("s" + form.config.data.id);
 				
-				var icon=formdata.icon;
+				var icon=form.getValues().icon;
 				if(icon=="") icon=null;
 				
 				//var width =device.get('width');
