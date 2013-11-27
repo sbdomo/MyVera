@@ -10,7 +10,8 @@ Ext.define('myvera.model.Floors', {
 		{name: 'pathretina',  type: 'string', defaultValue: ""},
 		{name: 'widthretina', type: 'int', defaultValue: 0},
 		{name: 'tab', type: 'int', defaultValue: 0},
-		{name: 'ind', type: 'int', defaultValue: 90}
+		{name: 'ind', type: 'int', defaultValue: 90},
+		{name: 'noslider', type: 'boolean', defaultValue: false}		
 		    ],
 	    idProperty: 'id'
     }

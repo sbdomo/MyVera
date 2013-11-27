@@ -12,7 +12,7 @@ Ext.define('myvera.view.PanelConfigFloor', {
 		//styleHtmlContent: true,
 		//scrollable: 'vertical',
 		defaults: {
-			labelWidth: '127px'
+			labelWidth: '140px'
 		},
 		items: [
 		{
@@ -41,6 +41,12 @@ Ext.define('myvera.view.PanelConfigFloor', {
 			name: 'ind',
 			itemId: 'ind',
 			value: 90
+		},
+		{
+			xtype: 'togglefield',
+			name: 'noslider',
+			itemId: 'noslider',
+			label: locale.getSt().field.noslider
 		},
 		{
 			xtype: 'textfield',
@@ -235,6 +241,7 @@ Ext.define('myvera.view.PanelConfigFloor', {
 				e.down('#widthretina').setValue(d.widthretina);
 				e.down('#tab').setValue(d.tab);
 				e.down('#ind').setValue(d.ind);
+				e.down('#noslider').setValue(d.noslider);
 			}
 		}
 		

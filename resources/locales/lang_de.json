@@ -177,7 +177,8 @@
       "type":"Typ",
       "go":"Gehe zu",
       "iconformat":"Format der Ikone",
-      "url":"URL"
+      "url":"URL",
+      "noslider":"Ohne Cust. Cont."
    },
    "button":{
       "back":"Zur&uuml;ck",

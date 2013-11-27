@@ -517,7 +517,7 @@ Ext.define('myvera.controller.contconfig', {
 			idfloor = form.config.data.id;
 		}
 		var floor= {id: idfloor, name: formdata.name, path: formdata.path, linkimage: formdata.linkimage, pathretina: formdata.pathretina,
-			linkimage2: formdata.linkimage2, widthretina: formdata.widthretina, tab: formdata.tab, ind: formdata.ind };
+			linkimage2: formdata.linkimage2, widthretina: formdata.widthretina, tab: formdata.tab, ind: formdata.ind, noslider: formdata.noslider };
 		Ext.Ajax.request({
 			url: './protect/savefloors.php',
 			headers: syncheader,

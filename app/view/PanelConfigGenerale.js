@@ -23,11 +23,13 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 				xtype: 'textfield',
 				name: 'login',
 				autoCapitalize: false,
+				hidden: true,
 				placeHolder: locale.getSt().field.name
 			},
 			{
 				xtype: 'passwordfield',
 				name: 'pass',
+				hidden: true,
 				placeHolder: locale.getSt().field.password
 			},
 			{
@@ -35,6 +37,7 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 				label: locale.getSt().field.veraip,
 				//id: 'ipvera',
 				name: 'ipvera',
+				hidden: true,
 				placeHolder: 'Ex: 192.168.0.1'
 			},
 			{
@@ -42,6 +45,7 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 				label: locale.getSt().field.profile.name,
 				name:'viewprofil',
 				itemId:'viewprofil',
+				disabled: true,
 				options: [
 				{text: locale.getSt().field.profile['0'],  value: '0'},
 				{text: locale.getSt().field.profile['1'],  value: '1'},
@@ -51,6 +55,13 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 				{text: locale.getSt().field.profile['5'],  value: '5'},
 				{text: locale.getSt().field.profile['6'],  value: '6'}
 				]
+			},
+			{
+				xtype: 'togglefield',
+				name: 'isConfig',
+				hidden: true,
+				value: 1,
+				label: locale.getSt().title.config
 			},
 			{
 				xtype: 'button',
@@ -98,6 +109,7 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 			{
 				xtype: 'togglefield',
 				name: 'isRetina',
+				hidden: true,
 				value: 0,
 				label: locale.getSt().misc.retina//,
 				//labelWidth: '40%'
@@ -105,7 +117,6 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 			{
 				xtype: 'button',
 				text: locale.getSt().misc.retina,
-				hidden: true,
 				name: 'retinabutton'
 				//ui: 'confirm'
 			}

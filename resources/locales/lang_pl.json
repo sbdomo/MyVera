@@ -177,7 +177,8 @@
 "type":"Typ",
 "go":"Idź",
 "iconformat":"Ikona Format",
-"url":"URL"
+"url":"URL",
+"noslider":"Bez Cust. Cont."
 },
 "button":{
 "back":"Powrót",

@@ -177,7 +177,8 @@
       "type":"Type",
       "go":"ga naar",
       "iconformat":"Indeling van het icoon",
-      "url":"URL"
+      "url":"URL",
+      "noslider":"Zonder Cust. Cont."
    },
    "button":{
       "back":"Terug",

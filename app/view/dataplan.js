@@ -1,14 +1,13 @@
 Ext.define('myvera.view.dataplan', {
 	extend: 'Ext.DataView',
 	xtype: 'dataplan',
-	requires:['myvera.view.dataitem'],
+	//requires:['myvera.view.dataitem'],
 	stores: ['devicesStore'],
 	config: {
-		//fullscreen: true,
 		emptyText: locale.getSt().misc.nodevice,
 		store: 'devicesStore',
-		useComponents: true,
-		defaultType: 'dataitem',
+		//useComponents: true,
+		//defaultType: 'dataitem',
 		styleHtmlContent: true,
 		scrollable: null,
 		itemConfig: {

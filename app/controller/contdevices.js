@@ -41,6 +41,7 @@ Ext.define('myvera.controller.contdevices', {
 			autoVue: 'PanelConfigGenerale [name=autoVue]',
 			autoBord: 'PanelConfigGenerale [name=autoBord]',
 			viewprofil: 'PanelConfigGenerale [name=viewprofil]',
+			isConfig: 'PanelConfigGenerale [name=isConfig]',
 			loginBt: 'PanelConfigGenerale [name=loginbutton]',
 			retinaBt: 'PanelConfigGenerale [name=retinabutton]',
 			versionBt: 'PanelConfigGenerale [name=versionbutton]',
@@ -167,14 +168,18 @@ Ext.define('myvera.controller.contdevices', {
 				if(this.profilchoice==null) this.profilchoice=0;
 				this.getViewprofil().setValue(this.profilchoice);
 				
+				if(!cachedLoggedInUser.get('config')) {
+					Ext.getCmp('PanelConfig').getTabBar().getComponent(1).hide();
+					Ext.getCmp('PanelConfig').getTabBar().getComponent(2).hide();
+					Ext.getCmp('PanelConfig').getTabBar().getComponent(3).hide();
+				}
+				
 				console.info('Auto-Login succeeded.');
 				
 				if(this.getIsReveil().getValue()==0) Ext.getCmp('listclock').tab.hide();
 				
 				if(myvera.app.isretina=="@2x") this.getRetinaBt().setText(locale.getSt().button.noretinamode);
 				else  this.getRetinaBt().setText(locale.getSt().button.retinamode);
-				this.getIsRetina().hide();
-				this.getRetinaBt().show();
 				this.LogIn();
 				//this.startstore();
 			},
@@ -200,6 +205,18 @@ Ext.define('myvera.controller.contdevices', {
 					}
 				});
 				
+				this.getUsernameCt().show();
+				this.getPasswordCt().show();
+				this.getIpveraCt().show();
+				this.getViewprofil().enable();
+				this.getIsConfig().show();
+				this.getIsRetina().show();
+				this.getRetinaBt().hide();
+				
+				
+				Ext.getCmp('PanelConfig').getTabBar().getComponent(1).hide();
+				Ext.getCmp('PanelConfig').getTabBar().getComponent(2).hide();
+				Ext.getCmp('PanelConfig').getTabBar().getComponent(3).hide();
 				Ext.getCmp('main').setActiveItem(Ext.getCmp('PanelConfig'));
 				Ext.getCmp('datalist').tab.hide();
 				Ext.getCmp('panelinfo').tab.hide();
@@ -214,11 +231,6 @@ Ext.define('myvera.controller.contdevices', {
 		this.logged = true;
 		this.startstore();
 		this.getLoginBt().setText(locale.getSt().button.notlogin);
-		//this.getLoginBt().setUi('decline');
-		this.getUsernameCt().hide();
-		this.getPasswordCt().hide();
-		this.getIpveraCt().hide();
-		this.getViewprofil().disable();
 	},
 	
 	startstore: function() {
@@ -388,6 +400,7 @@ Ext.define('myvera.controller.contdevices', {
 				//Utilisation de FloorsStore.data.each, les vues ne sont pas triées sinon.
 				//Ext.each(floors, function(floor) {
 				var background="";
+				var tpl="";
 				FloorsStore.data.each(function(floor) {
 					if(floor.get('id')!=-1) {
 						//Pas de push si l'onglet n'existe pas (s'il a été supprimé par exemple)
@@ -397,21 +410,33 @@ Ext.define('myvera.controller.contdevices', {
 							} else {
 								background='background:url(./resources/config/img/'+floor.get('path')+') no-repeat left top;';
 							}
-							//console.log(floor.get('id')+" background:"+background);
-							items[floor.get('tab')].push({
+							tpl = '<tpl if="id"><tpl if="category!=111&&(etage=='+floor.get('id')+'||etage1=='+floor.get('id')+'||etage2=='+floor.get('id')+')">'+
+								'<div style="top:<tpl if="etage=='+floor.get('id')+'">{top}px; left:{left}px;'+
+								'<tpl elseif="etage1=='+floor.get('id')+'">{top1}px; left:{left1}px;'+
+								'<tpl elseif="etage2=='+floor.get('id')+'">{top2}px; left:{left2}px;</tpl>'+
+								myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplpanwebview() + myvera.util.Templates.getTplpanfin() + '</tpl></tpl>';
+							
+							if(floor.get('noslider')) {
+								items[floor.get('tab')].push({
 									xtype: 'dataplan',
 									id: ('vue' +floor.get('id')),
 									style: background,
+									itemTpl:  tpl
+								});
+							} else {
+								items[floor.get('tab')].push({
+									xtype: 'dataplan',
+									id: ('vue' +floor.get('id')),
+									style: background,
+									useComponents: true,
+									defaultType: 'dataitem',
 									itemConfig: {
 										//idetage: floor.get('id'),
 										//test si id pour pas de lancement du template s'il n'y a pas de record.
-										tpl: '<tpl if="id"><tpl if="category!=111&&(etage=='+floor.get('id')+'||etage1=='+floor.get('id')+'||etage2=='+floor.get('id')+')">'+
-											'<div style="top:<tpl if="etage=='+floor.get('id')+'">{top}px; left:{left}px;'+
-											'<tpl elseif="etage1=='+floor.get('id')+'">{top1}px; left:{left1}px;'+
-											'<tpl elseif="etage2=='+floor.get('id')+'">{top2}px; left:{left2}px;</tpl>'+
-											myvera.util.Templates.getTplplan() + myvera.util.Templates.getTplpanwebview() + myvera.util.Templates.getTplpanfin() + '</tpl></tpl>'
+										tpl: tpl
 									}
-							});
+								});
+							}
 						}
 					}
 				});
@@ -1797,6 +1822,7 @@ Ext.define('myvera.controller.contdevices', {
 				autoVue = this.getAutoVue().getValue(),
 				autoBord = this.getAutoBord().getValue(),
 				profil = this.getViewprofil().getValue();
+				config = this.getIsConfig().getValue();
 			if(this.getIsRetina().getValue()) var isRetina="@2x";
 			else var isRetina = "";
 				
@@ -1813,7 +1839,8 @@ Ext.define('myvera.controller.contdevices', {
 					autoVue: autoVue,
 					autoBord: autoBord,
 					isRetina: isRetina,
-					profil: profil
+					profil: profil,
+					config: config
 				});
 				user.save();
 				this.loggedUserId=this.base64_encode(username+":"+password);
@@ -1829,11 +1856,22 @@ Ext.define('myvera.controller.contdevices', {
 				this.getIsRetina().hide();
 				this.getRetinaBt().show();
 				
+				this.getUsernameCt().hide();
+				this.getPasswordCt().hide();
+				this.getIpveraCt().hide();
+				this.getViewprofil().disable();
+				this.getIsConfig().hide();
+				
 				//Affichage des onglets
 				Ext.getCmp('datalist').tab.show();
 				Ext.getCmp('panelinfo').tab.show();
 				if(this.getIsReveil().getValue()) Ext.getCmp('listclock').tab.show();
 				
+				if(config) {
+					Ext.getCmp('PanelConfig').getTabBar().getComponent(1).show();
+					Ext.getCmp('PanelConfig').getTabBar().getComponent(2).show();
+					Ext.getCmp('PanelConfig').getTabBar().getComponent(3).show();
+				}
 				//Sauvegarde de la dernière adresse IP de la Vera
 				var url = './protect/saveconfig.php';
 				var syncheader = "";

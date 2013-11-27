@@ -104,6 +104,7 @@ if ($json = @file_get_contents('php://input'))
 				    $floors[$floorkey]['name']=$floor['name'];
 				    $floors[$floorkey]['tab']=$floor['tab'];
 				    $floors[$floorkey]['ind']=$floor['ind'];
+				     $floors[$floorkey]['noslider']=$floor['noslider'];
 				    $floorsencode='{"floors":'.json_encode($floors).'}';
 				    //file_put_contents($fichierjson, $floorsencode);
 				    $success="true";
@@ -134,7 +135,8 @@ if ($json = @file_get_contents('php://input'))
 				    'pathretina' => $floor['pathretina'],
 				    'widthretina' => $floor['widthretina'],
 				    'tab' => $floor['tab'],
-				    'ind' => $floor['ind']
+				    'ind' => $floor['ind'],
+				    'noslider' => $floor['noslider']
 				    );
 			    $floorsencode='{"floors":'.json_encode($floors).'}';
 			    //file_put_contents($fichierjson, $floorsencode);

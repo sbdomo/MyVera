@@ -3,7 +3,7 @@ Ext.define('myvera.controller.Application', {
 	requires: ['Ext.DataView', 'Ext.util.DelayedTask', 'Ext.SegmentedButton', 'Ext.field.Radio'],
 
 	config: {
-		views: ['carouselplan', 'PanelConfigGenerale', 'PanelConfigFloorsNavigation', 'PanelConfigNavigation', 'PanelConfigRoomsNavigation','paneloverlay'],
+		views: ['carouselplan', 'PanelConfigGenerale', 'PanelConfigFloorsNavigation', 'PanelConfigNavigation', 'PanelConfigRoomsNavigation','paneloverlay', 'dataitem'],
 		stores: ['devicesStore', 'ConfigDevicesStore', 'FloorsStore', 'ConfigScenesStore'],
 		//'devicesStore',
 		models: ['Veradevices', 'Configdevices', 'modelRooms','CurrentUser', 'Floors', 'Configscenes', 'TabViews'],
