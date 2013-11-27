@@ -10,16 +10,6 @@
     will need to resolve manually.
 */
 
-// DO NOT DELETE - this directive is required for Sencha Cmd packages to work.
-//@require @packageOverrides
-
-//<debug>
-Ext.Loader.setPath({
-    'Ext': 'touch/src',
-    'myvera': 'app'
-});
-//</debug>
-
 Ext.application({
     name: 'myvera',
     controllers: [
@@ -66,8 +56,8 @@ Ext.application({
     isretina: "",
     setIsretina: function(value) {
 	    this.isretina = value;
-    },
-
+    },    
+    
     launch: function() {
 	if(locale.getSt().lang!="en") {
 		var MB = Ext.MessageBox;

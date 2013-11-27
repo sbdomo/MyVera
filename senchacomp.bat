@@ -1,1 +1,1 @@
-F:\Users\sallegym\bin\Sencha\Cmd\3.1.2.342\sencha app build production
+F:\Users\sallegym\bin\Sencha\Cmd\4.0.1.45\sencha app build production

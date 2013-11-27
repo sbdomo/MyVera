@@ -1,1 +1,0 @@
-sencha app build package
