@@ -101,7 +101,7 @@ tplpanfin: '<tpl else><tpl if="!(category==108&&subcategory==3)&&!(category==108
 	    '</tpl>'+
 	    
 	    '<tpl if="state==-2"><img class="djaune" src="./resources/images/indic/vide.png" draggable="false" />'+
-	    '<tpl elseif="state==-3"><img class="djaune" src="./resources/images/indic/vide.png" draggable="false" />'+
+	    '<tpl elseif="state==-3&&!(category==108&&(subcategory==3||subcategory==4))"><img class="djaune" src="./resources/images/indic/vide.png" draggable="false" />'+
 	    '<tpl elseif="state==2&&category!=5"><img class="dalert" src="./resources/images/indic/vide.png" draggable="false" />'+
 	    '<tpl elseif="(category==4||category==103)&&armed!=null"><img class="indic" src="./resources/images/indic/darm{armed}{retina}.png" draggable="false" />'+
 	    '<tpl elseif="category==120"><tpl if="armed==1&&var3==\'off\'"><img class="indic" src="./resources/images/indic/doff{retina}.png" draggable="false" />'+
