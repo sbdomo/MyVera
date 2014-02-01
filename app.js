@@ -43,7 +43,7 @@ Ext.application({
     },
     glossOnIcon: true,
     isIconPrecomposed: false,
-    
+
     startupImage: {
         '320x460': 'resources/startup/320x460.jpg',
         '640x920': 'resources/startup/640x920.png',
@@ -52,12 +52,12 @@ Ext.application({
         '1536x2008': 'resources/startup/1536x2008.png',
         '1496x2048': 'resources/startup/1496x2048.png'
     },
-
+    
     isretina: "",
     setIsretina: function(value) {
 	    this.isretina = value;
     },    
-    
+
     launch: function() {
 	if(locale.getSt().lang!="en") {
 		var MB = Ext.MessageBox;
