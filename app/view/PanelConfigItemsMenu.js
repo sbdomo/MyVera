@@ -4,6 +4,10 @@ Ext.define('myvera.view.PanelConfigItemsMenu', {
 	id:'PanelConfigItemsMenu',
 	config: {
 		padding: 4,
+		scrollable: {
+			direction: 'vertical',
+			directionLock: true
+		},
 		defaults: {
 			xtype: 'button',
 			margin: 5

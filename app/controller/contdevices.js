@@ -2562,7 +2562,7 @@ Ext.define('myvera.controller.contdevices', {
 			modal:true,
 			hideOnMaskTap: true,
 			baseCls:'transparentmodal',
-			styleHtmlContent: true,
+			//styleHtmlContent: true,
 			width: width,
 			height: height,
 			centered: true,
