@@ -2379,10 +2379,10 @@ Ext.define('myvera.controller.contdevices', {
 		    modal:true,
 		    id: 'popup_temp',
 		    hideOnMaskTap: true,
-		    padding: 4,
+		    padding: 2,
 		    //margin: '0,0,0,0',
 		    //border: 1,
-		    //width: '400px',
+		    width: '320px',
 		    centered: true,
 		    items:[
 		    {
@@ -2439,8 +2439,8 @@ Ext.define('myvera.controller.contdevices', {
 				minValue: min,
 				maxValue: max,
 				increment: incr,
-				width: 270,
-				fontsize: '20px',
+				width: 230,
+				fontsize: '16px',
 				suffix: locale.getSt().unit.temp
 			},
 			{
@@ -2454,8 +2454,8 @@ Ext.define('myvera.controller.contdevices', {
 				minValue: min,
 				maxValue: max,
 				increment: incr,
-				width: 270,
-				fontsize: '20px',
+				width: 230,
+				fontsize: '16px',
 				suffix: locale.getSt().unit.temp
 			},
 			{
