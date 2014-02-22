@@ -25,8 +25,11 @@ Ext.define('myvera.controller.contdevices', {
 			liste2: 'datalistphone [id=listInRoom]',
 			
 			listeon: 'dataliston',
+			listeonphone: 'datalistonphone',
 			listeoff: 'datalistoff',
+			listeoffphone: 'datalistoffphone',
 			listclock: 'listclock',
+			listclockphone: 'listclockphone',
 			
 			panelConfig: 'PanelConfigGenerale',
 			usernameCt: 'PanelConfigGenerale [name=login]',
@@ -66,10 +69,19 @@ Ext.define('myvera.controller.contdevices', {
 			listeon: {
 				itemtap: 'onDeviceTap'
 			},
+			listeonphone: {
+				itemtap: 'onDeviceTap'
+			},
 			listeoff: {
 				itemtap: 'onDeviceTap'
 			},
+			listeoffphone: {
+				itemtap: 'onDeviceTap'
+			},
 			listclock: {
+				itemtap: 'onDeviceTap'
+			},
+			listclockphone: {
 				itemtap: 'onDeviceTap'
 			},
 			
@@ -803,6 +815,7 @@ Ext.define('myvera.controller.contdevices', {
 	
 	onDeviceTap: function(view, index, target, record, event) {
 		//Valeurs par défaut
+		//console.log("tap " + view.id);
 		var dservice = 'urn:upnp-org:serviceId:SwitchPower1';
 		var daction = 'SetTarget';
 		var dtargetvalue = 'newTargetValue';
