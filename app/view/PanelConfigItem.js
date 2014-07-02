@@ -508,7 +508,8 @@ Ext.define('myvera.view.PanelConfigItem', {
 			name: 'imgformat',
 			options: [
 			{text: "png",  value: 0},
-			{text: "jpg",  value: 1}
+			{text: "jpg",  value: 1},
+			{text: "gif",  value: 2}
 			]
 		},
 		{

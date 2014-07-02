@@ -209,6 +209,15 @@ Ext.define('myvera.controller.contdevices', {
 						//console.log(response.config[0].ipvera);
 						if (response) {
 							if(response.config[0].ipvera) this.getIpveraCt().setValue(response.config[0].ipvera);
+							if(response.config[0].isRetina) {
+								if(response.config[0].isRetina=='@2x') {
+									this.getIsRetina().setValue(1);
+									//myvera.app.setIsretina('@2x');
+								} else {
+									this.getIsRetina().setValue(0);
+									//myvera.app.setIsretina("");
+								}
+							}
 						}
 					},
 					failure: function(result) {
@@ -1885,7 +1894,7 @@ Ext.define('myvera.controller.contdevices', {
 					Ext.getCmp('PanelConfig').getTabBar().getComponent(2).show();
 					Ext.getCmp('PanelConfig').getTabBar().getComponent(3).show();
 				}
-				//Sauvegarde de la dernière adresse IP de la Vera
+				//Sauvegarde de la dernière adresse IP de la Vera et le mode Retina
 				var url = './protect/saveconfig.php';
 				var syncheader = "";
 				syncheader={'Authorization': 'Basic ' + this.loggedUserId};
@@ -1894,7 +1903,8 @@ Ext.define('myvera.controller.contdevices', {
 					url: url,
 					headers: syncheader,
 					params: {
-						ipvera: ipvera
+						ipvera: ipvera,
+						isRetina: isRetina
 					},
 					method: 'GET',
 					timeout: 10000,

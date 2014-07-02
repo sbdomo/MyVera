@@ -8,7 +8,7 @@ tplplan: '<tpl if="category==1000&&subcategory!=1">'+
 		 '" class="scene">'+
 		 	'<div class="devicon">'+
 				'<img class="deviceImage" src="./resources/images/d'+
-					'<tpl if="icon!=null">{icon}<tpl else>1000</tpl>_0{retina}.<tpl if="imgformat==1">jpg<tpl else>png</tpl>" draggable="false" />'+
+					'<tpl if="icon!=null">{icon}<tpl else>1000</tpl>_0{retina}.<tpl if="imgformat==1">jpg<tpl elseif="imgformat==2">gif<tpl else>png</tpl>" draggable="false" />'+
 				'<img class="<tpl if="state==-2">djaune2<tpl elseif="state==-3">djaune2<tpl else>indic2</tpl>"'+
 					' src="./resources/images/indic/vide.png" draggable="false" />'+
 			'</div><div class="txtscene">'+
@@ -61,7 +61,7 @@ tplpanfin: '<tpl else><tpl if="!(category==108&&subcategory==3)&&!(category==108
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_<tpl if="status!=3">{status}</tpl>'+
 	    '<tpl elseif="category==1001&&subcategory!=0">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
-	    '<tpl else>0_0</tpl>{retina}.<tpl if="imgformat==1">jpg<tpl else>png</tpl>'+
+	    '<tpl else>0_0</tpl>{retina}.<tpl if="imgformat==1">jpg<tpl elseif="imgformat==2">gif<tpl else>png</tpl>'+
 	'</tpl>" />'+
 	    
 	    

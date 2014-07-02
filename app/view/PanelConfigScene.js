@@ -121,6 +121,17 @@ Ext.define('myvera.view.PanelConfigScene', {
 			itemId: 'width'
 		},
 		{
+			xtype: 'selectfield',
+			label: locale.getSt().field.iconformat,
+			itemId: 'imgformat',
+			name: 'imgformat',
+			options: [
+			{text: "png",  value: 0},
+			{text: "jpg",  value: 1},
+			{text: "gif",  value: 2}
+			]
+		},
+		{
 			xtype: 'textfield',
 			label: locale.getSt().field.index,
 			name: 'ind',
@@ -259,6 +270,7 @@ Ext.define('myvera.view.PanelConfigScene', {
 					device.set("state", "-3");
 					device.set("ind", formdata.ind);
 					device.set("onboard", formdata.onboard);
+					device.set("imgformat", formdata.imgformat);
 				} else {
 					devices.add({
 					id: "s" + data.id,
@@ -280,7 +292,8 @@ Ext.define('myvera.view.PanelConfigScene', {
 					icon: icon,
 					width: formdata.width,
 					ind: formdata.ind,
-					onboard: formdata.onboard
+					onboard: formdata.onboard,
+					imgformat: formdata.imgformat
 					});
 					var device = devices.getById("s" + data.id);
 					

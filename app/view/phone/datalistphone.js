@@ -51,12 +51,16 @@ Ext.define('myvera.view.phone.datalistphone', {
 			    ]
 		}],
 		listeners: {
-			select: function(view, record) {
+			//select: function(view, record) {
+			//	this.getParent().onSelect(view, record);
+			//},
+			itemtap: function(view, index, target, record) {
 				this.getParent().onSelect(view, record);
-			},
-			updatedata:function(e,d){
-				console.log('updatedata datalist-list');
-			}
+				//console.log('Itemp Tap: ' + record.get('name'));
+			}//,
+			//updatedata:function(e,d){
+			//	console.log('updatedata datalist-list');
+			//}
 		}
 
 	    },
