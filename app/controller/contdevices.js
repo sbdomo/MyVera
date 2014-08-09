@@ -192,6 +192,16 @@ Ext.define('myvera.controller.contdevices', {
 				
 				if(myvera.app.isretina=="@2x") this.getRetinaBt().setText(locale.getSt().button.noretinamode);
 				else  this.getRetinaBt().setText(locale.getSt().button.retinamode);
+				
+				
+				// Disables visual
+				//Ext.getBody().dom.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+				// Disables menu
+				//Ext.getBody().dom.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+				
+				//Ext.getBody().dom.addEventListener("contextmenu", function(e) { return true; }, false);
+				
+				
 				this.LogIn();
 				//this.startstore();
 			},
@@ -839,7 +849,7 @@ Ext.define('myvera.controller.contdevices', {
 		
 		var icontap = false;
 		var cat=record.get('category');
-		if (!Ext.Array.contains([2, 3, 4, 5, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 112, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
+		if (!Ext.Array.contains([2, 3, 4, 5, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 112, 113, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
 			return;
 		}
 		//Si c'est un hvac non heater, sort de la commande
@@ -1274,6 +1284,12 @@ Ext.define('myvera.controller.contdevices', {
 				this.onDeviceHoldTap(view, index, target, record, event);
 				return;
 			}
+			//RGB Controller
+			if(cat == 113&&record.get('sceneon') == null) {
+				dservice = "urn:upnp-org:serviceId:RGBController1";
+				//daction = 'SetTarget';
+				//dtargetvalue = 'newTargetValue';
+			}
 			//Scene
 			if (cat == 1000) {
 				dservice = "urn:micasaverde-com:serviceId:HomeAutomationGateway1";
@@ -1341,6 +1357,11 @@ Ext.define('myvera.controller.contdevices', {
 				//} else if (tap.hasCls('i5')) {
 				//	this.onDeviceHoldTap(view, index, target, record, event);
 				//	return;
+				}
+			} else if  (cat == 113) {
+				if (tap.hasCls('i4')) {
+					this.onDeviceHoldTap(view, index, target, record, event);
+					return;
 				}
 			}
 		}
@@ -1649,7 +1670,7 @@ Ext.define('myvera.controller.contdevices', {
 			});
 		} else if(record.get('category')==112) { //Battery Monitor
 			var isretina = myvera.app.isretina;
-			var status=record.get('status')
+			var status=record.get('status');
 			var devices = Ext.getStore('devicesStore');
 			var device = "";
 			var html='';
@@ -1727,7 +1748,39 @@ Ext.define('myvera.controller.contdevices', {
 			});
 			
 			
-			
+		} else if(record.get('category')==113) { //RGB Controller
+			var color=record.get('var1');
+			var popup=new Ext.Panel({
+			modal:true,
+			hideOnMaskTap: true,
+			width: '312px',
+			height: '312px',
+			maxWidth: '95%',
+			maxHeight: '95%',
+			centered: true,
+			scrollable: false, /*{
+				direction: 'vertical',
+				directionLock: true
+			},*/
+			items:[
+			{
+				xtype: 'colorpicker',
+				hexColor: color,
+				//state: record.get('state'),
+				listeners: {
+					change: function(Slider, thumb, newValue, oldValue, eOpts) {
+						//console.log("color change:"+newValue);
+						me.ondeviceaction(record.get('id'), 'urn:upnp-org:serviceId:RGBController1', 'SetColor', 'newColor', '#'+newValue);
+					}
+				}
+			}
+			],
+			listeners: {
+				hide: function(panel) {;
+					this.destroy();
+				}
+			}
+			});
 		} else {
 			var dservice = 'urn:upnp-org:serviceId:Dimming1';
 			var daction = 'SetLoadLevelTarget';
@@ -2906,6 +2959,9 @@ Ext.define('myvera.controller.contdevices', {
 			device.set('var1', deviceupdate.lowdevicelist);
 			device.set('var2', deviceupdate.middevicelist);
 			device.set('var3', deviceupdate.highdevicelist);
+			break;
+		case 113: //RGB Controller
+			device.set('var1', deviceupdate.color);
 			break;
 		case 120: //vclock
 			device.set('var1', deviceupdate.alarmtime);

@@ -27,7 +27,8 @@ Ext.application({
 	//'Ext.custom.vSlider',
 	'Ext.ux.slider.vslider',
 	'Ext.ux.slider.cslider',
-	'Ext.ux.field.Multiselect'
+	'Ext.ux.field.Multiselect',
+	'Ext.ux.picker.colorpicker'
 	//'Ext.ux.field.customslider'
     ],
 

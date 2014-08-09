@@ -15,16 +15,18 @@ Ext.define('myvera.view.dataplan', {
 		},
 		listeners:{
 			itemtaphold: function(view, index, target, record, event){
-				//2: Dimmable light, 8: Window Covering, 109: sonos
+				//2: Dimmable light, 8: Window Covering, 113: RGB Controller
+			//109: sonos
 			   //if (Ext.Array.contains([2, 8, 109], record.data.category)) {
-			   if (Ext.Array.contains([2, 8], record.data.category)) {
-				myvera.view.dataplan.lastTapHold = new Date();
+			   if (Ext.Array.contains([2, 8, 113], record.data.category)) {
+				view.lastTapHold = new Date();
+				//myvera.view.dataplan.lastTapHold = new Date();
 				//console.log('taphold:', record);
 				myvera.app.getController('myvera.controller.contdevices').onDeviceHoldTap(view, index, target, record, event);
 			   }
 			},
 			itemsingletap: function(view, index, target, record, event){
-			   if (record.data.category!=111&&(!myvera.view.dataplan.lastTapHold || (myvera.view.dataplan.lastTapHold - new Date() > 1000))) {
+			   if (record.data.category!=111&&(!view.lastTapHold || (new Date()- view.lastTapHold > 1000))) {
 				console.log('tap');
 				myvera.app.getController('myvera.controller.contdevices').onDeviceTap(view, index, target, record, event);
 			   }

@@ -59,6 +59,8 @@ tplpanfin: '<tpl else><tpl if="!(category==108&&subcategory==3)&&!(category==108
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl><tpl if="var1!=\'\'">_{status}</tpl>'+
 	    '<tpl elseif="category==112">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_<tpl if="status!=3">{status}</tpl>'+
+	    '<tpl elseif="category==113">'+
+	    	'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 	    '<tpl elseif="category==1001&&subcategory!=0">'+
 	    	'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	    '<tpl else>0_0</tpl>{retina}.<tpl if="imgformat==1">jpg<tpl elseif="imgformat==2">gif<tpl else>png</tpl>'+
@@ -139,6 +141,8 @@ tpllisticon:'<div class="devicon">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_0'+
 				'<tpl elseif="category==112">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_<tpl if="status!=3">{status}</tpl>'+
+				'<tpl elseif="category==113">'+
+					'<tpl if="icon!=null">{icon}<tpl else>{category}</tpl>_{status}'+
 				'<tpl elseif="category==1001">'+
 					'<tpl if="icon!=null">{icon}<tpl else>{category}{subcategory}</tpl>_0'+
 	   			'<tpl else>0_0</tpl>{retina}.png" />'+
@@ -198,6 +202,14 @@ tplcontenu: 		'<tpl if="category==4&&armed!= null"><div class="floatleft">'+
 					'<tpl if="armed!= null"><div class="clock2"><img class="armed2" src="./resources/images/indic/arm{armed}{retina}.png" /></div></tpl>'+
 					'<div class="clock3"><tpl if="var3==null">&nbsp;<tpl else><img width="42px" class="clocknext" src="./resources/images/indic/{var3}{retina}.png" /></tpl></div>'+
 					'</div>'+
+			'<tpl elseif="category==113">'+
+				'<div class="floatleft">'+
+					'<div class="longvar">'+
+						'<div class="i4" style="background-color:#{var1}; margin-left:10px; width:32px; height:32px; border-width:1px; border-style:solid; '+
+						'border-color: threedshadow threedhighlight threedhighlight threedshadow;"></div>'+
+					'</div>'+
+					'<img class="i4" style="margin-top: 5px;" src="./resources/images/plugin/color_wheel{retina}.png" />'+
+				'</div>'+
 			'<tpl elseif="category==2||category==8"><div>'+
 				'<div class="floatleft">'+
 					'<div class="devicelevel1">'+

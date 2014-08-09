@@ -750,6 +750,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.picker.DateTime": [
     "Ext.ux.DateTimePicker"
   ],
+  "Ext.ux.picker.colorpicker": [],
   "Ext.ux.slider.cslider": [],
   "Ext.ux.slider.hslider": [],
   "Ext.ux.slider.vslider": [],
@@ -1777,6 +1778,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.ux.picker.DateTime": [
     "widget.datetimepicker"
+  ],
+  "Ext.ux.picker.colorpicker": [
+    "widget.colorpicker"
   ],
   "Ext.ux.slider.cslider": [
     "widget.cslider"
