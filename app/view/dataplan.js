@@ -14,6 +14,7 @@ Ext.define('myvera.view.dataplan', {
 			draggable: false
 		},
 		listeners:{
+			/*
 			itemtaphold: function(view, index, target, record, event){
 				//2: Dimmable light, 8: Window Covering, 113: RGB Controller
 			//109: sonos
@@ -30,7 +31,7 @@ Ext.define('myvera.view.dataplan', {
 				console.log('tap');
 				myvera.app.getController('myvera.controller.contdevices').onDeviceTap(view, index, target, record, event);
 			   }
-			},
+			},*/
 			//painted: function(list, opts){
 			painted: {
 				single: true,

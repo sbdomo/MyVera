@@ -14,7 +14,8 @@ Ext.define('myvera.model.CurrentUser', {
 			{name: 'isRetina', type: 'string', defaultValue: ""},
 			{name: 'autoVue', type: 'boolean', defaultValue: false},
 			{name: 'autoBord', type: 'boolean', defaultValue: false},
-			{name: 'config', type: 'boolean', defaultValue: true}
+			{name: 'config', type: 'boolean', defaultValue: true},
+			{name: 'isContextmenu', type: 'boolean', defaultValue: true}
 		],
 
 		proxy: {

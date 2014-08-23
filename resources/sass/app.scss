@@ -86,6 +86,9 @@ $toolbar-gradient: 'glossy';
 @include icon('muted', '$');
 @include icon('audio', '%');
 
+@include icon('up', '{');
+@include icon('down', '}');
+
 @include sencha-button-ui('decline', #bc3314, 'matte');
 
 .bg {

@@ -41,6 +41,7 @@ Ext.define('myvera.controller.contdevices', {
 			isReveil: 'PanelConfigGenerale [name=isReveil]',
 			isRetina: 'PanelConfigGenerale [name=isRetina]',
 			isTab: 'PanelConfigGenerale [name=isTab]',
+			isContextmenu: 'PanelConfigGenerale [name=isContextmenu]',
 			autoVue: 'PanelConfigGenerale [name=autoVue]',
 			autoBord: 'PanelConfigGenerale [name=autoBord]',
 			viewprofil: 'PanelConfigGenerale [name=viewprofil]',
@@ -59,30 +60,42 @@ Ext.define('myvera.controller.contdevices', {
 			clocksaveclockBt: 'paneloverlay [name=saveclock]'
 		},
 		control: {
+			plan: {
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
+			},
 			liste1: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			liste2: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			
 			listeon: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			listeonphone: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			listeoff: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			listeoffphone: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			listclock: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			listclockphone: {
-				itemtap: 'onDeviceTap'
+				itemsingletap: 'onDeviceBoardTap',
+				itemtaphold: 'onDeviceBoardTaphold'
 			},
 			
 			isVueL: {
@@ -98,6 +111,10 @@ Ext.define('myvera.controller.contdevices', {
 			
 			isTab: {
 				change: 'onIsTabChange'
+			},
+			
+			isContextmenu: {
+				change: 'onIsContextmenuChange'
 			},
 			
 			autoVue: {
@@ -193,14 +210,13 @@ Ext.define('myvera.controller.contdevices', {
 				if(myvera.app.isretina=="@2x") this.getRetinaBt().setText(locale.getSt().button.noretinamode);
 				else  this.getRetinaBt().setText(locale.getSt().button.retinamode);
 				
-				
-				// Disables visual
-				//Ext.getBody().dom.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
-				// Disables menu
-				//Ext.getBody().dom.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
-				
-				//Ext.getBody().dom.addEventListener("contextmenu", function(e) { return true; }, false);
-				
+				this.getIsContextmenu().setValue(cachedLoggedInUser.get('isContextmenu'));
+				if(cachedLoggedInUser.get('isContextmenu')==false) {
+					// Disables visual
+					Ext.getBody().dom.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+					// Disables menu
+					Ext.getBody().dom.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+				}
 				
 				this.LogIn();
 				//this.startstore();
@@ -831,7 +847,19 @@ Ext.define('myvera.controller.contdevices', {
 		newsynctask.delay(delay);
 	},
 	
-	
+	onDeviceBoardTaphold: function(view, index, target, record, event) {
+		//2: Dimmable light, 8: Window Covering, 113: RGB Controller
+		if (Ext.Array.contains([2, 8, 113], record.data.category)) {
+			view.lastTapHold = new Date();
+			this.onDeviceHoldTap(view, index, target, record, event);
+		}
+	},
+	onDeviceBoardTap: function(view, index, target, record, event) {
+		if (!view.lastTapHold || (new Date()- view.lastTapHold > 1000)) {
+			console.log('tap');
+			this.onDeviceTap(view, index, target, record, event);
+		}
+	},
 	onDeviceTap: function(view, index, target, record, event) {
 		//Valeurs par défaut
 		//console.log("tap " + view.id);
@@ -848,18 +876,21 @@ Ext.define('myvera.controller.contdevices', {
 		var newstatus = "0";
 		
 		var icontap = false;
+		
 		var cat=record.get('category');
-		if (!Ext.Array.contains([2, 3, 4, 5, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 112, 113, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
-			return;
-		}
+		
 		//Si c'est un hvac non heater, sort de la commande
 		if(cat==5&&record.get('subcategory')!=2) return;
 		
 		//Si c'est une webview, sort de la commande
 		if(cat==1001&&record.get('subcategory')==0) return;
 		
-		//Si c'est un custom slider en dehors de listInRoom, sort de la commande
+		//Si c'est un custom slider en dehors de listInRoom, sort de la commande (ouvre un popup avec un slider sinon)
 		if(cat==111&&view.id!="listInRoom") return;
+		
+		if (!Ext.Array.contains([2, 3, 4, 5, 6, 7, 8, 16, 17, 21, 101, 102, 103, 104, 105, 106, 107, 108, 109, 111, 112, 113, 120, 1000, 1001], cat) && (record.get('sceneon') == null || record.get('sceneoff') == null)) {
+			return;
+		}
 		
 		if (Ext.Array.contains(["listInRoom", "dataliston", "datalistoff", "listclock"], view.id)) {
 			var tap = Ext.get(event.target);
@@ -1641,6 +1672,59 @@ Ext.define('myvera.controller.contdevices', {
 				}
 			}
 			});
+		} else if(record.get('category')==8) { //Window Covering
+			var dservice = 'urn:upnp-org:serviceId:Dimming1';
+			var daction = 'SetLoadLevelTarget';
+			var dtargetvalue = 'newLoadlevelTarget';
+			
+			var popup=new Ext.Panel({
+			modal:true,
+			hideOnMaskTap: true,
+			width:300,
+			height:110,
+			centered: true,
+			items:[
+			{
+				xtype:'slider',
+				value:record.data.level,
+				listeners: {
+					change: function(Slider, thumb, newValue, oldValue, eOpts) {
+						me.ondeviceaction(record.get('id'), dservice, daction, dtargetvalue, newValue);
+					}
+				}
+			},
+			{
+				xtype: 'segmentedbutton',
+				padding: '10 0 0 70',
+				allowToggle: false,
+				items: [
+				{
+					iconCls: 'up',
+					handler: function(btn) {
+						me.ondeviceaction(record.get('id'), "urn:upnp-org:serviceId:WindowCovering1", 'Up', "targetvalue", "", "nostate");
+					}
+				},
+				{
+					iconCls: 'down',
+					handler: function(btn) {
+						me.ondeviceaction(record.get('id'), "urn:upnp-org:serviceId:WindowCovering1", 'Down', "targetvalue", "", "nostate");
+					}
+				},
+				{
+					iconCls: 'pause',
+					handler: function(btn) {
+						me.ondeviceaction(record.get('id'), "urn:upnp-org:serviceId:WindowCovering1", 'Stop', "targetvalue", "", "nostate");
+					}
+				}
+				]
+			}
+			],
+			listeners: {
+				hide: function(panel) {
+					delete myvera.view.dataplan.lastTapHold;
+				}
+			}
+			});
 		} else if(record.get('category')==111) { //Custom Slider
 			var commande =record.get('var4').split('|');
 			//var dservice = 'urn:upnp-org:serviceId:Dimming1';
@@ -1770,7 +1854,7 @@ Ext.define('myvera.controller.contdevices', {
 				listeners: {
 					change: function(Slider, thumb, newValue, oldValue, eOpts) {
 						//console.log("color change:"+newValue);
-						me.ondeviceaction(record.get('id'), 'urn:upnp-org:serviceId:RGBController1', 'SetColor', 'newColor', '#'+newValue);
+						me.ondeviceaction(record.get('id'), 'urn:upnp-org:serviceId:RGBController1', 'SetColor', 'newColor', newValue);
 					}
 				}
 			}
@@ -1894,6 +1978,7 @@ Ext.define('myvera.controller.contdevices', {
 				isVueP = this.getIsVueP().getValue(),
 				isReveil = this.getIsReveil().getValue(),
 				isTab = this.getIsTab().getValue(),
+				isContextmenu = this.getIsContextmenu().getValue(),
 				autoVue = this.getAutoVue().getValue(),
 				autoBord = this.getAutoBord().getValue(),
 				profil = this.getViewprofil().getValue();
@@ -1911,6 +1996,7 @@ Ext.define('myvera.controller.contdevices', {
 					isVueP: isVueP,
 					isReveil: isReveil,
 					isTab: isTab,
+					isContextmenu: isContextmenu,
 					autoVue: autoVue,
 					autoBord: autoBord,
 					isRetina: isRetina,
@@ -2106,7 +2192,34 @@ Ext.define('myvera.controller.contdevices', {
 		}, this);
 		}
 	},
-	
+	onIsContextmenuChange: function() {
+				if(this.logged==true) {
+		Ext.ModelMgr.getModel('myvera.model.CurrentUser').load(1, {
+			success: function(user) {
+				var isContextmenu = this.getIsContextmenu().getValue();
+				user.set("isContextmenu", isContextmenu);
+				user.save();
+				console.log("onIsContextmenuChange");
+				if(isContextmenu==false) {
+					// Disables visual
+					Ext.getBody().dom.addEventListener("MSHoldVisual", function(e) { e.preventDefault(); }, false);
+					// Disables menu
+					Ext.getBody().dom.addEventListener("contextmenu", function(e) { e.preventDefault(); }, false);
+					
+					
+				} else {
+					console.log("show context");
+					Ext.getBody().dom.addEventListener("MSHoldVisual", function(e) { return true; }, false);
+					Ext.getBody().dom.addEventListener("contextmenu", function(e) { e.returnValue = true; }, false);
+				}
+			},
+			failure: function() {
+				// this should not happen, nevertheless:
+				alert(locale.getSt().misc.error);
+			}
+		}, this);
+		}
+	},
 	onAutoVueChange: function() {
 		if(this.logged==true) {
 		Ext.ModelMgr.getModel('myvera.model.CurrentUser').load(1, {

@@ -108,6 +108,12 @@ Ext.define('myvera.view.PanelConfigGenerale', {
 			},
 			{
 				xtype: 'togglefield',
+				name: 'isContextmenu',
+				value: 1,
+				label: locale.getSt().misc.iscontextmenu
+			},
+			{
+				xtype: 'togglefield',
 				name: 'isRetina',
 				hidden: true,
 				value: 0,
